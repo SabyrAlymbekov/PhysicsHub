@@ -4,6 +4,7 @@ import Navs from './Navs'
 import { Button } from '@/components/ui/button'
 import NavsMobile from './NavsMobile'
 import Link from "next/link";
+import {SignInButton} from "@/components/shared/auth/signin-button";
 
 function Navbar() {
   return (
@@ -18,9 +19,11 @@ function Navbar() {
             <Navs></Navs>
 
             <div className='row gap-3'>
-              <Button variant="outline" className='max-xs:hidden'>
-                Войти
-              </Button>
+              <SignInButton>
+                  <Button variant="outline" className='max-xs:hidden'>
+                      Войти
+                  </Button>
+              </SignInButton>
 
               <NavsMobile></NavsMobile>
             </div>

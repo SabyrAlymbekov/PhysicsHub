@@ -10,6 +10,7 @@ import {
 
 import Link from 'next/link'
 import Image from 'next/image'
+import {SignInButton} from "@/components/shared/auth/signin-button";
  
 export function Burger() {
   return (
@@ -34,9 +35,11 @@ export function Burger() {
         </div>
         <SheetFooter>
             <SheetClose asChild>
-                <Button variant="outline" className='max-xs:block hidden'>
-                    Войти
-                </Button>
+                <SignInButton>
+                    <Button variant="outline" className='max-xs:block hidden'>
+                        Войти
+                    </Button>
+                </SignInButton>
             </SheetClose>
         </SheetFooter>
       </SheetContent>
