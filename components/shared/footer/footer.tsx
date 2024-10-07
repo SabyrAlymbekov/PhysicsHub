@@ -6,18 +6,43 @@ import insta from "@/public/assets/icons/instagram.svg"
 const Footer = () => {
     return (
         <footer className="w-full bg-white">
-            <div className="container h-[50px] flex items-center justify-between gap-10">
-                <div className="flex gap-3">
-                    <Link className="hover:opacity-50" href="/privacy-policy">
-                        Privacy Policy
-                    </Link>
-                    |
-                    <Link className="hover:opacity-50" href="/terms-of-service">
-                        Terms of Service
-                    </Link>
+            <div className="container flex items-center justify-between gap-10 py-3">
+                <div className="flex gap-3 flex-col">
+                    <div className="grid grid-cols-2 gap-2">
+                        <Link className="hover:opacity-50" href="/">
+                            Главная
+                        </Link>
+                        <Link className="hover:opacity-50" href="/weekly">
+                            Задача недели
+                        </Link>
+                        <Link className="hover:opacity-50" href="/archive">
+                            Архив
+                        </Link>
+                        <Link className="hover:opacity-50" href="/olympiads">
+                            Олимпиады
+                        </Link>
+                        <Link className="hover:opacity-50" href="/resources">
+                            Материалы
+                        </Link>
+                        <Link className="hover:opacity-50" href="/shop">
+                            Мерч
+                        </Link>
+                    </div>
+
                 </div>
-                <div className="">
-                    <span>Physics Hub 2024©</span>
+                <div className="grid grid-cols-1 justify-items-center">
+                    <span className="text-xl font-bold">Physics Hub 2024©</span>
+
+                    <div className="flex gap-3">
+
+                        <Link className="hover:opacity-50" href="/privacy-policy">
+                            Privacy Policy
+                        </Link>
+                        |
+                        <Link className="hover:opacity-50" href="/terms-of-service">
+                            Terms of Service
+                        </Link>
+                    </div>
                 </div>
                 <div className="flex gap-3 items-center">
                     <span className="text-[15px]">+996-550-22-99</span>
