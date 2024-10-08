@@ -22,8 +22,7 @@ import {
 } from "@/components/ui/form"
 import {FormError} from "@/components/shared/auth/form-error";
 import {FormSuccess} from "@/components/shared/auth/form-success";
-import {loginAction} from "@/lib/actions/login.action";
-import {signUpAction} from "@/lib/actions/signup.action";
+import {loginAction, loginWithGoogle} from "@/lib/actions/login.action";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -43,11 +42,21 @@ export function UserSignInForm({ className }: UserAuthFormProps) {
     async function onSubmit(values: z.infer<typeof LoginSchema>) {
         setIsLoading(true);
         const res = await loginAction(values);
-        console.log(values)
         if (res?.success) {
             setState(<FormSuccess message={res.success}></FormSuccess>);
-        } else {
-            setState(<FormSuccess message={res.error}></FormSuccess>);
+        } else if (res?.error) {
+            setState(<FormError message={res.error}></FormError>);
+        }
+        setIsLoading(false)
+    }
+
+    const onLoginWithGoogle = async () => {
+        setIsLoading(true);
+        const res = await loginWithGoogle()
+        if (res?.success) {
+            setState(<FormSuccess message={res.success}></FormSuccess>);
+        } else if (res?.error) {
+            setState(<FormError message={res.error}></FormError>);
         }
         setIsLoading(false)
     }
@@ -119,7 +128,7 @@ export function UserSignInForm({ className }: UserAuthFormProps) {
               </span>
                     </div>
                 </div>
-                <Button variant="outline" type="button" disabled={isLoading}>
+                <Button variant="outline" type="button" disabled={isLoading} onClick={onLoginWithGoogle}>
                     {isLoading ? (
                         <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                     ) : (

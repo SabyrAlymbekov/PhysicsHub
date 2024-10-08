@@ -5,10 +5,13 @@ import { Button } from '@/components/ui/button'
 import NavsMobile from './NavsMobile'
 import Link from "next/link";
 import {SignInButton} from "@/components/shared/auth/signin-button";
+import {currentUser} from "@/lib/actions/authActions";
 
-function Navbar() {
+async function Navbar() {
+    const user = await currentUser()
+    console.log(user)
   return (
-    <header className='shadow z-50 bg-white fixed w-screen'>
+    <header className='shadow z-50 bg-white w-screen'>
       <div className='container'>
           <div className='flex w-full justify-between items-center py-3'>
             <Link className="row items-center gap-1" href="/">
@@ -19,11 +22,23 @@ function Navbar() {
             <Navs></Navs>
 
             <div className='row gap-3'>
-              <SignInButton>
-                  <Button variant="outline" className='max-xs:hidden'>
-                      Войти
-                  </Button>
-              </SignInButton>
+                {!user ? (
+                        <SignInButton>
+                            <Button variant="outline" className='max-xs:hidden'>
+                                Войти
+                            </Button>
+                        </SignInButton>
+                    )
+                    :
+                    (
+                        <Link
+                            href={"/profile/" + user.name}
+                            className='max-xs:hidden'
+                        >
+                            <Image src={user.image as string || "/assets/icons/avatar.png"} alt="avatar" width={36} height={36} className="rounded-full"></Image>
+                        </Link>
+                    )
+                }
 
               <NavsMobile></NavsMobile>
             </div>

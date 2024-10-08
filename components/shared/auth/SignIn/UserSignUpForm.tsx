@@ -23,6 +23,7 @@ import {
 import {FormError} from "@/components/shared/auth/form-error";
 import {FormSuccess} from "@/components/shared/auth/form-success";
 import {signUpAction} from "@/lib/actions/signup.action";
+import {loginWithGoogle} from "@/lib/actions/login.action";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -36,20 +37,30 @@ export function UserSignUpForm({ className }: UserAuthFormProps) {
         defaultValues: {
             email: "",
             password: "",
-            name: "",
+            username: "",
         }
     })
 
     async function onSubmit(values: z.infer<typeof SignUpSchema>) {
         setIsLoading(true);
             const res = await signUpAction(values);
-            console.log(values)
             if (res?.success) {
                 setState(<FormSuccess message={res.success}></FormSuccess>);
-            } else {
-                setState(<FormSuccess message={res.error}></FormSuccess>);
+            } else if (res?.error) {
+                setState(<FormError message={res.error}></FormError>);
             }
             setIsLoading(false)
+    }
+
+    const onLoginWithGoogle = async () => {
+        setIsLoading(true);
+        const res = await loginWithGoogle()
+        if (res?.success) {
+            setState(<FormSuccess message={res.success}></FormSuccess>);
+        } else if (res?.error) {
+            setState(<FormError message={res.error}></FormError>);
+        }
+        setIsLoading(false)
     }
 
     return (
@@ -101,7 +112,7 @@ export function UserSignUpForm({ className }: UserAuthFormProps) {
                         ></FormField>
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="username"
                             render={({ field }) => (
                                 <FormItem className="grid gap-1">
                                     <FormLabel className="sr-only">
@@ -138,7 +149,7 @@ export function UserSignUpForm({ className }: UserAuthFormProps) {
               </span>
                     </div>
                 </div>
-                <Button variant="outline" type="button" disabled={isLoading}>
+                <Button variant="outline" type="button" disabled={isLoading} onClick={onLoginWithGoogle}>
                     {isLoading ? (
                         <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
