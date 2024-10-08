@@ -12,6 +12,9 @@
     .title {
         @apply font-bold sm:text-6xl text-5xl 2xl:text-8xl md:text-7xl md:text-center tracking-tight
     }
+    .title-mini {
+        @apply font-bold sm:text-5xl text-4xl 2xl:text-7xl md:text-6xl md:text-center tracking-tight
+    }
     .subtitle {
         @apply md:text-center text-xl sm:text-2xl 2xl:text-3xl font-medium leading-snug md:leading-normal text-gray-800 dark:text-gray-300
     }
@@ -63,6 +66,9 @@
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+    }
+    .bg-gradient {
+        background: linear-gradient(315deg, #62cff4, #2c67f2);
     }
 }
 

@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 function Main() {
   return (
-    <section className='bg-gray-100 w-full mt-[66px] py-5 md:py-24'>
+    <section className='bg-gray-100 w-full py-5 md:py-24'>
         <div className='container py-10 flex flex-col justify-center gap-5'>
             <h1 className='title'>Physics hub</h1>
             <p className='subtitle'>Physics hub – это платформа для изучения физики
