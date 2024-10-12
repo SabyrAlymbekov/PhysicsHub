@@ -27,6 +27,10 @@ const Footer = () => {
                         <Link className="hover:opacity-50" href="/shop">
                             Мерч
                         </Link>
+                        <Link href="/team" className="hover:opacity-50">
+                            Наша команда
+                        </Link>
+
                     </div>
 
                 </div>
