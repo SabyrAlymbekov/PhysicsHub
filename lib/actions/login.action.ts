@@ -23,7 +23,7 @@ export const loginAction = async (values: z.infer<typeof LoginSchema>) => {
     }
     try {
         await signIn("credentials", dataToSend);
-    } catch (error: any) {
+    } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {
                 case "CredentialsSignin":
@@ -42,7 +42,7 @@ export const loginAction = async (values: z.infer<typeof LoginSchema>) => {
         }
         throw error;
     }
-    // revalidatePath("/");
+    revalidatePath("/");
     return {
         success: "done."
     }
@@ -52,6 +52,8 @@ export const loginWithGoogle = async () => {
     try {
         await signIn("google", { redirectTo: "/" })
     } catch (error) {
+        console.log(error)
+        throw error;
         return {
             error: "Internal server Error!",
         }

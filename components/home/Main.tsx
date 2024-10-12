@@ -1,7 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import Goals from "@/components/home/goals/Goals";
-import WhyUs from "@/components/home/why_us/whyUs";
 
 function Main() {
   return (

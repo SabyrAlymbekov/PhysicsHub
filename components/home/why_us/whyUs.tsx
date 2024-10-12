@@ -12,10 +12,7 @@ const WhyUs = () => {
     return (
         <section className="bg-gray-100 w-full py-[50px]">
             <div className="container lg:flex lg:justify-between lg:gap-10 ">
-                <div className="lg:w-1/2">
-                    <h3 className="text-3xl text-center font-semibold mb-9 sm:text-4xl md:text-5xl">Our Team consist of
-                        several <span
-                            className="font-bold text-gradient">super creative</span> people !</h3>
+                <div className="lg:w-1/2 flex items-center">
                     <Swiper
                         scrollbar={{
                             hide: true,
@@ -82,14 +79,14 @@ const WhyUs = () => {
                         </SwiperSlide>
                     </Swiper>
                 </div>
-                <div className="lg:w-1/2">
-                    <h2 className="text-5xl text-center mt-10 font-bold text-black">Что такое physics hub?</h2>
-                    <div className="mt-7 text-xl text-gray-600 md:text-2xl">
+                <div className="xl:w-1/2">
+                    <h2 className="text-4xl sm:text-6xl md:text-[3.5em] mt-8 font-bold text-black">Что такое Physics Hub?</h2>
+                    <div className="mt-4 text-xl text-gray-600 md:text-2xl">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto aspernatur consectetur
                         earum
                         est maiores numquam repudiandae rerum voluptatem. Laudantium, vel!
                     </div>
-                    <div className="mt-7 text-xl text-gray-600 md:text-2xl">
+                    <div className="mt-3 text-xl text-gray-600 md:text-2xl">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus aliquam commodi, debitis
                         dolores eaque eligendi exercitationem explicabo ipsa magni, necessitatibus nihil nobis
                         perspiciatis

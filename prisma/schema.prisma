@@ -16,24 +16,54 @@ datasource db {
 enum UserRole {
   ADMIN
   USER
+  TEAM
 }
 
 model User {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?         @unique
-  hashedPassword String?
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  role          UserRole?       @default(USER)
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  email           String?          @unique
+  hashedPassword  String?
+  emailVerified   DateTime?
+  image           String?
+  role            UserRole?        @default(USER)
+  bio             String?
+  realName        String?
+  rolesInTeam     String[]
+  education       String[]
+  achievements    String[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  socials         SocialMediaInfo[] // Связь с социальными сетями
+  accounts        Account[]         // Связь с аккаунтами
+  sessions        Session[]         // Связь с сессиями
+  authenticators  Authenticator[]   // Для WebAuthn
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
+
+model Social {
+  id          String            @id @default(auto()) @map("_id") @db.ObjectId
+  name        String            @unique               // Поле должно быть уникальным
+  image       String?           // Логотип или иконка социальной сети
+
+  // Обратная связь с SocialMediaInfo
+  socialMedia SocialMediaInfo[]
+}
+
+model SocialMediaInfo {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  link       String   // Ссылка на профиль пользователя в соц. сети
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id]) // Связь с пользователем
+
+  socialId   String
+  social     Social   @relation(fields: [socialId], references: [id]) // Связь с соц. сетью
+
+  createdAt  DateTime @default(now())
+}
+
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId

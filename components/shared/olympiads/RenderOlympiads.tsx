@@ -1,6 +1,6 @@
 import React from 'react'
 
-const RenderOlympiads = ({ olymps }) => {
+const RenderOlympiads = () => {
     return <div>
 
     </div>

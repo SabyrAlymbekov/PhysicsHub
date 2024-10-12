@@ -1,4 +1,4 @@
-import type {NextAuthOptions} from "next-auth";
+import type {NextAuthConfig} from "next-auth";
 import GoogleProvider from "next-auth/providers/Google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -6,7 +6,7 @@ import {db} from "@/lib/db";
 import {getUserByEmail} from "@/lib/actions/authActions";
 import bcrypt from "bcryptjs"
 
-export const authConfig: NextAuthOptions = {
+export const authConfig: NextAuthConfig = {
     adapter: PrismaAdapter(db),
     session: { strategy: "jwt" },
     providers: [
@@ -48,6 +48,5 @@ export const authConfig: NextAuthOptions = {
     ],
     pages: {
         signIn: "/signin",
-        signUp: "/signup"
     }
 }

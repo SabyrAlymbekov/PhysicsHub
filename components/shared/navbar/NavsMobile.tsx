@@ -11,7 +11,7 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import {SignInButton} from "@/components/shared/auth/signin-button";
-import {auth} from "@/auth";
+// import {auth} from "@/auth";
 import {currentUser} from "@/lib/actions/authActions";
  
 export async function Burger() {

@@ -1,16 +1,16 @@
 import React from "react";
-import Link from "next/link";
+// import Link from "next/link";
 
-const Books = ({ text, filename }) => {
-    return <tr
-        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-wrap">
-            <Link download={filename}>
-                {text}
-            </Link>
-        </th>
-    </tr>
-}
+// const Books = ({ text, filename }) => {
+//     return <tr
+//         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+//         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-wrap">
+//             <Link download={filename}>
+//                 {text}
+//             </Link>
+//         </th>
+//     </tr>
+// }
 
 const ResourcesList = () => {
     return <section className="container relative mt-14">

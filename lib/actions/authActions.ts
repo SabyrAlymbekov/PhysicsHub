@@ -17,10 +17,10 @@ export const currentUser = async () => {
     return session?.user;
 };
 
-export const currentRole = async () => {
-    const session = await auth();
-    if (!session) {
-        return null;
-    }
-    return session?.user?.role;
-};
+// export const currentRole = async () => {
+//     const session = await auth();
+//     if (!session || !session.user?.role) {
+//         return null;
+//     }
+//     return session.user.role;
+// };
