@@ -122,3 +122,56 @@ model Authenticator {
 
   @@unique([userId, credentialID])
 }
+
+model Textbook {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  authors     String[]
+  tags        String[]
+  topics      String[]
+  filePath    String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("textbooks")
+}
+
+// olympiads
+
+model Olympiad {
+  id                  String      @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  logoUrl             String
+  coverUrl            String
+  regulationsUrl      String?     // Опционально
+  registrationStart   DateTime
+  registrationEnd     DateTime
+  stages              Stage[]
+  resultsDate         DateTime
+  description         String
+  participantCount    Int
+  socialLinks         Json        // Ссылки на соц. сети
+  registrationFormUrl String
+  organizers          Organizer[]
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+model Stage {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  olympiad  Olympiad @relation(fields: [olympiadId], references: [id])
+  olympiadId String   @db.ObjectId
+  name      String
+  startDate DateTime
+  endDate   DateTime
+}
+
+model Organizer {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  olympiad          Olympiad @relation(fields: [olympiadId], references: [id])
+  olympiadId        String   @db.ObjectId
+  logoUrl           String
+  sponsorName       String
+  sponsorWebsiteUrl String
+}

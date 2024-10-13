@@ -48,5 +48,16 @@ export const authConfig: NextAuthConfig = {
     ],
     pages: {
         signIn: "/signin",
-    }
+    },
+    callbacks: {
+        jwt({ token, user }) {
+            if(user) token.role = user.role
+            return token
+        },
+        session({ session, token }) {
+            session.user.role = token.role
+            return session
+        }
+    },
+
 }

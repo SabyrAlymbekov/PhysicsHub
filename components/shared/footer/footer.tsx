@@ -5,7 +5,7 @@ import insta from "@/public/assets/icons/instagram.svg"
 
 const Footer = () => {
     return (
-        <footer className="w-full bg-white">
+        <footer className="w-full bg-white mt-auto">
             <div className="container flex items-center justify-between gap-10 py-3">
                 <div className="flex gap-3 flex-col">
                     <div className="grid grid-cols-2 gap-2">
