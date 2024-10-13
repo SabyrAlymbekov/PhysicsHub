@@ -1,8 +1,15 @@
 import React from 'react';
 
-const Person = ({photo, name, status, school, description}) => {
+const Person = ({photo, name, status, school, description, id}: {
+    photo: string;
+    name: string;
+    status: string;
+    school: string;
+    description: string;
+    id: string;
+}) => {
     return (
-        <div className="flex gap-8">
+        <div className="flex gap-8" id={id}>
             <div className="flex-shrink-0 basis-[400px]">
                 <img className="rounded-2xl w-[100%] object-center object-cover" src={photo} alt="photo"/>
             </div>
