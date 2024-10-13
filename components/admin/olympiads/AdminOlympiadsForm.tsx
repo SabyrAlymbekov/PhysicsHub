@@ -3,7 +3,7 @@
 import {useEffect, useState} from 'react';
 import {currentUser} from "@/lib/actions/authActions";
 import {useRouter} from "next/navigation";
-import {Label} from "@/components/ui/Label";
+import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 

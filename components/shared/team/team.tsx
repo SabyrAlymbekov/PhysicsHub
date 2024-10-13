@@ -23,11 +23,11 @@ const TeamPage = async () => {
                     team && team.map((member, index) => (
                         <Person
                             key={index}
-                            photo={member.image}
-                            name={member.name}
+                            photo={member.image as string}
+                            name={member.name as string}
                             status={member.rolesInTeam.join(', ')}
                             school={member.education.join(', ')}
-                            description={member.achievements}
+                            description={member.achievements.join(',\n')}
                             id={member.id}
                         />
                     ))
