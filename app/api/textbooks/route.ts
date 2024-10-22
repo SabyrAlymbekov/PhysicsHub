@@ -1,14 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import {currentUser} from "@/lib/actions/authActions";
 import {revalidatePath} from "next/cache"; // Предполагается, что вы используете singleton для PrismaClient
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
     const session = await currentUser();
 
     // Проверка роли пользователя
     if (!session || session.role !== 'ADMIN') {
-        return NextResponse.json({ error: 'Доступ запрещен' }, { status: 403 });
+        return Response.json({ error: 'Доступ запрещен' }, { status: 403 });
     }
 
     try {
@@ -28,9 +27,9 @@ export async function POST(req: NextRequest) {
             },
         });
         revalidatePath('/resources')
-        return NextResponse.json(textbook, { status: 201 });
+        return Response.json(textbook, { status: 201 });
     } catch (error) {
         console.error('Ошибка при создании учебника:', error);
-        return NextResponse.json({ error: 'Ошибка при сохранении учебника' }, { status: 500 });
+        return Response.json({ error: 'Ошибка при сохранении учебника' }, { status: 500 });
     }
 }

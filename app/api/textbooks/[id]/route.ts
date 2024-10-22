@@ -1,17 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
 import {db} from '@/lib/db';
 import { deleteObject, ref } from 'firebase/storage';
 import { storage } from '@/firebase';
 import {currentUser} from "@/lib/actions/authActions";
 import {revalidatePath} from "next/cache";
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-    const { id } = params;
+export async function DELETE(req: Request,{ params }: { params: Promise<{ id: string }> }) {
+    console.log(await params)
+    const { id } = (await params);
+    console.log(id)
 
     const user = await currentUser();
 
     if (!user || user.role !== 'ADMIN') {
-        return NextResponse.json({ error: 'Доступ запрещен' }, { status: 403 });
+        return Response.json({ error: 'Доступ запрещен' }, { status: 403 });
     }
 
     try {
@@ -20,7 +21,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         });
 
         if (!textbook) {
-            return NextResponse.json({ error: 'Учебник не найден' }, { status: 404 });
+            return Response.json({ error: 'Учебник не найден' }, { status: 404 });
         }
 
         const filePath = textbook.filePath;
@@ -30,12 +31,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         });
 
         const fileRef = ref(storage, filePath);
-
         await deleteObject(fileRef);
         revalidatePath('/resources')
-        return NextResponse.json({ message: 'Учебник и файл успешно удалены' }, { status: 200 });
+        return Response.json({ message: 'Учебник и файл успешно удалены' }, { status: 200 });
     } catch (error) {
         console.error('Ошибка при удалении учебника:', error);
-        return NextResponse.json({ error: 'Ошибка при удалении учебника' }, { status: 500 });
+        return Response.json({ error: 'Ошибка при удалении учебника' }, { status: 500 });
     }
 }

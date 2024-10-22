@@ -1,7 +1,6 @@
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/actions/authActions";
 import { revalidatePath } from "next/cache";
-import { NextResponse } from "next/server";
 import { Stage } from "@/components/admin/olympiads/AdminOlympiadsForm";
 
 interface Org {
@@ -16,7 +15,7 @@ export async function POST(req: Request) {
         const user = await currentUser();
 
         if (!user || user.role !== 'ADMIN') {
-            return NextResponse.json({ error: "Доступ запрещен" }, { status: 403 });
+            return Response.json({ error: "Доступ запрещен" }, { status: 403 });
         }
 
         const formData = await req.json(); // Parse the request body
@@ -61,9 +60,9 @@ export async function POST(req: Request) {
         // Revalidate the path to update the cache
         revalidatePath('/olympiads');
 
-        return NextResponse.json({ olympiad }, { status: 201 });
+        return Response.json({ olympiad }, { status: 201 });
     } catch (error) {
         console.error('Ошибка при создании олимпиады:', error);
-        return NextResponse.json({ error: 'Ошибка при создании олимпиады' }, { status: 500 });
+        return Response.json({ error: 'Ошибка при создании олимпиады' }, { status: 500 });
     }
 }
