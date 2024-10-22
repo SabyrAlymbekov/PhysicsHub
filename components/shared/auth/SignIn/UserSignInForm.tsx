@@ -52,11 +52,10 @@ export function UserSignInForm({ className }: UserAuthFormProps) {
 
     const onLoginWithGoogle = async () => {
         setIsLoading(true);
-        const res = await loginWithGoogle()
-        if (res?.success) {
-            setState(<FormSuccess message={res.success}></FormSuccess>);
-        } else if (res?.error) {
-            setState(<FormError message={res.error}></FormError>);
+        try {
+            await loginWithGoogle()
+        } catch (e) {
+            setState(<FormError message="Internal server error"></FormError>);
         }
         setIsLoading(false)
     }

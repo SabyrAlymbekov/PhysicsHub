@@ -16,7 +16,7 @@ async function Navbar() {
           <div className='flex w-full justify-between items-center py-3'>
             <Link className="row items-center gap-1" href="/">
               <Image src="/assets/icons/logo.png" width={40} height={40} alt="physicshub"></Image>
-              <h1 className='h2-bold'>Physicshub</h1>
+              <h1 className='h2-bold'>Physics Hub</h1>
             </Link>
 
             <Navs></Navs>

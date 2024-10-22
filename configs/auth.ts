@@ -1,13 +1,10 @@
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import {db} from "@/lib/db";
 import {getUserByEmail} from "@/lib/actions/authActions";
 import bcrypt from "bcryptjs"
+import {NextAuthConfig} from "next-auth";
 
-export const authConfig = {
-    adapter: PrismaAdapter(db),
-    session: { strategy: "jwt" },
+export const authConfig  = {
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -45,18 +42,4 @@ export const authConfig = {
             }
         })
     ],
-    pages: {
-        signIn: "/signin",
-    },
-    callbacks: {
-        jwt({ token, user }) {
-            if(user) token.role = user.role
-            return token
-        },
-        session({ session, token }) {
-            session.user.role = token.role
-            return session
-        }
-    },
-
-}
+} satisfies NextAuthConfig

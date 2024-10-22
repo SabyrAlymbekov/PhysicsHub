@@ -54,12 +54,6 @@ export const loginWithGoogle = async () => {
     } catch (error) {
         console.log(error)
         throw error;
-        return {
-            error: "Internal server Error!",
-        }
     }
     revalidatePath("/")
-    return {
-        success: "done."
-    }
 }

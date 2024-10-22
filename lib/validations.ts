@@ -14,3 +14,13 @@ export const SignUpSchema = z.object({
         message: "Длина имени не может превышать 255 символов"
     })
 })
+
+
+export const profileSchema = z.object({
+    bio: z.string().min(3, {message: "описание должно быть как минимум в 3 символа."}).max(4096, {message: "описание должно быть меньше 4096 символов."}),
+    realName: z.string().max(128, {message: "длина не должна превосходить 128 символов"}),
+    education: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array(),
+    achievements: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array(),
+    realImage: z.string(),
+    rolesInTeam: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array()
+})

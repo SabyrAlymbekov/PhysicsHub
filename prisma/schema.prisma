@@ -25,43 +25,23 @@ model User {
   email           String?          @unique
   hashedPassword  String?
   emailVerified   DateTime?
+
   image           String?
   role            UserRole?        @default(USER)
   bio             String?
   realName        String?
-  rolesInTeam     String[]
   education       String[]
   achievements    String[]
+  realImage       String?
 
-  socials         SocialMediaInfo[] // Связь с социальными сетями
-  accounts        Account[]         // Связь с аккаунтами
-  sessions        Session[]         // Связь с сессиями
-  authenticators  Authenticator[]   // Для WebAuthn
+  rolesInTeam     String[]
+  socials         String[]      // ссылки вида "SocialMediaName:link"
+  accounts        Account[]
+  sessions        Session[]
+  authenticators  Authenticator[]
 
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
-}
-
-model Social {
-  id          String            @id @default(auto()) @map("_id") @db.ObjectId
-  name        String            @unique               // Поле должно быть уникальным
-  image       String?           // Логотип или иконка социальной сети
-
-  // Обратная связь с SocialMediaInfo
-  socialMedia SocialMediaInfo[]
-}
-
-model SocialMediaInfo {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  link       String   // Ссылка на профиль пользователя в соц. сети
-
-  userId     String
-  user       User     @relation(fields: [userId], references: [id]) // Связь с пользователем
-
-  socialId   String
-  social     Social   @relation(fields: [socialId], references: [id]) // Связь с соц. сетью
-
-  createdAt  DateTime @default(now())
 }
 
 
@@ -145,10 +125,10 @@ model Olympiad {
   logoUrl             String
   coverUrl            String
   regulationsUrl      String?     // Опционально
-  registrationStart   DateTime
-  registrationEnd     DateTime
+  registrationStart   DateTime?   // либо дата либо неопределено
+  registrationEnd     DateTime?   // либо дата либо неопределено
   stages              Stage[]
-  resultsDate         DateTime
+  resultsDate         DateTime?    // либо дата либо неопределено
   description         String
   participantCount    Int
   socialLinks         Json        // Ссылки на соц. сети
@@ -159,12 +139,12 @@ model Olympiad {
 }
 
 model Stage {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  olympiad  Olympiad @relation(fields: [olympiadId], references: [id])
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  olympiad   Olympiad @relation(fields: [olympiadId], references: [id])
   olympiadId String   @db.ObjectId
-  name      String
-  startDate DateTime
-  endDate   DateTime
+  name       String
+  startDate  DateTime?   // либо дата либо неопределено
+  endDate    DateTime?   // либо дата либо неопределено
 }
 
 model Organizer {
@@ -172,6 +152,6 @@ model Organizer {
   olympiad          Olympiad @relation(fields: [olympiadId], references: [id])
   olympiadId        String   @db.ObjectId
   logoUrl           String
-  sponsorName       String
-  sponsorWebsiteUrl String
+  name       String
+  link String
 }

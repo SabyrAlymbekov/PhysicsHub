@@ -1,15 +1,30 @@
 "use client";
 
-import {useEffect, useState} from 'react';
+import {ChangeEvent, useEffect, useState} from 'react';
 import {currentUser} from "@/lib/actions/authActions";
 import {useRouter} from "next/navigation";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
+import {Button} from "@/components/ui/button";
+import {uploadFile} from "@/lib/utils";
+
+export interface Stage {
+    name: string;
+    startDate?: string;
+    endDate?: string;
+}
+
+export interface Organizer {
+    name: string;
+    link: string;
+    logo: File | null;
+}
 
 export default function CreateOlympiadForm() {
     const router = useRouter();
     const [isAdmin, setIsAdmin] = useState<boolean>(true);
+
     useEffect(() => {
         const ch = async () => {
             const curUser = await currentUser()
@@ -18,9 +33,72 @@ export default function CreateOlympiadForm() {
         }
         ch()
     }, [])
+
     if (!isAdmin) {
         router.push('/')
     }
+
+    // Stages var/functions
+    const [stages, setStages] = useState<Stage[]>([
+        { name: ''},
+    ]);
+
+    // Функция для добавления нового этапа
+    const addStage = () => {
+        setStages([...stages, { name: '' }]);
+    };
+
+    // Функция для обновления значений каждого этапа
+    const handleStageChange = (index: number, field: keyof Stage, value: string) => {
+        const newStages = [...stages];
+        newStages[index][field] = value;
+        console.log(value, field)
+        setStages(newStages);
+    };
+
+    // Функция для удаления этапа
+    const removeStage = (index: number) => {
+        const newStages = stages.filter((_, i) => i !== index);
+        setStages(newStages);
+    };
+
+    // Organizers var/functions
+    const [organizers, setOrganizers] = useState<Organizer[]>([]);
+
+    const handleOrgChange = (index: number, field: string, value: string) => {
+        const newOrganizers: Organizer[] = [...organizers];
+        newOrganizers[index] = {
+            ...newOrganizers[index],
+            [field]: value
+        }
+        setOrganizers(newOrganizers);
+    }
+
+    const handleOrgFileChange = (index: number, event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] || null;
+
+        // Создаем копию массива организаторов
+        const updatedOrganizers = [...organizers];
+
+        // Обновляем нужного организатора, добавляя загруженный файл
+        updatedOrganizers[index] = {
+            ...updatedOrganizers[index],
+            logo: file,
+        };
+
+        // Обновляем состояние
+        setOrganizers(updatedOrganizers);
+    };
+
+    const addOrganizer = () => {
+        setOrganizers([...organizers, {name: '', link: '', logo: null}]);
+    }
+
+    const removeOrg = (index: number) => {
+        const neworganizers = organizers.filter((_, i) => i !== index);
+        setOrganizers(neworganizers);
+    }
+
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -30,8 +108,6 @@ export default function CreateOlympiadForm() {
         participantCount: 0,
         socialLinks: '',
         registrationFormUrl: '',
-        stages: '',
-        organizers: '',
     });
 
     const [logo, setLogo] = useState<File | null>(null);
@@ -50,56 +126,50 @@ export default function CreateOlympiadForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Проверка на наличие обязательных файлов
         if (!logo || !cover) {
-            alert('Пожалуйста, загрузите логотип и обложку олимпиады.');
+            alert('Пожалуйста, загрузите логотип и обложку.');
             return;
         }
 
-        const formDataToSubmit = new FormData();
-        formDataToSubmit.append('name', formData.name);
-        formDataToSubmit.append('description', formData.description);
-        formDataToSubmit.append('registrationStart', formData.registrationStart);
-        formDataToSubmit.append('registrationEnd', formData.registrationEnd);
-        formDataToSubmit.append('resultsDate', formData.resultsDate);
-        formDataToSubmit.append('participantCount', formData.participantCount.toString());
-        formDataToSubmit.append('socialLinks', formData.socialLinks);
-        formDataToSubmit.append('registrationFormUrl', formData.registrationFormUrl);
-        formDataToSubmit.append('stages', formData.stages);
-        formDataToSubmit.append('organizers', formData.organizers);
-
-        formDataToSubmit.append('logo', logo); // Логотип
-        formDataToSubmit.append('cover', cover); // Обложка
-        if (regulations) {
-            formDataToSubmit.append('regulations', regulations); // Положение (опционально)
-        }
-
         try {
+            // Upload files and get their URLs
+            const logoUrl = await uploadFile(logo, 'olympiads/logos');
+            const coverUrl = await uploadFile(cover, 'olympiads/covers');
+            const regulationsUrl = regulations ? await uploadFile(regulations, 'olympiads/regulations') : null;
+
+            const organizerLogos = await Promise.all(
+                organizers.map(org => org.logo ? uploadFile(org.logo, 'olympiads/organizers/logos') : null)
+            );
+
+            const updatedOrganizers = organizers.map((org, i) => ({
+                ...org,
+                logoUrl: organizerLogos[i],
+            }));
+
+            const payload = {
+                ...formData,
+                stages,
+                organizers: updatedOrganizers,
+                logoUrl,
+                coverUrl,
+                regulationsUrl,
+            };
+
+            // Call server function
+            console.log(payload)
             const res = await fetch('/api/olympiads', {
                 method: 'POST',
-                body: formDataToSubmit,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
             });
+
+            const result = await res.json();
 
             if (res.ok) {
                 alert('Олимпиада успешно создана!');
-                setFormData({
-                    name: '',
-                    description: '',
-                    registrationStart: '',
-                    registrationEnd: '',
-                    resultsDate: '',
-                    participantCount: 0,
-                    socialLinks: '',
-                    registrationFormUrl: '',
-                    stages: '',
-                    organizers: '',
-                });
-                setLogo(null);
-                setCover(null);
-                setRegulations(null);
+                router.push('/olympiads');
             } else {
-                const errorData = await res.json();
-                alert(`Ошибка: ${errorData.error}`);
+                alert(`Ошибка: ${result.error}`);
             }
         } catch (error) {
             console.error('Ошибка при создании олимпиады:', error);
@@ -107,80 +177,160 @@ export default function CreateOlympiadForm() {
         }
     };
 
+
     return (
-        <div>
-            <form onSubmit={handleSubmit} className="flex flex-col max-w-[500px]">
-                <Label>
+        <div className="container my-16">
+            <h1 className="title mb-6">Create on olympiad</h1>
+            <form onSubmit={handleSubmit} className="flex flex-col max-w-[500px] gap-6">
+                <Label className="subtitle !text-left !text-black">
                     Название:
                     <Input type="text" name="name" value={formData.name} onChange={handleInputChange} required/>
                 </Label>
 
-                <Label>
+                <Label className="subtitle !text-left !text-black">
                     Описание:
                     <Textarea name="description" value={formData.description} onChange={handleInputChange} required/>
                 </Label>
 
-                <Label>
+                <Label className="subtitle !text-left !text-black">
                     Дата начала регистрации:
                     <Input type="date" name="registrationStart" value={formData.registrationStart}
-                           onChange={handleInputChange} required/>
+                           onChange={handleInputChange}/>
                 </Label>
 
-                <Label>
+                <Label className="subtitle !text-left !text-black">
                     Дата окончания регистрации:
                     <Input type="date" name="registrationEnd" value={formData.registrationEnd}
-                           onChange={handleInputChange} required/>
+                           onChange={handleInputChange}/>
                 </Label>
 
-                <Label>
+                <Label className="subtitle !text-left !text-black">
                     Дата публикации результатов:
                     <Input type="date" name="resultsDate" value={formData.resultsDate} onChange={handleInputChange}
-                           required/>
+                           />
                 </Label>
 
-                <Label>
+                <Label className="subtitle !text-left !text-black">
                     Количество участников:
                     <Input type="number" name="participantCount" value={formData.participantCount}
                            onChange={handleInputChange} required/>
                 </Label>
 
-                <Label>
-                    Ссылки на соцсети (JSON):
+                <Label className="subtitle !text-left !text-black">
+                    Ссылки на соцсети:
+                    (в формате название:ссылка без пробелов и запятыми для перечисления. Например instagram:https://instagram.com)
                     <Textarea name="socialLinks" value={formData.socialLinks} onChange={handleInputChange} required/>
                 </Label>
 
-                <Label>
+                <Label className="subtitle !text-left !text-black">
                     Ссылка на форму регистрации:
                     <Input type="text" name="registrationFormUrl" value={formData.registrationFormUrl}
                            onChange={handleInputChange} required/>
                 </Label>
 
-                <Label>
-                    Этапы (JSON):
-                    <Textarea name="stages" value={formData.stages} onChange={handleInputChange} required/>
-                </Label>
+                <h1 className="subtitle !text-left !text-black">
+                    Этапы:
+                    {stages.map((stage, index) => (
+                        <div key={index} style={{ marginBottom: '20px' }}>
+                            <Label>
+                                Название этапа:
+                                <Input
+                                    type="text"
+                                    value={stage.name}
+                                    onChange={(e) => handleStageChange(index, 'name', e.target.value)}
+                                    placeholder="Введите название этапа"
+                                    required
+                                />
+                            </Label>
 
-                <Label>
-                    Организаторы (JSON):
-                    <Textarea name="organizers" value={formData.organizers} onChange={handleInputChange} required/>
-                </Label>
+                            <Label>
+                                Дата начала:
+                                <Input
+                                    type="date"
+                                    value={stage.startDate || ''}
+                                    onChange={(e) => handleStageChange(index, 'startDate', e.target.value)}
+                                />
+                            </Label>
 
-                <Label>
+                            <Label>
+                                Дата окончания:
+                                <Input
+                                    type="date"
+                                    value={stage.endDate || ''}
+                                    onChange={(e) => handleStageChange(index, 'endDate', e.target.value)}
+                                />
+                            </Label>
+
+                            <Button type="button" onClick={() => removeStage(index)}>
+                                Удалить этап
+                            </Button>
+                        </div>
+                    ))}
+
+                    <Button type="button" onClick={addStage}>
+                        Добавить этап
+                    </Button>
+
+                </h1>
+
+                <h1 className="subtitle !text-left !text-black">
+                    Организаторы:
+                    {organizers.map((org, index) => (
+                        <div key={index} style={{marginBottom: '20px'}}>
+                            <Label>
+                                Название:
+                                <Input
+                                    type="text"
+                                    value={org.name}
+                                    onChange={(e) => handleOrgChange(index, 'name', e.target.value)}
+                                    placeholder="Введите название организатора"
+                                    required
+                                />
+                            </Label>
+
+                            <Label>
+                                Ссылка на них:
+                                <Input
+                                    type="text"
+                                    value={org.link}
+                                    onChange={(e) => handleOrgChange(index, 'link', e.target.value)}
+                                    required
+                                />
+                            </Label>
+
+                            <Label className="subtitle !text-left !text-black">
+                                Логотип:
+                                <Input type="file" accept="image/*" onChange={(e) => handleOrgFileChange(index, e)}/>
+                            </Label>
+
+                            <Button type="button" onClick={() => removeOrg(index)}>
+                                Удалить
+                            </Button>
+                        </div>
+                    ))}
+
+                    <Button type="button" onClick={addOrganizer}>
+                        Добавить организатора
+                    </Button>
+
+                </h1>
+
+                <Label className="subtitle !text-left !text-black">
                     Логотип:
                     <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setLogo)} required/>
                 </Label>
 
-                <Label>
+                <Label className="subtitle !text-left !text-black">
                     Обложка:
                     <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setCover)} required/>
                 </Label>
 
-                <Label>
+                <Label className="subtitle !text-left !text-black">
                     Положение (опционально):
                     <Input type="file" accept=".pdf" onChange={(e) => handleFileChange(e, setRegulations)}/>
                 </Label>
 
-                <button type="submit">Создать олимпиаду</button>
+                <Button type="submit">Создать олимпиаду</Button>
             </form>
         </div>
     );

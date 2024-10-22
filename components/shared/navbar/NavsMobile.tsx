@@ -33,7 +33,7 @@ export async function Burger() {
                   <SheetClose asChild>
                       <Link className="row items-center gap-1" href="/">
                           <Image src="/assets/icons/logo.png" width={40} height={40} alt="physicshub"></Image>
-                          <h1 className='h2-bold'>Physicshub</h1>
+                          <h1 className='h2-bold'>Physics Hub</h1>
                       </Link>
                   </SheetClose>
               </SheetTitle>

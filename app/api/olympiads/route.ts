@@ -1,81 +1,54 @@
-import { NextRequest, NextResponse } from 'next/server';
-import {db} from '@/lib/db';
-import { storage } from '@/lib/firebaseAdmin';
-import { v4 as uuidv4 } from 'uuid';
-import {currentUser} from "@/lib/actions/authActions";
-import {revalidatePath} from "next/cache";
+import { db } from "@/lib/db";
+import { currentUser } from "@/lib/actions/authActions";
+import { revalidatePath } from "next/cache";
+import { NextResponse } from "next/server";
+import { Stage } from "@/components/admin/olympiads/AdminOlympiadsForm";
 
-export async function POST(req: NextRequest) {
-    const formData = await req.formData();
-    const user = await currentUser();
+interface Org {
+    name: string
+    link: string
+    logoUrl: string
+}
 
-    if (!user || user.role !== 'ADMIN') {
-        return NextResponse.json({ error: 'Доступ запрещен' }, { status: 403 });
-    }
-
+// POST handler for creating an olympiad
+export async function POST(req: Request) {
     try {
+        const user = await currentUser();
+
+        if (!user || user.role !== 'ADMIN') {
+            return NextResponse.json({ error: "Доступ запрещен" }, { status: 403 });
+        }
+
+        const formData = await req.json(); // Parse the request body
+
         const {
-            name,
-            description,
-            registrationStart,
-            registrationEnd,
-            resultsDate,
-            participantCount,
-            socialLinks,
-            registrationFormUrl,
-            stages,
-            organizers,
-        } = Object.fromEntries(formData.entries());
+            name, description, registrationStart, registrationEnd, resultsDate,
+            participantCount, socialLinks, registrationFormUrl, stages, organizers,
+            logoUrl, coverUrl, regulationsUrl
+        } = formData;
 
-        const logo = formData.get('logo') as File;
-        const cover = formData.get('cover') as File;
-        const regulations = formData.get('regulations') as File | null;
-
-        if (!logo || !cover) {
-            return NextResponse.json({ error: 'Логотип и обложка обязательны.' }, { status: 400 });
-        }
-
-        // Загрузка файлов в Firebase Storage
-        const uploadFile = async (file: File, folder: string): Promise<string> => {
-            const fileName = `${uuidv4()}_${file.name}`;
-            const filePath = `${folder}/${fileName}`;
-            const fileRef = storage.bucket().file(filePath);
-
-            const buffer = await file.arrayBuffer();
-            await fileRef.save(Buffer.from(buffer), { contentType: file.type });
-
-            await fileRef.makePublic();
-            return fileRef.publicUrl();
-        };
-        const logoUrl = await uploadFile(logo, 'olympiads/logos');
-        const coverUrl = await uploadFile(cover, 'olympiads/covers');
-        let regulationsUrl = null;
-
-        if (regulations) {
-            regulationsUrl = await uploadFile(regulations, 'olympiads/regulations');
-        }
-
-        const stagesArray = JSON.parse(stages as string);
-        const organizersArray = JSON.parse(organizers as string);
-        const socialLinksArray = JSON.parse(socialLinks as string);
 
         const olympiad = await db.olympiad.create({
             data: {
-                name: name as string,
-                description: description as string,
-                registrationStart: new Date(registrationStart as string),
-                registrationEnd: new Date(registrationEnd as string),
-                resultsDate: new Date(resultsDate as string),
-                participantCount: parseInt(participantCount as string),
-                socialLinks: socialLinksArray,
-                registrationFormUrl: registrationFormUrl as string,
-                stages: {
-                    create: stagesArray,
-                },
+                name,
+                description,
+                registrationStart: (registrationStart != '') ? new Date(registrationStart as string) : null,
+                registrationEnd: (registrationEnd != '') ? new Date(registrationEnd as string) : null,
+                resultsDate: (resultsDate != '') ? new Date(resultsDate as string) : null,
+                participantCount: parseInt(participantCount),
+                socialLinks,
+                registrationFormUrl,
+                stages: { create: stages.map((stage: Stage) => (
+                        {
+                            name: stage.name,
+                            startDate: (stage?.startDate) ? new Date(stage.startDate).toISOString() : null,
+                            endDate: (stage?.endDate) ? new Date(stage.endDate).toISOString() : null,
+                        }
+                    )) },
                 organizers: {
-                    create: organizersArray.map((org: any) => ({
-                        sponsorName: org.sponsorName,
-                        sponsorWebsiteUrl: org.sponsorWebsiteUrl,
+                    create: organizers.map((org: Org) => ({
+                        name: org.name,
+                        link: org.link,
                         logoUrl: org.logoUrl,
                     })),
                 },
@@ -84,7 +57,10 @@ export async function POST(req: NextRequest) {
                 regulationsUrl,
             },
         });
+
+        // Revalidate the path to update the cache
         revalidatePath('/olympiads');
+
         return NextResponse.json({ olympiad }, { status: 201 });
     } catch (error) {
         console.error('Ошибка при создании олимпиады:', error);
