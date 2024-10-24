@@ -1,6 +1,6 @@
 import Navbar from '@/components/shared/navbar/Navbar'
 import React from 'react'
-// import Footer from "@/components/shared/footer/footer";
+import Footer from "@/components/shared/footer/footer";
 
 function Layout({ children } : { children: React.ReactNode}) {
   return (
@@ -9,7 +9,7 @@ function Layout({ children } : { children: React.ReactNode}) {
         <main>
             { children }
         </main>
-         {/*<Footer></Footer>*/}
+         <Footer></Footer>
     </div>
   )
 }

@@ -23,7 +23,8 @@ const config: Config = {
   		},
   		screens: {
   			xs: '420px',
-  			md: '830px'
+  			md: '830px',
+				mini: '700px'
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -90,6 +91,9 @@ const config: Config = {
 		},
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+		require("tailwindcss-animate"),
+		// require('@tailwindcss/line-clamp'),
+	],
 };
 export default config;
