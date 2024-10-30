@@ -2,6 +2,9 @@ import React from 'react';
 import {getOlympiadById} from "@/lib/actions/olympiads/getOlympiadById";
 import Image from "next/image";
 import Link from "next/link";
+import { CiLink } from "react-icons/ci";
+import { MdOutlineAppRegistration } from "react-icons/md";
+import { IoMdAlarm } from "react-icons/io";
 
 const OlympiadPage = async ({olympiadId}) => {
   console.log(olympiadId);
@@ -9,6 +12,41 @@ const OlympiadPage = async ({olympiadId}) => {
 
   const olympiad = await getOlympiadById(olympiadId);
   console.log(olympiad);
+  let links;
+  try {
+    links = JSON.parse(olympiad.socialLinks);
+  } catch (error) {
+    links = olympiad.socialLinks; // если это не JSON, просто оставляем как есть
+  }
+  function timeSince(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+
+    const intervals = [
+      { seconds: 31536000, singular: "год", few: "года", many: "лет" },
+      { seconds: 2592000, singular: "месяц", few: "месяца", many: "месяцев" },
+      { seconds: 86400, singular: "день", few: "дня", many: "дней" },
+      { seconds: 3600, singular: "час", few: "часа", many: "часов" },
+      { seconds: 60, singular: "минута", few: "минуты", many: "минут" }
+    ];
+
+    for (const interval of intervals) {
+      const count = Math.floor(seconds / interval.seconds);
+      if (count >= 1) {
+        return count + " " + getDeclension(count, interval.singular, interval.few, interval.many);
+      }
+    }
+    return seconds + " " + getDeclension(seconds, "секунда", "секунды", "секунд");
+  }
+
+  function getDeclension(number, singular, few, many) {
+    const mod10 = number % 10;
+    const mod100 = number % 100;
+
+    if (mod10 === 1 && mod100 !== 11) return singular;
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
+    return many;
+  }
+  console.log(links, typeof links, "СУКА БЛЯТЬ ЭТО ЕБАННАЯ Я ЕБАЛ В РОТ");
   return (
     <div className="olympiadPage w-full py-10">
       <div className="container relative">
@@ -25,9 +63,14 @@ const OlympiadPage = async ({olympiadId}) => {
             alt="avatar"
             className="w-24 h-24 bg-gray-200 rounded-full object-cover"
           />
+          <div className="flex gap-5">
           <span className="font-bold py-2 px-4 bg-gray-100 rounded-xl">
             Участников: <span className="text-gradient">{olympiad.participantCount}</span>
           </span>
+          <span className="font-bold py-2 px-4 bg-gray-100 rounded-xl">
+            Было создано {timeSince(olympiad.createdAt)}
+          </span>
+          </div>
         </div>
         <h1 className="text-6xl mt-20 mb-5 font-bold uppercase">
           {olympiad.name}
@@ -37,19 +80,13 @@ const OlympiadPage = async ({olympiadId}) => {
             <p className="text-lg w-full break-words">
               {olympiad.description}
             </p>
-            {/*<div className="stages flex flex-col gap-4">*/}
-            {/*  <h2 className="font-semibold text-3xl">Этапы</h2>*/}
-            {/*  <div className="">*/}
-            {/*    {*/}
-            {/*      olympiad.stages.map(() => (*/}
 
-            {/*      ))*/}
-            {/*    }*/}
-            {/*  </div>*/}
-            {/*</div>*/}
-            <div className="register flex flex-col gap-4">
-              <h2 className="font-semibold text-3xl">
-                Регистрация
+            <div className="register flex flex-col gap-4 border p-4 rounded-lg">
+              <h2 className="font-semibold text-3xl flex gap-1 items-center flex-nowrap">
+                <MdOutlineAppRegistration/>
+                <span>
+                  Регистрация
+                </span>
               </h2>
               <div className="flex gap-5 font-medium text-xl">
 
@@ -75,33 +112,101 @@ const OlympiadPage = async ({olympiadId}) => {
                 Ссылка на заполнение формы
               </Link>
             </div>
-            {
-              true && (
-                <div className="stages">
-                  <h2 className="font-semibold text-3xl">Этапы</h2>
-                  {
-                    olympiad.stages.map(stage => (
-                      <div className="stage" key={stage.id}>
-                        <h3 className="font-semibold text-2xl text-gradient">{stage.name}</h3>
-                        <span
-                          className="text-gradient">{new Date(stage.startDate).toLocaleDateString("ru-GB", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric"
-                        })}</span> — <span
-                        className="text-gradient">{new Date(startDate.endDate.toLocaleDateString("ru-GB", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric"
-                      })}</span>
-                      </div>
-                    ))
-                  }
-                </div>
-              )
-            }
+
+            {/*{*/}
+            {/*  true && (*/}
+            {/*    <div className="stages">*/}
+            {/*      <h2 className="font-semibold text-3xl">Этапы</h2>*/}
+            {/*      {*/}
+            {/*        olympiad.stages.map(stage => (*/}
+            {/*          <div className="stage" key={stage.id}>*/}
+            {/*            <h3 className="font-semibold text-2xl text-gradient">{stage.name}</h3>*/}
+            {/*            <span*/}
+            {/*              className="text-gradient">{new Date(stage.startDate).toLocaleDateString("ru-GB", {*/}
+            {/*              day: "numeric",*/}
+            {/*              month: "long",*/}
+            {/*              year: "numeric"*/}
+            {/*            })}</span> — <span*/}
+            {/*            className="text-gradient">{new Date(startDate.endDate.toLocaleDateString("ru-GB", {*/}
+            {/*            day: "numeric",*/}
+            {/*            month: "long",*/}
+            {/*            year: "numeric"*/}
+            {/*          })}</span>*/}
+            {/*          </div>*/}
+            {/*        ))*/}
+            {/*      }*/}
+            {/*    </div>*/}
+            {/*  )*/}
+            {/*}*/}
+
+            {/*{*/}
+            {/*  true && (*/}
+            {/*    <div className="organizers">*/}
+            {/*      <h2 className="font-semibold text-3xl">Организаторы</h2>*/}
+            {/*      {*/}
+            {/*        olympiad.stages.map(org => (*/}
+            {/*          <div className="org" key={org.id}>*/}
+            {/*                      <Link href="org.link">*/}
+
+                                    {/*                  <Image*/}
+                                    {/*                    src={org.logoUrl}*/}
+                                    {/*                    alt="avatar"*/}
+                                    {/*                    className="w-20 h-20 bg-gray-200 rounded-full object-cover"*/}
+                                    {/*                  />*/}
+                                    {/*            <h3 className="font-semibold text-2xl text-gradient">{org.name}</h3>*/}
+                                    {/*
+                                  </Link>
+          </div>*/}
+            {/*        ))*/}
+            {/*      }*/}
+            {/*    </div>*/}
+            {/*  )*/}
+            {/*}*/}
+            <div className="results flex flex-col gap-5 border p-4 rounded-lg">
+              <h2 className="font-semibold text-3xl flex gap-1 items-center flex-nowrap">
+                <IoMdAlarm/>
+                <span>
+                  Результаты
+                </span>
+              </h2>
+              <p  className="flex gap-2 font-medium text-xl">
+                <span>Дата:</span>
+                <span
+                  className="text-gradient">{new Date(olympiad.resultsDate).toLocaleDateString("ru-GB", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+                })}</span>
+
+              </p>
+            </div>
           </div>
-          <div className="col-span-1">gay</div>
+          <div className="col-span-1 flex flex-col gap-5">
+            <h2 className="font-semibold text-3xl text-gradient">
+              Социальные сети:
+            </h2>
+            <ul>
+              <li className="">
+              <Link href={links} className="flex flex-nowrap items-center gap-2" target="_blank">
+                  <CiLink></CiLink>
+                  <span>
+                    {links}
+                  </span>
+                </Link>
+              </li>
+              {/*{*/}
+              {/*  links.map((link, index) => (*/}
+              {/*      <li key={index} className="">*/}
+
+              {/*        <Link href={link}>*/}
+              {/*          link*/}
+              {/*        </Link>*/}
+              {/*      </li>*/}
+              {/*    )*/}
+              {/*  )*/}
+              {/*}*/}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
