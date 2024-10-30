@@ -99,8 +99,8 @@ const OlympiadPage = async ({olympiadId}) => {
                 </span>
               </h2>
               <p className="text-lg break-words">
-                {/*{olympiad.description}*/}
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, blanditiis, consequuntur dignissimos dolore earum eligendi eum explicabo incidunt iste mollitia nihil nobis provident reiciendis reprehenderit sed, veniam voluptatibus! Commodi nostrum, sed? Blanditiis deleniti dolores inventore minima modi, sint! Accusamus asperiores at deserunt natus non pariatur quibusdam rerum sequi sint tempore.
+                {olympiad.description}
+                {/*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, blanditiis, consequuntur dignissimos dolore earum eligendi eum explicabo incidunt iste mollitia nihil nobis provident reiciendis reprehenderit sed, veniam voluptatibus! Commodi nostrum, sed? Blanditiis deleniti dolores inventore minima modi, sint! Accusamus asperiores at deserunt natus non pariatur quibusdam rerum sequi sint tempore.*/}
               </p>
             </div>
 
