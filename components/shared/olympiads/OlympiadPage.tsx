@@ -2,9 +2,15 @@ import React from 'react';
 import {getOlympiadById} from "@/lib/actions/olympiads/getOlympiadById";
 import Image from "next/image";
 import Link from "next/link";
-import { CiLink } from "react-icons/ci";
-import { MdOutlineAppRegistration } from "react-icons/md";
+import { CiLink} from "react-icons/ci";
+import { MdOutlineAppRegistration,  MdOutlineDescription } from "react-icons/md";
 import { IoMdAlarm } from "react-icons/io";
+import { Separator } from "@/components/ui/separator"
+import { BsCalendar2DateFill } from "react-icons/bs";
+
+import { IoPeopleSharp } from "react-icons/io5";
+
+
 
 const OlympiadPage = async ({olympiadId}) => {
   console.log(olympiadId);
@@ -64,25 +70,43 @@ const OlympiadPage = async ({olympiadId}) => {
             className="w-24 h-24 bg-gray-200 rounded-full object-cover"
           />
           <div className="flex gap-5">
-          <span className="font-bold py-2 px-4 bg-gray-100 rounded-xl">
+          <span className="md:hidden font-bold py-2 px-4 bg-gray-100 rounded-xl gap-2 flex flex-nowrap items-center">
+            <IoPeopleSharp></IoPeopleSharp>
+            {olympiad.participantCount}
+          </span>
+          <span className="md:block hidden font-bold py-2 px-4 bg-gray-100 rounded-xl">
             Участников: <span className="text-gradient">{olympiad.participantCount}</span>
           </span>
-          <span className="font-bold py-2 px-4 bg-gray-100 rounded-xl">
+          <span className="md:block hidden font-bold py-2 px-4 bg-gray-100 rounded-xl">
             Было создано {timeSince(olympiad.createdAt)}
+          </span>
+          <span className="md:hidden gap-2 font-bold py-2 px-4 bg-gray-100 rounded-xl flex flex-nowrap items-center">
+            <BsCalendar2DateFill></BsCalendar2DateFill>
+            {timeSince(olympiad.createdAt)}
           </span>
           </div>
         </div>
-        <h1 className="text-6xl mt-20 mb-5 font-bold uppercase">
+        <h1 className="text-4xl lg:text-6xl mt-20 mb-5 font-bold uppercase">
           {olympiad.name}
         </h1>
-        <div className="grid grid-cols-3 gap-5">
-          <div className="col-span-2 flex flex-col gap-5">
-            <p className="text-lg w-full break-words">
-              {olympiad.description}
-            </p>
+        <div className="grid lg:grid-cols-3 gap-5">
+          <div className="lg:col-span-2 flex flex-col gap-5">
+            <div className="flex flex-col gap-4 border p-4 rounded-lg">
+              <h2 className="font-semibold text-2xl lg:text-3xl flex gap-1 items-center flex-nowrap">
+                <MdOutlineDescription/>
+                <span>
+                  Описание
+                </span>
+              </h2>
+              <p className="text-lg break-words">
+                {/*{olympiad.description}*/}
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, blanditiis, consequuntur dignissimos dolore earum eligendi eum explicabo incidunt iste mollitia nihil nobis provident reiciendis reprehenderit sed, veniam voluptatibus! Commodi nostrum, sed? Blanditiis deleniti dolores inventore minima modi, sint! Accusamus asperiores at deserunt natus non pariatur quibusdam rerum sequi sint tempore.
+              </p>
+            </div>
+
 
             <div className="register flex flex-col gap-4 border p-4 rounded-lg">
-              <h2 className="font-semibold text-3xl flex gap-1 items-center flex-nowrap">
+              <h2 className="font-semibold text-2xl lg:text-3xl flex gap-1 items-center flex-nowrap">
                 <MdOutlineAppRegistration/>
                 <span>
                   Регистрация
@@ -163,7 +187,7 @@ const OlympiadPage = async ({olympiadId}) => {
             {/*  )*/}
             {/*}*/}
             <div className="results flex flex-col gap-5 border p-4 rounded-lg">
-              <h2 className="font-semibold text-3xl flex gap-1 items-center flex-nowrap">
+              <h2 className="font-semibold text-2xl lg:text-3xl flex gap-1 items-center flex-nowrap">
                 <IoMdAlarm/>
                 <span>
                   Результаты
@@ -181,8 +205,12 @@ const OlympiadPage = async ({olympiadId}) => {
               </p>
             </div>
           </div>
-          <div className="col-span-1 flex flex-col gap-5">
-            <h2 className="font-semibold text-3xl text-gradient">
+
+          <div className="lg:col-span-1 flex flex-col gap-2 lg:gap-5">
+            <div className="lg:hidden block">
+              <Separator></Separator>
+            </div>
+            <h2 className="font-semibold text-[20px] lg:text-3xl text-gradient">
               Социальные сети:
             </h2>
             <ul>

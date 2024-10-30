@@ -15,15 +15,15 @@ const OlympiadBlock = ({ olympiad }) => {
           alt="olympiad"
         />
         <div className="p-4">
-          <h2 className="text-xl font-bold text-gradient">
+          <h2 className="text-xl font-bold text-gradient truncate">
             {olympiad.name}
           </h2>
           <p>
             Registration: {new Date(olympiad.registrationStart).toLocaleDateString("de-DE")} — {new Date(olympiad.registrationEnd).toLocaleDateString("de-DE")}
           </p>
-          <p className="truncate">
-            {olympiad.description}
-          </p>
+          {/*<p className="truncate">*/}
+          {/*  {olympiad.description}*/}
+          {/*</p>*/}
         </div>
       </div>
     </Link>
