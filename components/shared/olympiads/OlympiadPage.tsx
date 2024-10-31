@@ -10,13 +10,48 @@ import { BsCalendar2DateFill } from "react-icons/bs";
 
 import { IoPeopleSharp } from "react-icons/io5";
 
+// TODO: Добавить этапы и организаторы
+// TODO: убрать было создано
+// TODO: убрать все ошибки типов
+// TODO: сделать нормальное описание
+// TODO: если описание слишком длинное то обрезать его и добавить в конец многоточие и read more, при нажатии на которое будет показываться полное описание
+// TODO: сделать красивые карточки олимпиады на главной
+// TODO: добавить фильтры
 
+function timeSince(date) {
+  const seconds = Math.floor((new Date() - date) / 1000);
 
-const OlympiadPage = async ({olympiadId}) => {
+  const intervals = [
+    { seconds: 31536000, singular: "год", few: "года", many: "лет" },
+    { seconds: 2592000, singular: "месяц", few: "месяца", many: "месяцев" },
+    { seconds: 86400, singular: "день", few: "дня", many: "дней" },
+    { seconds: 3600, singular: "час", few: "часа", many: "часов" },
+    { seconds: 60, singular: "минута", few: "минуты", many: "минут" }
+  ];
+
+  for (const interval of intervals) {
+    const count = Math.floor(seconds / interval.seconds);
+    if (count >= 1) {
+      return count + " " + getDeclension(count, interval.singular, interval.few, interval.many);
+    }
+  }
+  return seconds + " " + getDeclension(seconds, "секунда", "секунды", "секунд");
+}
+
+function getDeclension(number, singular, few, many) {
+  const mod10 = number % 10;
+  const mod100 = number % 100;
+
+  if (mod10 === 1 && mod100 !== 11) return singular;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
+  return many;
+}
+
+const OlympiadPage = async ({olympiadId}: {olympiadId: string}) => {
   console.log(olympiadId);
-  // console.log("иди назуй")
 
   const olympiad = await getOlympiadById(olympiadId);
+  if (!olympiad) return <div>Олимпиада не найдена</div>;
   console.log(olympiad);
   let links;
   try {
@@ -24,34 +59,7 @@ const OlympiadPage = async ({olympiadId}) => {
   } catch (error) {
     links = olympiad.socialLinks; // если это не JSON, просто оставляем как есть
   }
-  function timeSince(date) {
-    const seconds = Math.floor((new Date() - date) / 1000);
-
-    const intervals = [
-      { seconds: 31536000, singular: "год", few: "года", many: "лет" },
-      { seconds: 2592000, singular: "месяц", few: "месяца", many: "месяцев" },
-      { seconds: 86400, singular: "день", few: "дня", many: "дней" },
-      { seconds: 3600, singular: "час", few: "часа", many: "часов" },
-      { seconds: 60, singular: "минута", few: "минуты", many: "минут" }
-    ];
-
-    for (const interval of intervals) {
-      const count = Math.floor(seconds / interval.seconds);
-      if (count >= 1) {
-        return count + " " + getDeclension(count, interval.singular, interval.few, interval.many);
-      }
-    }
-    return seconds + " " + getDeclension(seconds, "секунда", "секунды", "секунд");
-  }
-
-  function getDeclension(number, singular, few, many) {
-    const mod10 = number % 10;
-    const mod100 = number % 100;
-
-    if (mod10 === 1 && mod100 !== 11) return singular;
-    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
-    return many;
-  }
+  
   console.log(links, typeof links, "СУКА БЛЯТЬ ЭТО ЕБАННАЯ Я ЕБАЛ В РОТ");
   return (
     <div className="olympiadPage w-full py-10">
@@ -116,23 +124,23 @@ const OlympiadPage = async ({olympiadId}) => {
 
                 <p>
                   Начало: <span
-                  className="text-gradient">{new Date(olympiad.registrationStart).toLocaleDateString("ru-GB", {
+                  className="text-gradient">{(olympiad.registrationStart) ? new Date(olympiad.registrationStart).toLocaleDateString("ru-GB", {
                   day: "numeric",
                   month: "long",
                   year: "numeric"
-                })}</span>
+                }) : "Пока неизвестно"}</span>
                 </p>
                 <p>
                   Конец: <span
-                  className="text-gradient">{new Date(olympiad.registrationStart).toLocaleDateString("ru-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric"
-                })}</span>
+                  className="text-gradient">{(olympiad.registrationEnd) ? new Date(olympiad.registrationEnd).toLocaleDateString("ru-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                  }) : "Пока неизвестно"}</span>
                 </p>
 
               </div>
-              <Link href={olympiad.regulationsUrl} className="font-medium text-gray-500 hover:text-gray-700">
+              <Link href={olympiad.registrationFormUrl} className="font-medium text-gray-500 hover:text-gray-700">
                 Ссылка на заполнение формы
               </Link>
             </div>
@@ -142,6 +150,7 @@ const OlympiadPage = async ({olympiadId}) => {
             {/*    <div className="stages">*/}
             {/*      <h2 className="font-semibold text-3xl">Этапы</h2>*/}
             {/*      {*/}
+            {/* у олимпиады нет поля этапы ты должен получать эти этапы через функцию getstagesbyolympaidsid в lib/actions/olympiads/getStagesByOlympiadId и делать это оптимизировано */}
             {/*        olympiad.stages.map(stage => (*/}
             {/*          <div className="stage" key={stage.id}>*/}
             {/*            <h3 className="font-semibold text-2xl text-gradient">{stage.name}</h3>*/}
@@ -167,6 +176,7 @@ const OlympiadPage = async ({olympiadId}) => {
             {/*  true && (*/}
             {/*    <div className="organizers">*/}
             {/*      <h2 className="font-semibold text-3xl">Организаторы</h2>*/}
+            {/* Тоже самое только ты должен получать организаторов через функцию getorganizersbyolympaidid в lib/actions/olympiads/getOrganizersByOlympiadId и делать это оптимизировано */}
             {/*      {*/}
             {/*        olympiad.stages.map(org => (*/}
             {/*          <div className="org" key={org.id}>*/}
@@ -196,11 +206,11 @@ const OlympiadPage = async ({olympiadId}) => {
               <p  className="flex gap-2 font-medium text-xl">
                 <span>Дата:</span>
                 <span
-                  className="text-gradient">{new Date(olympiad.resultsDate).toLocaleDateString("ru-GB", {
+                  className="text-gradient">{(olympiad.resultsDate) ? new Date(olympiad.resultsDate).toLocaleDateString("ru-GB", {
                   day: "numeric",
                   month: "long",
                   year: "numeric"
-                })}</span>
+                }) : "Пока неизвестно"}</span>
 
               </p>
             </div>
