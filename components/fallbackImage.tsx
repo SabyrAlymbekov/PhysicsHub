@@ -4,21 +4,23 @@ import Image, { ImageProps } from "next/image";
 import { useEffect, useState } from "react";
 
 interface ImageFallbackProps extends Omit<ImageProps, 'src'> {
-  src: string;
+  src: string | null;
   fallbackSrc: string;
 }
 
 export default function ImageFallback({ src, fallbackSrc, ...rest }: ImageFallbackProps) {
-  const [imgSrc, setImgSrc] = useState<string>(src);
+  const [imgSrc, setImgSrc] = useState<string | null>(src);
 
   useEffect(() => {
-    setImgSrc(src);
+    if (src != null) {
+      setImgSrc(src);
+    }
   }, [src]);
 
   return (
     <Image
       {...rest}
-      src={imgSrc}
+      src={imgSrc || fallbackSrc}
       onLoadingComplete={(result) => {
         if (result.naturalWidth === 0) {
           // Broken image

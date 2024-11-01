@@ -32,6 +32,9 @@ model User {
   realName        String?
   education       String[]
   achievements    String[]
+  roles           String[]
+  projects        String[]
+  interests       String[]
   realImage       String?
 
   rolesInTeam     String[]
