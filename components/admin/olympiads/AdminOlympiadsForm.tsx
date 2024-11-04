@@ -7,7 +7,7 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
-import {uploadFile} from "@/lib/utils";
+import {uploadFileWithProgress as uploadFile} from "@/lib/utils";
 import { createOlympiad } from "@/lib/actions/olympiads/createOlympiads";
 
 export interface Stage {
@@ -132,12 +132,13 @@ export default function CreateOlympiadForm() {
         }
 
         try {
-            const logoUrl = await uploadFile(logo, 'olympiads/logos');
-            const coverUrl = await uploadFile(cover, 'olympiads/covers');
-            const regulationsUrl = regulations ? await uploadFile(regulations, 'olympiads/regulations') : null;
+            
+            const logoUrl = await uploadFile(logo, 'olympiads/logos', ()=>{});
+            const coverUrl = await uploadFile(cover, 'olympiads/covers', ()=>{});
+            const regulationsUrl = regulations ? await uploadFile(regulations, 'olympiads/regulations', ()=>{}) : null;
 
             const organizerLogos = await Promise.all(
-                organizers.map(org => org.logo ? uploadFile(org.logo, 'olympiads/organizers/logos') : null)
+                organizers.map(org => org.logo ? uploadFile(org.logo, 'olympiads/organizers/logos', ()=>{}) : null)
             );
 
             const updatedOrganizers = organizers.map((org, i) => ({

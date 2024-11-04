@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { changeProfile } from '@/lib/actions/profile/changeProfile'
 import { uploadFileWithProgress, deleteFile } from "@/lib/utils";
 
-const EditImageForm = ({oldImage} : {oldImage: string}) => {
+const EditImageForm = ({oldImage} : {oldImage: string | null}) => {
     const [state, setState] = useState<React.ReactNode>("")
     const [logo, setLogo] = useState<string | null>(null);
     const [oldLogo, setOldLogo] = useState<string | null>(oldImage);

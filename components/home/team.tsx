@@ -6,7 +6,6 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
-// import ImageFallback from "@/components/fallbackImage"; // Импортируем ImageFallback
 import Link from "next/link";
 import ImageFallback from "../fallbackImage";
 
@@ -20,7 +19,7 @@ export const TeamMember = ({teamMember}: {
                     href={`/profile/${teamMember.id}`}
                 >
                     <ImageFallback
-                        src={teamMember.realImage || teamMember.image || "/assets/icons/avatar.png"}
+                        src={teamMember.image || "/assets/icons/avatar.png"}
                         fallbackSrc="/assets/icons/avatar.png"
                         alt="logo"
                         width={100}
