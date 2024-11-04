@@ -11,9 +11,10 @@ const OlympiadsList: React.FC = () => {
     const [olympiads, setOlympiads] = useState([]);
     const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
     const [showUpcoming, setShowUpcoming] = useState(false);
-
     useEffect(() => {
-        // Функция для получения данных
+        console.log(dateRange, "ЗАБЕЛАСЯ СУКА АЛКЬКИКУЗИКИКЬИКУЗЩИЬИУЗИУЩЗИКЩЗУИЩУКЗЩКЩЗЩКУЗ");
+    }, [dateRange]);
+    useEffect(() => {
         const fetchOlympiads = async () => {
             const data = await getAllOlympiads();
             setOlympiads(data);

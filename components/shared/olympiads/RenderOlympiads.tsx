@@ -8,6 +8,8 @@ interface Olympiad {
     name: string;
     startDate: Date;
     endDate: Date;
+    registrationStart: Date;
+    registrationEnd: Date;
 }
 
 interface RenderOlympiadsProps {
@@ -19,21 +21,26 @@ interface RenderOlympiadsProps {
 const RenderOlympiads: React.FC<RenderOlympiadsProps> = ({ olympiads, dateRange, showUpcoming }) => {
     const now = new Date();
 
-    // Фильтруем олимпиады по диапазону дат и флагу "Предстоящие"
     const filteredOlympiads = olympiads.filter((olympiad) => {
-        const { startDate, endDate } = olympiad;
+        const { registrationStart, registrationEnd } = olympiad;
+        const registrationEndDate = new Date(registrationEnd);
+        const isValidDate = !isNaN(registrationEndDate.getTime());
 
-        // Фильтр для предстоящих олимпиад
-        if (showUpcoming && isAfter(now, new Date(endDate))) {
+        if (isValidDate && showUpcoming && isAfter(now, registrationEndDate)) {
             return false;
         }
 
-        // Фильтр по диапазону дат
-        if (dateRange && dateRange.from && dateRange.to) {
-            return (
-              isWithinInterval(new Date(startDate), { start: dateRange.from, end: dateRange.to }) &&
-              isWithinInterval(new Date(endDate), { start: dateRange.from, end: dateRange.to })
-            );
+        if (dateRange?.from && dateRange?.to) {
+            const isStartWithinRange = isWithinInterval(registrationStart, {
+                start: dateRange.from,
+                end: dateRange.to,
+            });
+            const isEndWithinRange = isWithinInterval(registrationEnd, {
+                start: dateRange.from,
+                end: dateRange.to,
+            });
+
+            return isStartWithinRange && isEndWithinRange;
         }
 
         return true;
