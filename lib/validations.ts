@@ -17,10 +17,18 @@ export const SignUpSchema = z.object({
 
 
 export const profileSchema = z.object({
-    bio: z.string().min(3, {message: "описание должно быть как минимум в 3 символа."}).max(4096, {message: "описание должно быть меньше 4096 символов."}),
-    realName: z.string().max(128, {message: "длина не должна превосходить 128 символов"}),
-    education: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array(),
-    achievements: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array(),
-    realImage: z.string(),
-    rolesInTeam: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array()
+    bio: z.string().min(3, {message: "описание должно быть как минимум в 3 символа."}).max(4096, {message: "описание должно быть меньше 4096 символов."}).or(z.undefined()),
+    role: z.union([
+        z.literal('ADMIN'),
+        z.literal('TEAM'),
+        z.literal('USER'),
+      ]).or(z.undefined()),
+    name: z.string().min(1, {message: "поле не должно быть пустым"}).max(128, {message: "длина не должна превосходить 128 символов"}).or(z.undefined()),
+    projects: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во проектов не должно превышать 100"}).or(z.undefined()),
+    education: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined()),
+    achievements: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined()),
+    interests: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined()),
+    socials: z.string().url().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined()),
+    image: z.string().or(z.undefined()),
+    rolesInTeam: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined())
 })

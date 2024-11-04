@@ -29,13 +29,11 @@ model User {
   image           String?
   role            UserRole?        @default(USER)
   bio             String?
-  realName        String?
   education       String[]
   achievements    String[]
   roles           String[]
   projects        String[]
   interests       String[]
-  realImage       String?
 
   rolesInTeam     String[]
   socials         String[]      // ссылки вида "SocialMediaName:link"
@@ -157,4 +155,18 @@ model Organizer {
   logoUrl           String
   name       String
   link String
+}
+
+// shop
+
+model Product {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  description String
+  views String[]
+  price Int
+  inStock Boolean
+  sizes String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

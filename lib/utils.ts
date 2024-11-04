@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge"
 import bcrypt from "bcryptjs"
 
 import { v4 as uuidv4 } from "uuid";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { app } from "@/firebase"; // Initialize Firebase client
 
 export function cn(...inputs: ClassValue[]) {
@@ -19,10 +19,29 @@ export function saltAndHashPassword(password: string) {
 
 const storage = getStorage(app);
 
-export const uploadFile = async (file: File, folder: string): Promise<string> => {
+export const uploadFileWithProgress = async (file: File, folder: string, onProgress: (progress: number) => void): Promise<string> => {
   const fileName = `${uuidv4()}_${file.name}`;
   const storageRef = ref(storage, `${folder}/${fileName}`);
+  const uploadTask = uploadBytesResumable(storageRef, file);
 
-  await uploadBytes(storageRef, file); // Upload file
-  return getDownloadURL(storageRef);  // Get public URL
+  return new Promise((resolve, reject) => {
+    uploadTask.on('state_changed', 
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        onProgress(progress);
+      }, 
+      (error) => {
+        reject(error);
+      }, 
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        resolve(downloadURL);
+      }
+    );
+  });
+};
+
+export const deleteFile = async (fileUrl: string): Promise<void> => {
+  const fileRef = ref(storage, fileUrl);
+  return deleteObject(fileRef);
 };

@@ -1,11 +1,13 @@
 'use server'
 
-import db from "@/lib/db";
+import {db} from "@/lib/db";
 
 const getStageByOlympiadsId = async (id: string) => {
   try {
-    let res = await db.stages.findMany({
-      where: eq(stages.olympiadId, id)
+    const res = await db.stage.findMany({
+      where: {
+        olympiadId: id
+      }
     })
     return res
   } catch (error) {

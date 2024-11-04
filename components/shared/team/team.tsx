@@ -1,7 +1,5 @@
 import React from 'react';
-// import Person from "@/components/shared/team/person";
 import {getTeamMembers} from "@/lib/actions/team/getTeam";
-// import {PersonProps} from "@/types/componentsTypes";
 import type {User} from "@prisma/client";
 import {TeamMember} from "@/components/home/team";
 
@@ -10,7 +8,7 @@ const TeamPage = async () => {
     const admins = await getTeamMembers("ADMIN");
     return (
         <>
-            <section className="bg-gray-100 w-full py-5 md:py-20">
+            <section className="bg-gray-100 w-full py-20">
                 <div className="container flex flex-col">
                     <h1 className="title">
                         Наша <span className="text-gradient">команда</span>
@@ -25,7 +23,7 @@ const TeamPage = async () => {
                 </div>
             </section>
             <h2 className="text-5xl max-sm:text-3xl my-10 font-bold container block uppercase">
-                КОМАНДА ИЗ 22 ЧЕЛОВЕК, ГОТОВЫХ НЕСКУЧНО ОБУЧАТЬ ТЕБЯ НАУКАМ
+                наша команда состоит КОМАНДА ИЗ {teamMembers!.length + admins!.length} ЧЕЛОВЕК 
             </h2>
             <h2 className="text-4xl max-sm:text-2xl mb-10 font-bold container block uppercase">Администрация</h2>
             <section className="container flex flex-row flex-wrap gap-10">

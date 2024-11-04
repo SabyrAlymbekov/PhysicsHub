@@ -1,3 +1,5 @@
+// 'use client'
+
 import React from 'react';
 import {getOlympiadById} from "@/lib/actions/olympiads/getOlympiadById";
 import Image from "next/image";
@@ -9,6 +11,7 @@ import { Separator } from "@/components/ui/separator"
 import { BsCalendar2DateFill } from "react-icons/bs";
 
 import { IoPeopleSharp } from "react-icons/io5";
+import getStageByOlympiadsId from '@/lib/actions/olympiads/getStageByOlympiadsId';
 
 // TODO: Добавить этапы и организаторы
 // TODO: убрать было создано
@@ -49,10 +52,11 @@ function getDeclension(number, singular, few, many) {
 
 const OlympiadPage = async ({olympiadId}: {olympiadId: string}) => {
   console.log(olympiadId);
-
+  const stages = await getStageByOlympiadsId(olympiadId);
+  // console.log(stages);
   const olympiad = await getOlympiadById(olympiadId);
   if (!olympiad) return <div>Олимпиада не найдена</div>;
-  console.log(olympiad);
+  // console.log(olympiad);
   let links;
   try {
     links = JSON.parse(olympiad.socialLinks);
@@ -60,7 +64,7 @@ const OlympiadPage = async ({olympiadId}: {olympiadId: string}) => {
     links = olympiad.socialLinks; // если это не JSON, просто оставляем как есть
   }
   
-  console.log(links, typeof links, "СУКА БЛЯТЬ ЭТО ЕБАННАЯ Я ЕБАЛ В РОТ");
+  // console.log(links, typeof links, "СУКА БЛЯТЬ ЭТО ЕБАННАЯ Я ЕБАЛ В РОТ");
   return (
     <div className="olympiadPage w-full py-10">
       <div className="container relative">

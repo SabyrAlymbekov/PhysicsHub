@@ -11,7 +11,10 @@ const config: Config = {
   theme: {
   	container: {
   		center: true,
-  		padding: '2rem',
+  		padding: {
+			DEFAULT: '1rem',
+			sm: '2rem',
+		},
   		screens: {
   			'2xl': '1400px'
   		}
@@ -24,7 +27,7 @@ const config: Config = {
   		screens: {
   			xs: '420px',
   			md: '830px',
-				mini: '700px'
+			mini: '700px'
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

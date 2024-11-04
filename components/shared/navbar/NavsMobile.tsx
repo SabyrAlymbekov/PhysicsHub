@@ -57,10 +57,10 @@ export async function Burger() {
                         :
                         (
                             <Link
-                                href={"/profile/" + user.name}
+                                href={"/profile/" + user.id}
                                 className="flex flex-row gap-2 items-center"
                             >
-                                <Image src={user.image as string || "/assets/icons/avatar.png"} alt="avatar" width={36} height={36} className="rounded-full"></Image>
+                                <Image src={user.image as string || "/assets/icons/avatar.png"} alt="avatar" width={36} height={36} className="rounded-full w-[36px] h-[36px]"></Image>
                                 <h1 className="base-medium">{user.name}</h1>
                             </Link>
                         )

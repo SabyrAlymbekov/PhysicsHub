@@ -8,6 +8,7 @@ import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {uploadFile} from "@/lib/utils";
+import { createOlympiad } from "@/lib/actions/olympiads/createOlympiads";
 
 export interface Stage {
     name: string;
@@ -52,7 +53,6 @@ export default function CreateOlympiadForm() {
     const handleStageChange = (index: number, field: keyof Stage, value: string) => {
         const newStages = [...stages];
         newStages[index][field] = value;
-        console.log(value, field)
         setStages(newStages);
     };
 
@@ -132,7 +132,6 @@ export default function CreateOlympiadForm() {
         }
 
         try {
-            // Upload files and get their URLs
             const logoUrl = await uploadFile(logo, 'olympiads/logos');
             const coverUrl = await uploadFile(cover, 'olympiads/covers');
             const regulationsUrl = regulations ? await uploadFile(regulations, 'olympiads/regulations') : null;
@@ -155,21 +154,13 @@ export default function CreateOlympiadForm() {
                 regulationsUrl,
             };
 
-            // Call server function
-            console.log(payload)
-            const res = await fetch('/api/olympiads', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
+            const res = await createOlympiad(payload);
 
-            const result = await res.json();
-
-            if (res.ok) {
+            if (res?.message == "success") {
                 alert('Олимпиада успешно создана!');
                 router.push('/olympiads');
             } else {
-                alert(`Ошибка: ${result.error}`);
+                alert('Ошибка при создании олимпиады!');
             }
         } catch (error) {
             console.error('Ошибка при создании олимпиады:', error);

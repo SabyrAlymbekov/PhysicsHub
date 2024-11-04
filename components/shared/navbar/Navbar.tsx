@@ -32,10 +32,10 @@ async function Navbar() {
                     :
                     (
                         <Link
-                            href={"/profile/" + user.name}
+                            href={"/profile/" + user.id}
                             className='max-xs:hidden'
                         >
-                            <Image src={user.image as string || "/assets/icons/avatar.png"} alt="avatar" width={36} height={36} className="rounded-full"></Image>
+                            <Image src={user.image as string || "/assets/icons/avatar.png"} alt="avatar" width={36} height={36} className="rounded-full  w-[36px] h-[36px]"></Image>
                         </Link>
                     )
                 }
