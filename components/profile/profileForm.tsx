@@ -13,9 +13,17 @@ import { z } from "zod";
 import Logout from "../shared/auth/Logout-button";
 import EditImageForm from "./edits/EditImageForm";
 
+interface user {
+  name: string;
+  email: string;
+  image: string | null;
+  id: string;
+  role: "ADMIN" | "TEAM" | "USER";
+}
+
 const ProfileFormShare = async ({ userId }: { userId: string }) => {
   const profile: User | null = await getProfile(userId);
-  const user = await currentUser();
+  const user: user | null = await currentUser();
   if (profile === null) {
     return <div>Profile not found</div>;
   }
@@ -244,7 +252,7 @@ const ProfileFormShare = async ({ userId }: { userId: string }) => {
                       <div key={index}>
                           {
                             ((z.string().url()).safeParse(soc).success) ? (
-                              <Link href={soc}>{soc}</Link>
+                              <Link href={soc} className="break-all">{soc}</Link>
                             ) : (
                               <p className="font-normal">{soc}</p>
                             )
@@ -264,7 +272,7 @@ const ProfileFormShare = async ({ userId }: { userId: string }) => {
         )}
         </div>
       </div>
-      {userId == user.id && <Logout classname="my-3 w-fit"></Logout>}
+      {userId == user?.id && <Logout classname="my-3 w-fit"></Logout>}
     </div>
   );
 };

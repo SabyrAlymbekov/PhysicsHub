@@ -28,7 +28,7 @@ export const profileSchema = z.object({
     education: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined()),
     achievements: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined()),
     interests: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined()),
-    socials: z.string().url().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined()),
+    socials: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined()),
     image: z.string().or(z.undefined()),
     rolesInTeam: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined())
 })
