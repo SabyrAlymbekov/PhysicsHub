@@ -6,14 +6,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { getAllOlympiads } from "@/lib/actions/olympiads/getAllOlympiads";
 import RenderOlympiads from "@/components/shared/olympiads/RenderOlympiads";
 import { DateRange } from "react-day-picker";
+import { Olympiad } from "@prisma/client";
 
 const OlympiadsList: React.FC = () => {
-    const [olympiads, setOlympiads] = useState([]);
+    const [olympiads, setOlympiads] = useState<Olympiad[]>([]);
     const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
-    const [showUpcoming, setShowUpcoming] = useState(false);
-    useEffect(() => {
-        console.log(dateRange, "ЗАБЕЛАСЯ СУКА АЛКЬКИКУЗИКИКЬИКУЗЩИЬИУЗИУЩЗИКЩЗУИЩУКЗЩКЩЗЩКУЗ");
-    }, [dateRange]);
+    const [showUpcoming, setShowUpcoming] = useState<boolean>(false);
     useEffect(() => {
         const fetchOlympiads = async () => {
             const data = await getAllOlympiads();
@@ -36,7 +34,7 @@ const OlympiadsList: React.FC = () => {
                   <Checkbox
                     id="upcoming"
                     checked={showUpcoming}
-                    onCheckedChange={(checked) => setShowUpcoming(checked)}
+                    onCheckedChange={(checked: boolean) => setShowUpcoming(checked)}
                   />
               </div>
           </div>

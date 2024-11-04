@@ -12,51 +12,32 @@ import { BsCalendar2DateFill } from "react-icons/bs";
 import { IoPeopleSharp } from "react-icons/io5";
 import getStagesByOlympiadId from "@/lib/actions/olympiads/getStagesByOlympiadId";
 import getOrganizerByOlympiadsId from "@/lib/actions/olympiads/getOrganizerByOlympiadId";
+import { Olympiad, Stage } from '@prisma/client';
+import { redirect } from 'next/navigation';
 
 // Типы для олимпиады, этапов и ссылок на социальные сети
-interface Olympiad {
-  id: string;
-  name: string;
-  description: string;
-  participantCount: number;
-  createdAt: string;
-  registrationStart: string;
-  registrationEnd: string;
-  registrationFormUrl?: string;
-  socialLinks: string;
-  resultsDate: string;
-}
-
-interface Stage {
-  id: string;
-  name: string;
-  startDate?: string;
-  endDate?: string;
-}
-
-interface SocialLink {
-  url: string;
-  name?: string;
-}
 
 interface OlympiadPageProps {
   olympiadId: string;
 }
 
 const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
-  const olympiad: Olympiad = await getOlympiadById(olympiadId);
-  const stages: Stage[] = await getStagesByOlympiadId(olympiadId);
+  const olympiad: Olympiad | null = await getOlympiadById(olympiadId);
+  if (!olympiad) {
+    redirect('/')
+  }
+  console.log(olympiad.description)
+  const stages: Stage[] | undefined = await getStagesByOlympiadId(olympiadId);
+  if (!stages) {
+    redirect('/')
+  }
   const organizers = await getOrganizerByOlympiadsId(olympiadId);
 
-  let links: SocialLink[] | string;
-  try {
-    links = JSON.parse(olympiad.socialLinks);
-  } catch (error) {
-    links = olympiad.socialLinks;
-  }
+  const links: string[] = olympiad.socialLinks.split(',');
+  // const links = [];
 
-  const timeSince = (date: string): string => {
-    const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+  const timeSince = (date: Date): string => {
+    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
     const intervals = [
       { seconds: 31536000, singular: "год", few: "года", many: "лет" },
       { seconds: 2592000, singular: "месяц", few: "месяца", many: "месяцев" },
@@ -87,7 +68,7 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
     <div className="olympiadPage w-full py-10">
       <div className="container relative">
         <div className="relative w-full h-[200px] bg-black border-2 rounded-lg overflow-hidden">
-          <Image src={olympiad.coverUrl} alt="banner" width={100} height={100} className="w-full h-full object-cover" />
+          <Image src={olympiad.coverUrl} alt="banner" width={1364} height={196} className="w-full h-full object-cover" />
         </div>
         <div className="absolute inset-x-0 top-[150px] flex justify-between items-center px-20">
           <Image src={olympiad.logoUrl} alt="avatar" width={100} height={100} className="w-24 h-24 bg-gray-200 rounded-full object-cover" />
@@ -116,7 +97,7 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
                 <MdOutlineDescription />
                 <span>Описание</span>
               </h2>
-              <p className="text-lg break-words">{olympiad.description}</p>
+              <p className="text-lg whitespace-pre-wrap">{olympiad.description}</p>
             </div>
 
             <div className="register flex flex-col gap-4 border p-4 rounded-lg">
@@ -126,18 +107,24 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
               </h2>
               <div className="flex gap-5 font-medium text-xl">
                 <p>
-                  Начало: <span className="text-gradient">{new Date(olympiad.registrationStart).toLocaleDateString("ru-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric"
-                })}</span>
+                  Начало: <span className="text-gradient">
+                    {
+                    (olympiad.registrationStart ? new Date(olympiad.registrationStart).toLocaleDateString("ru-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric"
+                    }) : "не определено")
+                }
+                </span>
                 </p>
                 <p>
-                  Конец: <span className="text-gradient">{new Date(olympiad.registrationEnd).toLocaleDateString("ru-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric"
-                })}</span>
+                  Конец: <span className="text-gradient">{
+                    (olympiad.registrationEnd ? new Date(olympiad.registrationEnd).toLocaleDateString("ru-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric"
+                    }) : "не определено")
+                }</span>
                 </p>
               </div>
               <Link href={olympiad.registrationFormUrl || "#"} className="font-medium text-gray-500 hover:text-gray-700">
@@ -152,13 +139,13 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
               </h2>
               <p className="flex gap-2 font-medium text-xl">
                 <span>Дата:</span>
-                <span className="text-gradient">
-                  {new Date(olympiad.resultsDate).toLocaleDateString("ru-GB", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric"
-                  })}
-                </span>
+                <span className="text-gradient">{
+                    (olympiad.resultsDate ? new Date(olympiad.resultsDate).toLocaleDateString("ru-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric"
+                    }) : "не определено")
+                }</span>
               </p>
             </div>
           </div>
@@ -200,7 +187,7 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
 
                   {organizers.map((org) => (
                     <div className="organizer flex flex-col items-center w-[70px] " key={org.id}>
-                      <Link href={org.link || "#"}>
+                      <a href={org.link || "#"}>
                         <div className="w-[70px] h-[70px]">
                           <Image
                             src={org.logoUrl}
@@ -210,8 +197,9 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
                             className="object-cover rounded-full"
                           />
                         </div>
-                      </Link>
+                      
                       <h3 className="font-semibold text-xl mt-2">{org.name}</h3>
+                      </a>
                     </div>
                   ))}
                 </div>
@@ -222,15 +210,15 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
               <Separator />
             </div>
 
-            <h2 className="font-semibold text-3xl text-gradient">Социальные сети:</h2>
-            {Array.isArray(links) && links.length > 0 ? (
+            <h2 className="font-semibold text-3xl text-gradient">Источники:</h2>
+            {links.length > 0 ? (
               <ul>
                 {links.map((link, index) => (
                   <li key={index}>
-                    <Link href={link.url || "#"} className="flex flex-nowrap items-center gap-2" target="_blank">
+                    <a href={(link.split(':')[1] + ':' + link.split(':')[2]) || "#"} className="flex flex-nowrap items-center gap-2" target="_blank" >
                       <CiLink />
-                      <span>{link.name || link.url}</span>
-                    </Link>
+                      <span>{link.split(':')[0]}</span>
+                    </a>
                   </li>
                 ))}
               </ul>

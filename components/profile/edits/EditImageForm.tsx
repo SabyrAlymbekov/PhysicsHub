@@ -3,8 +3,6 @@
 import React, { useState } from 'react'
 import { FormSuccess } from '@/components/shared/auth/form-success'
 import { FormError } from '@/components/shared/auth/form-error'
-import { Button } from '@/components/ui/button'
-import { DialogFooter } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { changeProfile } from '@/lib/actions/profile/changeProfile'

@@ -5,7 +5,6 @@ import { FormSuccess } from '@/components/shared/auth/form-success';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DialogFooter } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { changeProfile } from '@/lib/actions/profile/changeProfile';

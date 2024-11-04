@@ -9,7 +9,6 @@ import ModalWrapper from "./modalWrapper";
 import EditFieldForm from "./edits/EditFieldForm";
 import EditManyFields from "./edits/EditManyFields";
 import Link from "next/link";
-import { IoMdAdd } from "react-icons/io";
 import { z } from "zod";
 import Logout from "../shared/auth/Logout-button";
 import EditImageForm from "./edits/EditImageForm";

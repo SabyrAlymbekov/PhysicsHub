@@ -6,6 +6,7 @@ import {TeamMember} from "@/components/home/team";
 const TeamPage = async () => {
     const teamMembers = await getTeamMembers("TEAM");
     const admins = await getTeamMembers("ADMIN");
+    
     return (
         <>
             <section className="bg-gray-100 w-full py-20">
@@ -23,7 +24,7 @@ const TeamPage = async () => {
                 </div>
             </section>
             <h2 className="text-5xl max-sm:text-3xl my-10 font-bold container block uppercase">
-                наша команда состоит КОМАНДА ИЗ {teamMembers!.length + admins!.length} ЧЕЛОВЕК 
+                наша команда состоит ИЗ {teamMembers!.length + admins!.length} ЧЕЛОВЕК 
             </h2>
             <h2 className="text-4xl max-sm:text-2xl mb-10 font-bold container block uppercase">Администрация</h2>
             <section className="container flex flex-row flex-wrap gap-10">

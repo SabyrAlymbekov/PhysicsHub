@@ -1,5 +1,4 @@
 import React from "react"
-import Logout from "@/components/shared/auth/Logout-button";
 
 import dynamic from 'next/dynamic'
 

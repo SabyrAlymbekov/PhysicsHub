@@ -132,7 +132,7 @@ model Olympiad {
   resultsDate         DateTime?    // либо дата либо неопределено
   description         String
   participantCount    Int
-  socialLinks         Json        // Ссылки на соц. сети
+  socialLinks         String        // Ссылки на соц. сети
   registrationFormUrl String
   organizers          Organizer[]
   createdAt           DateTime    @default(now())

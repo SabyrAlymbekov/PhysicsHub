@@ -7,7 +7,7 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
-import {uploadFileWithProgress as uploadFile} from "@/lib/utils";
+import { uploadFile} from "@/lib/utils";
 import { createOlympiad } from "@/lib/actions/olympiads/createOlympiads";
 
 export interface Stage {
@@ -113,6 +113,7 @@ export default function CreateOlympiadForm() {
     const [logo, setLogo] = useState<File | null>(null);
     const [cover, setCover] = useState<File | null>(null);
     const [regulations, setRegulations] = useState<File | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -131,20 +132,25 @@ export default function CreateOlympiadForm() {
             return;
         }
 
+        setIsSubmitting(true);
+
         try {
-            
-            const logoUrl = await uploadFile(logo, 'olympiads/logos', ()=>{});
-            const coverUrl = await uploadFile(cover, 'olympiads/covers', ()=>{});
-            const regulationsUrl = regulations ? await uploadFile(regulations, 'olympiads/regulations', ()=>{}) : null;
+            const logoUrl = await uploadFile(logo, 'olympiads/logos');
+            const coverUrl = await uploadFile(cover, 'olympiads/covers');
+            const regulationsUrl = regulations ? await uploadFile(regulations, 'olympiads/regulations') : null;
 
             const organizerLogos = await Promise.all(
-                organizers.map(org => org.logo ? uploadFile(org.logo, 'olympiads/organizers/logos', ()=>{}) : null)
+                organizers.map(org => org.logo ? uploadFile(org.logo, 'olympiads/organizers/logos') : null)
             );
 
-            const updatedOrganizers = organizers.map((org, i) => ({
-                ...org,
-                logoUrl: organizerLogos[i],
-            }));
+            const updatedOrganizers = organizers.map((org, i) => {
+                const newOrg = {
+                    name: org.name,
+                    link: org.link,
+                    logoUrl: organizerLogos[i],
+                }
+                return newOrg;
+            });
 
             const payload = {
                 ...formData,
@@ -154,6 +160,8 @@ export default function CreateOlympiadForm() {
                 coverUrl,
                 regulationsUrl,
             };
+
+            console.log(payload);
 
             const res = await createOlympiad(payload);
 
@@ -166,9 +174,10 @@ export default function CreateOlympiadForm() {
         } catch (error) {
             console.error('Ошибка при создании олимпиады:', error);
             alert('Произошла ошибка при создании олимпиады.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
-
 
     return (
         <div className="container my-16">
@@ -176,48 +185,48 @@ export default function CreateOlympiadForm() {
             <form onSubmit={handleSubmit} className="flex flex-col max-w-[500px] gap-6">
                 <Label className="subtitle !text-left !text-black">
                     Название:
-                    <Input type="text" name="name" value={formData.name} onChange={handleInputChange} required/>
+                    <Input type="text" name="name" value={formData.name} onChange={handleInputChange} required disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Описание:
-                    <Textarea name="description" value={formData.description} onChange={handleInputChange} required/>
+                    <Textarea name="description" value={formData.description} onChange={handleInputChange} required disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Дата начала регистрации:
                     <Input type="date" name="registrationStart" value={formData.registrationStart}
-                           onChange={handleInputChange}/>
+                           onChange={handleInputChange} disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Дата окончания регистрации:
                     <Input type="date" name="registrationEnd" value={formData.registrationEnd}
-                           onChange={handleInputChange}/>
+                           onChange={handleInputChange} disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Дата публикации результатов:
                     <Input type="date" name="resultsDate" value={formData.resultsDate} onChange={handleInputChange}
-                           />
+                           disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Количество участников:
                     <Input type="number" name="participantCount" value={formData.participantCount}
-                           onChange={handleInputChange} required/>
+                           onChange={handleInputChange} required disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Ссылки на соцсети:
                     (в формате название:ссылка без пробелов и запятыми для перечисления. Например instagram:https://instagram.com)
-                    <Textarea name="socialLinks" value={formData.socialLinks} onChange={handleInputChange} required/>
+                    <Textarea name="socialLinks" value={formData.socialLinks} onChange={handleInputChange} required disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Ссылка на форму регистрации:
                     <Input type="text" name="registrationFormUrl" value={formData.registrationFormUrl}
-                           onChange={handleInputChange} required/>
+                           onChange={handleInputChange} required disabled={isSubmitting}/>
                 </Label>
 
                 <h1 className="subtitle !text-left !text-black">
@@ -232,6 +241,7 @@ export default function CreateOlympiadForm() {
                                     onChange={(e) => handleStageChange(index, 'name', e.target.value)}
                                     placeholder="Введите название этапа"
                                     required
+                                    disabled={isSubmitting}
                                 />
                             </Label>
 
@@ -241,6 +251,7 @@ export default function CreateOlympiadForm() {
                                     type="date"
                                     value={stage.startDate || ''}
                                     onChange={(e) => handleStageChange(index, 'startDate', e.target.value)}
+                                    disabled={isSubmitting}
                                 />
                             </Label>
 
@@ -250,16 +261,17 @@ export default function CreateOlympiadForm() {
                                     type="date"
                                     value={stage.endDate || ''}
                                     onChange={(e) => handleStageChange(index, 'endDate', e.target.value)}
+                                    disabled={isSubmitting}
                                 />
                             </Label>
 
-                            <Button type="button" onClick={() => removeStage(index)}>
+                            <Button type="button" onClick={() => removeStage(index)} disabled={isSubmitting}>
                                 Удалить этап
                             </Button>
                         </div>
                     ))}
 
-                    <Button type="button" onClick={addStage}>
+                    <Button type="button" onClick={addStage} disabled={isSubmitting}>
                         Добавить этап
                     </Button>
 
@@ -277,6 +289,7 @@ export default function CreateOlympiadForm() {
                                     onChange={(e) => handleOrgChange(index, 'name', e.target.value)}
                                     placeholder="Введите название организатора"
                                     required
+                                    disabled={isSubmitting}
                                 />
                             </Label>
 
@@ -287,21 +300,22 @@ export default function CreateOlympiadForm() {
                                     value={org.link}
                                     onChange={(e) => handleOrgChange(index, 'link', e.target.value)}
                                     required
+                                    disabled={isSubmitting}
                                 />
                             </Label>
 
                             <Label className="subtitle !text-left !text-black">
                                 Логотип:
-                                <Input type="file" accept="image/*" onChange={(e) => handleOrgFileChange(index, e)}/>
+                                <Input type="file" accept="image/*" onChange={(e) => handleOrgFileChange(index, e)} disabled={isSubmitting}/>
                             </Label>
 
-                            <Button type="button" onClick={() => removeOrg(index)}>
+                            <Button type="button" onClick={() => removeOrg(index)} disabled={isSubmitting}>
                                 Удалить
                             </Button>
                         </div>
                     ))}
 
-                    <Button type="button" onClick={addOrganizer}>
+                    <Button type="button" onClick={addOrganizer} disabled={isSubmitting}>
                         Добавить организатора
                     </Button>
 
@@ -309,20 +323,20 @@ export default function CreateOlympiadForm() {
 
                 <Label className="subtitle !text-left !text-black">
                     Логотип:
-                    <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setLogo)} required/>
+                    <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setLogo)} required disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Обложка:
-                    <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setCover)} required/>
+                    <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setCover)} required disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Положение (опционально):
-                    <Input type="file" accept=".pdf" onChange={(e) => handleFileChange(e, setRegulations)}/>
+                    <Input type="file" accept=".pdf" onChange={(e) => handleFileChange(e, setRegulations)} disabled={isSubmitting}/>
                 </Label>
 
-                <Button type="submit">Создать олимпиаду</Button>
+                <Button type="submit" disabled={isSubmitting}>Создать олимпиаду</Button>
             </form>
         </div>
     );

@@ -2,6 +2,7 @@ import React from 'react';
 import Link from "next/link";
 import tg from "@/public/assets/icons/telegram.svg"
 import insta from "@/public/assets/icons/instagram.svg"
+import Image from "next/image"
 
 const Footer = () => {
     return (
@@ -50,12 +51,12 @@ const Footer = () => {
                       </div>
                   </div>
                   <div className="flex gap-3 items-center">
-                      <span className="text-[15px]">+996-550-22-99</span>
+                      <span className="text-[15px]">+996700796184</span>
                       <div className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center">
-                          <img className="w-4" src={tg.src} alt=""/>
+                          <Image className="w-4" src={tg} alt="link" width={7} height={7}/>
                       </div>
                       <div className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center">
-                          <img className="w-4" src={insta.src} alt=""/>
+                          <Image className="w-4" src={insta} alt="link"  width={7} height={7}/>
                       </div>
                   </div>
 
@@ -109,12 +110,12 @@ const Footer = () => {
                       <span className="text-[14px]">+996-550-22-99</span>
                       <div className="flex gap-3">
 
-                          <div className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center">
-                              <img className="w-4" src={tg.src} alt=""/>
-                          </div>
-                          <div className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center">
-                              <img className="w-4" src={insta.src} alt=""/>
-                          </div>
+                          <Link className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center" href="https://t.me/phys_hub">
+                            <Image className="w-4" src={tg} alt="link"  width={7} height={7}/>
+                          </Link>
+                          <Link className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center" href="https://www.instagram.com/_physicshub_rus/?igsh=MWppMmhvcmdidXVvNg%3D%3D">
+                            <Image className="w-4" src={insta} alt="link"  width={7} height={7}/>
+                          </Link>
                       </div>
                   </div>
 
