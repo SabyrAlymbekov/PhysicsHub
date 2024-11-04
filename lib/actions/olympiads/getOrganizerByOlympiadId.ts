@@ -2,9 +2,9 @@
 
 import {db} from "@/lib/db";
 
-const getStageByOlympiadsId = async (id: string) => {
+const getOrganizerByOlympiadsId = async (id: string) => {
   try {
-    const res = await db.stage.findMany({
+    const res = await db.organizer.findMany({
       where: {
         olympiadId: id
       }
@@ -15,4 +15,4 @@ const getStageByOlympiadsId = async (id: string) => {
   }
 }
 
-export default getStageByOlympiadsId
+export default getOrganizerByOlympiadsId

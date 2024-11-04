@@ -10,8 +10,10 @@ const OlympiadBlock = ({ olympiad }) => {
     <Link href={linkHref}>
       <div className="olympiad-block w-full bg-gray-100 h-[200px] rounded-xl overflow-hidden">
         <Image
-          className="w-full h-1/2 bg-black"
-          src={``}
+          className="w-full h-1/2 bg-black object-cover"
+          src={olympiad.coverUrl}
+          width={100}
+          height={100}
           alt="olympiad"
         />
         <div className="p-4">

@@ -8,13 +8,10 @@ import RenderOlympiads from "@/components/shared/olympiads/RenderOlympiads";
 import { DateRange } from "react-day-picker";
 
 const OlympiadsList: React.FC = () => {
-    console.log("ЗАГРУЗКА ЕБАТЬ")
     const [olympiads, setOlympiads] = useState([]);
     const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
     const [showUpcoming, setShowUpcoming] = useState(false);
-    useEffect(() => {
-        console.log(dateRange);
-    }, [dateRange]);
+
     useEffect(() => {
         // Функция для получения данных
         const fetchOlympiads = async () => {
