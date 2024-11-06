@@ -50,7 +50,7 @@ export const TeamMember = ({teamMember}: {
             </HoverCardContent>
         </HoverCard>
     )
-}
+} 
 
 const TeamSection = async () => {
     const teamMembers = await getTeamMembers("TEAM");
