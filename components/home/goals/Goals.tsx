@@ -6,7 +6,7 @@ const Goals = () => {
             <div className="sm:w-full ">
                 <h3 className="text-4xl sm:text-5xl font-bold md:text-7xl uppercase">Место объединяющее физиков <span className="text-gradient">со всего мира</span></h3>
                 <p className="text-2xl my-6">
-                    Главная идея/цель проекта заключается в создании идеальной среды для изучения физики.
+                    Главная идея/цель проекта заключается в создании идеальной среды для изучения физики. Вы сможете:
                 </p>
                 <ul className="list-disc text-2xl ml-10 flex flex-col gap-2">
                     <li className="">
