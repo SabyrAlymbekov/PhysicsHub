@@ -20,31 +20,30 @@ enum UserRole {
 }
 
 model User {
-  id              String           @id @default(auto()) @map("_id") @db.ObjectId
-  name            String?
-  email           String?          @unique
-  hashedPassword  String?
-  emailVerified   DateTime?
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?   @unique
+  hashedPassword String?
+  emailVerified  DateTime?
 
-  image           String?
-  role            UserRole?        @default(USER)
-  bio             String?
-  education       String[]
-  achievements    String[]
-  roles           String[]
-  projects        String[]
-  interests       String[]
+  image        String?
+  role         UserRole? @default(USER)
+  bio          String?
+  education    String[]
+  achievements String[]
+  roles        String[]
+  projects     String[]
+  interests    String[]
 
-  rolesInTeam     String[]
-  socials         String[]      // ссылки вида "SocialMediaName:link"
-  accounts        Account[]
-  sessions        Session[]
-  authenticators  Authenticator[]
+  rolesInTeam    String[]
+  socials        String[] // ссылки вида "SocialMediaName:link"
+  accounts       Account[]
+  sessions       Session[]
+  authenticators Authenticator[]
 
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -105,15 +104,15 @@ model Authenticator {
 }
 
 model Textbook {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String?
   authors     String[]
   tags        String[]
   topics      String[]
   filePath    String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("textbooks")
 }
@@ -125,14 +124,14 @@ model Olympiad {
   name                String
   logoUrl             String
   coverUrl            String
-  regulationsUrl      String?     // Опционально
-  registrationStart   DateTime?   // либо дата либо неопределено
-  registrationEnd     DateTime?   // либо дата либо неопределено
+  regulationsUrl      String? // Опционально
+  registrationStart   DateTime? // либо дата либо неопределено
+  registrationEnd     DateTime? // либо дата либо неопределено
   stages              Stage[]
-  resultsDate         DateTime?    // либо дата либо неопределено
+  resultsDate         DateTime? // либо дата либо неопределено
   description         String
   participantCount    Int
-  socialLinks         String        // Ссылки на соц. сети
+  socialLinks         String // Ссылки на соц. сети
   registrationFormUrl String
   organizers          Organizer[]
   createdAt           DateTime    @default(now())
@@ -140,33 +139,33 @@ model Olympiad {
 }
 
 model Stage {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  olympiad   Olympiad @relation(fields: [olympiadId], references: [id])
-  olympiadId String   @db.ObjectId
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  olympiad   Olympiad  @relation(fields: [olympiadId], references: [id])
+  olympiadId String    @db.ObjectId
   name       String
-  startDate  DateTime?   // либо дата либо неопределено
-  endDate    DateTime?   // либо дата либо неопределено
+  startDate  DateTime? // либо дата либо неопределено
+  endDate    DateTime? // либо дата либо неопределено
 }
 
 model Organizer {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  olympiad          Olympiad @relation(fields: [olympiadId], references: [id])
-  olympiadId        String   @db.ObjectId
-  logoUrl           String
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  olympiad   Olympiad @relation(fields: [olympiadId], references: [id])
+  olympiadId String   @db.ObjectId
+  logoUrl    String
   name       String
-  link String
+  link       String
 }
 
 // shop
 
 model Product {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
   description String
-  views String[]
-  price Int
-  inStock Boolean
-  sizes String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  views       String[]
+  price       Int
+  inStock     Boolean
+  sizes       String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

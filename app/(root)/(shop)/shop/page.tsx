@@ -1,21 +1,12 @@
-import React from 'react'
-import { currentUser } from '@/lib/actions/authActions'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-// import ShopCard from '@/components/shop/ShopCard'
+import React from 'react';
+import ShopPage from "@/components/shop/ShopPage";
 
-const ShopPage = async () => {
-  const user = await currentUser()
+const Page = () => {
   return (
-    <div className='container'>
-        {user?.role == 'ADMIN' && <Link href='/shop/create'><Button variant='outline'>Загрузить товар</Button></Link>}
-        {/* <div className='flex flex-wrap gap-4'>
-            {products.map((product) => (
-                <ShopCard product={product} />
-            ))}
-        </div> */}
+    <div className="flex flex-col">
+      <ShopPage/>
     </div>
-  )
-}
+  );
+};
 
-export default ShopPage
+export default Page;

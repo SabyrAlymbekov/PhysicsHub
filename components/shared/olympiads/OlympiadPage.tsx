@@ -70,8 +70,8 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
         <div className="relative w-full h-[200px] bg-black border-2 rounded-lg overflow-hidden">
           <Image src={olympiad.coverUrl} alt="banner" width={1364} height={196} className="w-full h-full object-cover" />
         </div>
-        <div className="absolute inset-x-0 top-[150px] flex justify-between items-center px-20">
-          <Image src={olympiad.logoUrl} alt="avatar" width={100} height={100} className="w-24 h-24 bg-gray-200 rounded-full object-cover" />
+        <div className="absolute inset-x-0 top-[150px] flex justify-between items-center px-5 sm:px-20">
+          <Image src={olympiad.logoUrl} alt="avatar" width={100} height={100} className="w-24 h-24 border-2 bg-gray-200 rounded-full object-cover" />
           <div className="flex gap-5">
             <span className="md:hidden font-bold py-2 px-4 bg-gray-100 rounded-xl gap-2 flex flex-nowrap items-center">
               <IoPeopleSharp />
@@ -182,12 +182,12 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
 
             {organizers && (
               <div className="organizers">
-                <h2 className="font-semibold text-3xl mb-2 text-gradient">Организаторы:</h2>
-                <div className="flex justify-center gap-2">
+                <h2 className="font-semibold text-3xl mb-3 text-gradient">Организаторы:</h2>
+                <div className="flex flex-col gap-3">
 
                   {organizers.map((org) => (
-                    <div className="organizer flex flex-col items-center w-[70px] " key={org.id}>
-                      <a href={org.link || "#"}>
+                    <div className="organizer" key={org.id}>
+                      <a href={org.link || "#"} className="flex gap-3 items-center">
                         <div className="w-[70px] h-[70px]">
                           <Image
                             src={org.logoUrl}
@@ -198,7 +198,7 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
                           />
                         </div>
                       
-                      <h3 className="font-semibold text-xl mt-2">{org.name}</h3>
+                      <h3 className="font-semibold text-2xl">{org.name}</h3>
                       </a>
                     </div>
                   ))}
