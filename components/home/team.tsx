@@ -62,7 +62,9 @@ const TeamSection = async () => {
                     Наша команда
                 </h1>
                 <h3 className="subtitle mt-4">
-                    Команда проекта <span className="text-gradient">Physics Hub</span> состоит из энтузиастов, готовых помочь в развитии науки среди людей.
+                    Команда проекта <span className="text-gradient">Physics Hub</span> состоит из энтузиастов,
+                    <br/>
+                    готовых помочь в развитии науки среди людей.
                     <br/>
                     Наша главная цель сделать изучение физики <span className="text-gradient">легким</span>, <span className="text-gradient">понятным</span>, а главное  <span className="text-gradient">доступным</span>! 
                 </h3>
