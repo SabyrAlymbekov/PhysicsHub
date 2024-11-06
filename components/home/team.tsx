@@ -66,7 +66,9 @@ const TeamSection = async () => {
                     <br/>
                     готовых помочь в развитии науки среди людей.
                     <br/>
-                    Наша главная цель сделать изучение физики <span className="text-gradient">легким</span>, <span className="text-gradient">понятным</span>, а главное  <span className="text-gradient">доступным</span>! 
+                    Наша главная цель сделать изучение физики 
+                    <br/>
+                    <span className="text-gradient">легким</span>, <span className="text-gradient">понятным</span>, а главное  <span className="text-gradient">доступным</span>! 
                 </h3>
             </div>
             <h1 className="text-3xl font-bold mt-14 text-center"> Админы </h1>
