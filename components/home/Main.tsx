@@ -8,7 +8,7 @@ function Main() {
             <h1 className='title'>Попращайтесь с проблемами в изучении <span className='text-gradient'>физики</span></h1>
             <p className='subtitle'>Physics Hub – это платформа, которая оптимизирует ваше обучение.
                 <br/>
-                Наша цель сделать изучение физики <span className='text-gradient'>доступным для всех</span>!
+                Наша цель сделать изучение физики <span className='text-gradient'>удобным для всех</span>!
             </p>
         <div className="relative w-fit mx-auto mt-4">
         <div
