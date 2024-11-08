@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { CartProvider, useCart } from '@/context';
+import { CartProvider, useCart } from '@/context/CartContext';
 import { currentUser } from '@/lib/actions/authActions';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import shirt from './t-shirt.png';
 
 const ShopPage: React.FC = () => {
   const [user, setUser] = useState<any>(null);
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -42,6 +43,7 @@ const ShopPage: React.FC = () => {
   ];
 
   return (
+
     <div className='container'>
       <Link href={`/shop/cart`} >
         <Button>

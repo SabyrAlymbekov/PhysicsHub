@@ -5,7 +5,7 @@ import { BsCartFill } from "react-icons/bs";
 import { BsCartPlus } from "react-icons/bs";
 import Image from 'next/image'
 import {Button} from "@/components/ui/button";
-import {useCart} from "@/context";
+import {useCart} from "@/context/CartContext";
 
 interface ShopCardProps {
   product: {
@@ -22,6 +22,7 @@ interface ShopCardProps {
 const ShopCard = ({ product  }: { ShopCardProps }) => {
   // console.log(product)
   const { cart , addToCart, removeFromCart } = useCart()
+
 
   const [show, setShow] = React.useState(false);
   return (
@@ -48,15 +49,12 @@ const ShopCard = ({ product  }: { ShopCardProps }) => {
                   {
                     cart.some(item => item.id === product.id) ?
                       (
-
-                      <BsCartFill />
-
+                        <BsCartFill />
                       )
                         :
-                        (
-                          <BsCartPlus/>
-
-                        )
+                      (
+                        <BsCartPlus/>
+                      )
                   }
                 </Button>
               </div>
