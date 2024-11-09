@@ -163,7 +163,7 @@ model Product {
   name        String
   description String
   views       String[]
-  price       Int
+  npm         Int
   inStock     Boolean
   sizes       String[]
   createdAt   DateTime @default(now())
