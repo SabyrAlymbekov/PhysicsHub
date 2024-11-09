@@ -15,6 +15,7 @@ export const SignUpSchema = z.object({
     })
 })
 
+// sdbh
 
 export const profileSchema = z.object({
     bio: z.string().min(3, {message: "описание должно быть как минимум в 3 символа."}).max(4096, {message: "описание должно быть меньше 4096 символов."}).or(z.undefined()),
