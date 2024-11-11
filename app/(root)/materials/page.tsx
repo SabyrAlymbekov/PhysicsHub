@@ -18,7 +18,7 @@ const Resources = async (props: {
     }>;
   }) => {
     const user = await currentUser();
-    const isAdmin = user.role == "ADMIN";
+    const isAdmin = user?.role == "ADMIN";
     const searchParams = await props.searchParams;
     const topics = searchParams?.topics?.split(',') || [];
     const currentPage = Number(searchParams?.page) || 1;

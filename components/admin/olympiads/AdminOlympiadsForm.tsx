@@ -29,7 +29,7 @@ export default function CreateOlympiadForm() {
     useEffect(() => {
         const ch = async () => {
             const curUser = await currentUser()
-            if (!curUser || curUser.role !== "ADMIN") setIsAdmin(false);
+            if (!curUser || curUser?.role !== "ADMIN") setIsAdmin(false);
             else setIsAdmin(true);
         }
         ch()

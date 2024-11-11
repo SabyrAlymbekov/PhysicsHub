@@ -20,10 +20,9 @@ const config: Config = {
   		}
   	},
   	extend: {
-  		fontFamily: {
-  			inter: ["var(--font-inter)"],
-  			spaceGrotesk: ["var(--font-spaceGrotesk)"]
-  		},
+		fontFamily: {
+			sans: ['var(--font-geist-sans)'],
+		  },
   		screens: {
   			xs: '420px',
   			md: '830px',
