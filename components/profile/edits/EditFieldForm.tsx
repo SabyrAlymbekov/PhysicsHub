@@ -23,7 +23,6 @@ const EditFieldForm: React.FC<EditFieldFormProps> = ({ Name, fieldName, initialV
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({[fieldName]: value})
         let res;
         if (userId) {
             res = await changeProfile({[fieldName]: value}, userId)

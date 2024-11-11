@@ -15,8 +15,6 @@ import getOrganizerByOlympiadsId from "@/lib/actions/olympiads/getOrganizerByOly
 import { Olympiad, Stage } from '@prisma/client';
 import { redirect } from 'next/navigation';
 
-// Типы для олимпиады, этапов и ссылок на социальные сети
-
 interface OlympiadPageProps {
   olympiadId: string;
 }
@@ -26,7 +24,6 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
   if (!olympiad) {
     redirect('/')
   }
-  console.log(olympiad.description)
   const stages: Stage[] | undefined = await getStagesByOlympiadId(olympiadId);
   if (!stages) {
     redirect('/')

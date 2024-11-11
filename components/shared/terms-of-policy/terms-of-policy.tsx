@@ -2,7 +2,7 @@ import React from 'react';
 
 const TermsOfPolicy = () => {
     return (
-        <section className="bg-gray-100 mt-[66px] w-full py-5 md:py-20">
+        <section className="bg-gray-100 w-full py-5 md:py-20">
             <div className="container flex flex-col gap-6">
                 <h1 className="text-5xl font-bold text-gray-900">
                     Условия использования

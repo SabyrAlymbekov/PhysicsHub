@@ -9,7 +9,6 @@ import {currentUser} from "@/lib/actions/authActions";
 
 async function Navbar() {
     const user = await currentUser()
-    console.log(user)
   return (
     <header className='shadow z-50 bg-white w-screen'>
       <div className='container'>

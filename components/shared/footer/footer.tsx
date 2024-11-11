@@ -23,7 +23,7 @@ const Footer = () => {
                           <Link className="hover:opacity-50" href="/olympiads">
                               Олимпиады
                           </Link>
-                          <Link className="hover:opacity-50" href="/resources">
+                          <Link className="hover:opacity-50" href="/materials">
                               Материалы
                           </Link>
                           <Link className="hover:opacity-50" href="/shop">
@@ -79,7 +79,7 @@ const Footer = () => {
                           <Link className="hover:opacity-50" href="/olympiads">
                               Олимпиады
                           </Link>
-                          <Link className="hover:opacity-50" href="/resources">
+                          <Link className="hover:opacity-50" href="/materials">
                               Материалы
                           </Link>
                           <Link className="hover:opacity-50" href="/shop">

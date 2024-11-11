@@ -161,8 +161,6 @@ export default function CreateOlympiadForm() {
                 regulationsUrl,
             };
 
-            console.log(payload);
-
             const res = await createOlympiad(payload);
 
             if (res?.message == "success") {

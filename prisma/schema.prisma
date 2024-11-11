@@ -104,16 +104,24 @@ model Authenticator {
   @@unique([userId, credentialID])
 }
 
+model Topic {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  name           String          @unique
+  bookCount      Int             @default(0) // Field to store the number of textbooks
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
 model Textbook {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String?
   authors     String[]
   tags        String[]
-  topics      String[]
   filePath    String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  topicIds   String[]        @db.ObjectId // Store topic IDs directly
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
   @@map("textbooks")
 }

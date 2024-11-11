@@ -5,7 +5,6 @@ import Link from "next/link";
 const OlympiadBlock = ({ olympiad }: {olympiad: Olympiad}) => {
 
   const linkHref = olympiad.id ? (`/olympiads/${olympiad.id}`) : ("#");
-  console.log(linkHref);
 
   const registrationStart = olympiad.registrationStart ? new Date(olympiad.registrationStart).toLocaleDateString("de-DE") : "неизвестно";
   const registrationEnd = olympiad.registrationEnd ? new Date(olympiad.registrationEnd).toLocaleDateString("de-DE") : "неизвестно";
