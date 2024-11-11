@@ -39,7 +39,7 @@ export async function Burger() {
               </SheetTitle>
             <div className='py-4 px-2 flex flex-col gap-3'>
                 <SheetClose asChild><Link href="/olympiads" className='w-full paragraph-medium'>Олимпиады</Link></SheetClose>
-                <SheetClose asChild><Link href="/resourmaterialsces"  className='w-full paragraph-medium'>Материалы</Link></SheetClose>
+                <SheetClose asChild><Link href="/materials"  className='w-full paragraph-medium'>Материалы</Link></SheetClose>
                 <SheetClose asChild><Link href="/shop"  className='w-full paragraph-medium'>Мерч</Link></SheetClose>
                 <SheetClose asChild><Link href="/team"  className='w-full paragraph-medium'>Команда</Link></SheetClose>
             </div>
