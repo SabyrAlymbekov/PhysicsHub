@@ -136,8 +136,9 @@ const PolicyPrivacy = () => {
                         9. Контакты
                         <p>
                             Если у вас есть вопросы или пожелания по поводу нашей Политики конфиденциальности, пожалуйста,
-                            свяжитесь с нами по адресу: [Ваш контактный адрес электронной почты].
-                        </p>
+                            свяжитесь с нами по адресу: <a href="https://mail.google.com/mail/u/0/?pli=1#inbox?compose=CllgCJlKFQgmqcBnRHDRQrcGDHDGpXBTGghFmlBVqxrWGNWlPjZnFSHlXbQndtndnBgGzqBzwxB" target="_blank" rel="noopener noreferrer">
+                        nursultanraiapov@gmail.com
+                        </a>. </p>
                     </li>
                 </ul>
             </div>

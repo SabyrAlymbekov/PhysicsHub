@@ -50,7 +50,7 @@ export const TeamMember = ({teamMember}: {
             </HoverCardContent>
         </HoverCard>
     )
-}
+} 
 
 const TeamSection = async () => {
     const teamMembers = await getTeamMembers("TEAM");
@@ -62,11 +62,13 @@ const TeamSection = async () => {
                     Наша команда
                 </h1>
                 <h3 className="subtitle mt-4">
-                    МЫ - независимая команда школьников-физиков энтузиастов.
+                    Команда проекта <span className="text-gradient">Physics Hub</span> состоит из энтузиастов,
                     <br/>
-                    Мы развиваем сообщество физиков и помогаем людям.
+                    готовых помочь в развитии науки.
                     <br/>
-                    Наша главная цель сделать изучение физики <span className="text-gradient">легким, понятным, а главное доступным</span>!
+                    Наша главная цель сделать изучение физики 
+                    <br/>
+                    <span className="text-gradient">легким</span>, <span className="text-gradient">понятным</span>, а главное  <span className="text-gradient">доступным</span>! 
                 </h3>
             </div>
             <h1 className="text-3xl font-bold mt-14 text-center"> Админы </h1>

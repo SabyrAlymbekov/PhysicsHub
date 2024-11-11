@@ -6,17 +6,17 @@ const Goals = () => {
             <div className="sm:w-full ">
                 <h3 className="text-4xl sm:text-5xl font-bold md:text-7xl uppercase">Место объединяющее физиков <span className="text-gradient">со всего мира</span></h3>
                 <p className="text-2xl my-6">
-                    Главная идея/цель проекта заключается в Lorem ipsum dolor sit amet, consetetur adipiscing elit, sed do eiusmod tempor. lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur adipiscing elit, также наши цели.
+                    Главная идея/цель проекта заключается в создании идеальной среды для изучения физики. Вы сможете:
                 </p>
                 <ul className="list-disc text-2xl ml-10 flex flex-col gap-2">
                     <li className="">
-                        Собрать хорошие ресурсы для изучения физика
+                        Найти любую книгу по интересующей вас теме с рецензиями
                     </li>
                     <li className="">
-                        Создать комьюнити идейных физиков
+                        Практиковаться, решая задачи
                     </li>
                     <li className="">
-                        Помочь людям погрузиться в мир физики
+                        Общаться с другими участниками на нашем форуме
                     </li>
                 </ul>
             </div>
