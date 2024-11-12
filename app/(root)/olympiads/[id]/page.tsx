@@ -6,8 +6,6 @@ const Page = ({params} : {
 }) => {
   return (
     <div className="flex flex-col">
-      {/*Привет*/}
-
       <OlympiadPage olympiadId={params.id} />
     </div>
   );

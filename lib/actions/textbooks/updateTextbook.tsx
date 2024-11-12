@@ -1,6 +1,7 @@
 "use server";
 
 import { db as prisma } from "@/lib/db";
+import { currentUser } from "../authActions";
 
 export async function updateTextbook(
     id: string,
@@ -14,7 +15,11 @@ export async function updateTextbook(
     if (!id || !name || !authors.length || !category || !topics.length) {
         throw new Error("Пожалуйста, заполните все обязательные поля.");
     }
+    const user = await currentUser();
 
+        if (!user || user.role !== 'ADMIN') {
+            throw new Error("forbidden");
+        }   
     try {
         return await prisma.$transaction(async (prisma) => {
             const currentTextbook = await prisma.textbook.findUnique({

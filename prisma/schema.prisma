@@ -112,6 +112,7 @@ model Topic {
   updatedAt      DateTime        @updatedAt
 }
 
+// also i should store file path
 model Textbook {
   id          String          @id @default(auto()) @map("_id") @db.ObjectId
   name        String

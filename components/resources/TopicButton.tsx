@@ -32,7 +32,7 @@ const TopicButton = ({topic}: {
     className='rounded-full focus:bg-black focus:text-white'
   size="sm"
           >
-    {topic.name + ' ' + topic.bookCount}
+    {topic.name}
   </Button>
 }
 

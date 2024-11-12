@@ -1,5 +1,3 @@
-// 'use client'
-
 import React from 'react';
 import { getOlympiadById } from "@/lib/actions/olympiads/getOlympiadById";
 import Image from "next/image";
@@ -14,6 +12,8 @@ import getStagesByOlympiadId from "@/lib/actions/olympiads/getStagesByOlympiadId
 import getOrganizerByOlympiadsId from "@/lib/actions/olympiads/getOrganizerByOlympiadId";
 import { Olympiad, Stage } from '@prisma/client';
 import { redirect } from 'next/navigation';
+import { currentUser } from '@/lib/actions/authActions';
+import DeleteOlympiadButton from './deleteOlympiad';
 
 interface OlympiadPageProps {
   olympiadId: string;
@@ -29,9 +29,9 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
     redirect('/')
   }
   const organizers = await getOrganizerByOlympiadsId(olympiadId);
+  const user = await currentUser();
 
   const links: string[] = olympiad.socialLinks.split(',');
-  // const links = [];
 
   const timeSince = (date: Date): string => {
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
@@ -63,6 +63,9 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
 
   return (
     <div className="olympiadPage w-full py-10">
+      {
+        user?.role == "ADMIN" && <DeleteOlympiadButton olympiadId={olympiadId}></DeleteOlympiadButton>
+      }
       <div className="container relative">
         <div className="relative w-full h-[200px] bg-black border-2 rounded-lg overflow-hidden">
           <Image src={olympiad.coverUrl} alt="banner" width={1364} height={196} className="w-full h-full object-cover" />

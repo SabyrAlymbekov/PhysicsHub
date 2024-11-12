@@ -11,12 +11,12 @@ const OlympiadBlock = ({ olympiad }: {olympiad: Olympiad}) => {
 
   return (
     <Link href={linkHref}>
-      <div className="flex flex-row gap-3">
-        <Image src={olympiad.logoUrl} width={100} height={100} alt="olympiad logo" className="w-[100px] h-[100px] rounded-full aspect-auto"></Image>
+      <div>
+        <Image src={olympiad.logoUrl} width={100} height={100} alt="olympiad logo" className="w-[100px] h-[100px] rounded-full aspect-square float-left mr-3 mb-3"></Image>
         <div>
-        <h1 className="font-bold text-3xl">{olympiad.name}</h1>
-        <h1 className="font-medium text-2xl"> Регистрация с {registrationStart} по {registrationEnd}</h1>
-        <p className="">{(olympiad.description.length<200 ? olympiad.description : olympiad.description.slice(0, 200) + "...")}</p>
+        <h1 className="font-bold text-2xl">{olympiad.name}</h1>
+        <h1 className="font-medium text-lg"> <span className="text-gradient">Регистрация с {registrationStart} по {registrationEnd}</span></h1>
+        <p className="text-sm">{(olympiad.description.length<200 ? olympiad.description : olympiad.description.slice(0, 200) + "...")}</p>
         </div>
       </div>
     </Link>
