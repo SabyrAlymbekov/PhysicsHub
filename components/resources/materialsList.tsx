@@ -5,59 +5,78 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../ui/table';
-import { Button } from '../ui/button';
-import { CiCircleInfo } from 'react-icons/ci';
-import React from 'react';
+} from "../ui/table";
+import { Button } from "../ui/button";
+import { CiCircleInfo } from "react-icons/ci";
+import React from "react";
 import { MdEdit } from "react-icons/md";
 import { BsDownload } from "react-icons/bs";
-import getTextbooksByTopics from '@/lib/actions/textbooks/getTextbooksByTopics';
-import Link from 'next/link';
+import getTextbooksByTopics from "@/lib/actions/textbooks/getTextbooksByTopics";
+import Link from "next/link";
+import { currentUser } from "@/lib/actions/authActions";
 
 interface MaterialsListComponentProps {
-  selectedTopicIds: string[],
-  currentPage: number,
-  pageSize: number
+  selectedTopicIds: string[];
+  currentPage: number;
+  pageSize: number;
+  tag: "textbook" | "problembook";
 }
 
 const MaterialsListComponent = async ({
-  selectedTopicIds, currentPage, pageSize
+  selectedTopicIds,
+  currentPage,
+  pageSize,
+  tag
 }: MaterialsListComponentProps) => {
-  const { textbooks } = await getTextbooksByTopics(selectedTopicIds, currentPage, pageSize);
-  
+  const user = await currentUser();
+  const { materials } = await getTextbooksByTopics(
+    selectedTopicIds,
+    tag,
+    currentPage,
+    pageSize
+  );
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>название</TableHead>
-          <TableHead className="text-center w-5">edit</TableHead>
+          {user?.role == "ADMIN" && (
+            <TableHead className="text-center w-5">edit</TableHead>
+          )}
           <TableHead className="text-center w-10">скачать</TableHead>
           <TableHead className="text-center w-5 pr-3">инфо</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {textbooks.map((textbook) => (
+        {materials.map((textbook) => (
           <TableRow key={textbook.id}>
             <TableCell>{textbook.name}</TableCell>
-            <TableCell className="w-5">
-            <Link href={"/materials/"+textbook.id+"/edit"}>
-              <Button variant="ghost" size="icon">
-                <MdEdit />
-              </Button>
-              </Link>
-            </TableCell>
+            {user?.role == "ADMIN" && (
+              <TableCell className="w-5">
+                <Link href={"/materials/" + textbook.id + "/edit"}>
+                  <Button variant="ghost" size="icon">
+                    <MdEdit />
+                  </Button>
+                </Link>
+              </TableCell>
+            )}
             <TableCell className="w-10 ">
               <Link href={textbook.filePath} download>
-              <Button variant="ghost" size="icon" className='w-full text-center'>
-              <BsDownload />
-              </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-full text-center"
+                >
+                  <BsDownload />
+                </Button>
               </Link>
             </TableCell>
             <TableCell className="w-5">
-              <Link href={"/materials/"+textbook.id}>
-              <Button variant="ghost" size="icon">
-                <CiCircleInfo />
-              </Button>
+              <Link href={"/materials/" + textbook.id}>
+                <Button variant="ghost" size="icon">
+                  <CiCircleInfo />
+                </Button>
               </Link>
             </TableCell>
           </TableRow>

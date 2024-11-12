@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import getTextbookById, { getTopicsByTextbookid } from "@/lib/actions/textbooks/getTextbookById";
 import DeleteTextbookButton from "@/components/resources/deleteTextbook";
-import { useRouter } from "next/navigation"; // Используем next/navigation
+import { useRouter } from "next/navigation";
+import { currentUser } from "@/lib/actions/authActions";
 
 interface FormData {
   id: string;
@@ -24,6 +25,18 @@ interface FormData {
 
 export default function EditTextbookPage({ params }: { params: { id: string } }) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  useEffect(()=>{
+    const check = async () => {
+      const user = await currentUser();
+      if (user?.role !== "ADMIN") {
+        router.replace('/')
+      }
+      setIsLoading(false);
+    }
+    check();
+  }, [])
+
   const [formData, setFormData] = useState<FormData>({
     id: "",
     name: "",
@@ -37,7 +50,6 @@ export default function EditTextbookPage({ params }: { params: { id: string } })
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   useEffect(() => {
-    // Загрузка текущих данных учебника и тем
     const fetchTextbookAndTopics = async () => {
       try {
         const textbook = await getTextbookById(params.id);
@@ -143,6 +155,12 @@ export default function EditTextbookPage({ params }: { params: { id: string } })
       alert("Произошла ошибка при обновлении учебника.");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div>Checking you...</div>
+    )
+  }
 
   return (
     <div className="container my-16">

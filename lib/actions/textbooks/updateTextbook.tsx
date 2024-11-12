@@ -1,6 +1,6 @@
 "use server";
 
-import { db as prisma } from "@/lib/db"; // Убедитесь, что путь корректен
+import { db as prisma } from "@/lib/db";
 
 export async function updateTextbook(
     id: string,
@@ -11,15 +11,12 @@ export async function updateTextbook(
     topics: string[],
     newFilePath: string | null
 ) {
-    // Проверка обязательных полей
     if (!id || !name || !authors.length || !category || !topics.length) {
         throw new Error("Пожалуйста, заполните все обязательные поля.");
     }
 
     try {
-        // Начинаем транзакцию для обеспечения атомарности операций
         return await prisma.$transaction(async (prisma) => {
-            // Получаем текущий учебник
             const currentTextbook = await prisma.textbook.findUnique({
                 where: { id },
                 select: { topicIds: true, filePath: true },
@@ -31,7 +28,6 @@ export async function updateTextbook(
 
             const currentTopicIds = currentTextbook.topicIds;
 
-            // Получаем все существующие темы по именам одним запросом
             const existingTopics = await prisma.topic.findMany({
                 where: { name: { in: topics } },
                 select: { id: true, name: true },
@@ -40,10 +36,8 @@ export async function updateTextbook(
             const existingTopicNames = existingTopics.map((topic) => topic.name);
             const existingTopicIds = existingTopics.map((topic) => topic.id);
 
-            // Определяем новые темы, которые нужно создать
             const newTopicNames = topics.filter((topic) => !existingTopicNames.includes(topic));
 
-            // Создаём новые темы индивидуально
             let createdTopics: { id: string; name: string }[] = [];
             if (newTopicNames.length > 0) {
                 createdTopics = await Promise.all(
@@ -56,23 +50,18 @@ export async function updateTextbook(
                 );
             }
 
-            // Собираем все topicIds (существующие и созданные)
             const newTopicIds = [...existingTopicIds, ...createdTopics.map((topic) => topic.id)];
 
-            // Находим удалённые topicIds
             const removedTopicIds = currentTopicIds.filter((id) => !newTopicIds.includes(id));
 
-            // Находим добавленные topicIds
             const addedTopicIds = newTopicIds.filter((id) => !currentTopicIds.includes(id));
 
-            // Уменьшаем bookCount для удалённых тем
             if (removedTopicIds.length > 0) {
                 await prisma.topic.updateMany({
                     where: { id: { in: removedTopicIds } },
                     data: { bookCount: { decrement: 1 } },
                 });
 
-                // Удаляем темы, у которых bookCount <= 0
                 await prisma.topic.deleteMany({
                     where: {
                         id: { in: removedTopicIds },
@@ -81,7 +70,6 @@ export async function updateTextbook(
                 });
             }
 
-            // Увеличиваем bookCount для добавленных тем (существующих)
             if (addedTopicIds.length > 0) {
                 await prisma.topic.updateMany({
                     where: { id: { in: addedTopicIds } },
@@ -89,7 +77,6 @@ export async function updateTextbook(
                 });
             }
 
-            // Обновляем учебник
             const updatedTextbook = await prisma.textbook.update({
                 where: { id },
                 data: {
@@ -98,7 +85,7 @@ export async function updateTextbook(
                     authors,
                     tags: [category],
                     topicIds: newTopicIds,
-                    ...(newFilePath && { filePath: newFilePath }), // Обновляем filePath, если был загружен новый файл
+                    ...(newFilePath && { filePath: newFilePath }),
                 },
             });
 

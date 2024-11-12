@@ -10,11 +10,13 @@ import MaterialsListSkeleton from "@/components/resources/skeletons/materialsLis
 import getTextbooksByTopicsCount from "@/lib/actions/textbooks/getTextbooksByTopicsCount";
 import { Skeleton } from "@/components/ui/skeleton";
 import TopicChoosed from "@/components/resources/topicChoosed";
+import SelectInput from "@/components/resources/selectInput";
 
 const Resources = async (props: {
     searchParams?: Promise<{
       topics?: string;
       page?: string;
+      type?: string;
     }>;
   }) => {
     const user = await currentUser();
@@ -22,8 +24,9 @@ const Resources = async (props: {
     const searchParams = await props.searchParams;
     const topics = searchParams?.topics?.split(',') || [];
     const currentPage = Number(searchParams?.page) || 1;
+    const curTag = (searchParams?.type == "problembook" ? searchParams?.type : ((searchParams?.type == "textbook") ? "textbook" : "textbook")) || "textbook";
     const pageSize = 8;
-    const totalCount = await getTextbooksByTopicsCount(topics)
+    const totalCount = await getTextbooksByTopicsCount(topics, curTag)
     const totalPages = Math.ceil(totalCount / pageSize);
 
     return <div className="flex flex-col mb-12">
@@ -41,8 +44,11 @@ const Resources = async (props: {
                 <Suspense fallback={<h1>Loading...</h1>}>
                     <TopicChoosed selectedTopics={topics}></TopicChoosed>
                 </Suspense>
+                <Suspense fallback={<h1>Loading...</h1>}>
+                    <SelectInput></SelectInput>
+                </Suspense>
                 <Suspense fallback={<MaterialsListSkeleton></MaterialsListSkeleton>}>
-                    <MaterialsList selectedTopicIds={topics} currentPage={currentPage} pageSize={pageSize} />
+                    <MaterialsList selectedTopicIds={topics} currentPage={currentPage} pageSize={pageSize} tag={curTag}/>
                 </Suspense>
             </div>
         </div>

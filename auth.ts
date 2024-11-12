@@ -35,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 session.user.email = token.email as string;
             }
             return session
-        }
+        },
     },
     pages: {
         signIn: "/signin",

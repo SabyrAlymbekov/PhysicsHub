@@ -15,7 +15,6 @@ export async function createTextbook(
     }
 
     try {
-        // Найти или создать темы и получить их IDs
         const topicIds = await Promise.all(
             topics.map(async (topicName: string) => {
                 const existingTopic = await prisma.topic.findUnique({
@@ -23,14 +22,12 @@ export async function createTextbook(
                 });
 
                 if (existingTopic) {
-                    // Увеличить счётчик книг в теме
                     await prisma.topic.update({
                         where: { id: existingTopic.id },
                         data: { bookCount: existingTopic.bookCount + 1 },
                     });
                     return existingTopic.id;
                 } else {
-                    // Создать новую тему
                     const newTopic = await prisma.topic.create({
                         data: {
                             name: topicName,
@@ -42,7 +39,6 @@ export async function createTextbook(
             })
         );
 
-        // Создание учебника
         const newTextbook = await prisma.textbook.create({
             data: {
                 name,
