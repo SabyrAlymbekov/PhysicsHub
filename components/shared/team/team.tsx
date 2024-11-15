@@ -35,7 +35,7 @@ const TeamPage = async () => {
                 }
             </section>
             <h2 className="text-4xl max-sm:text-2xl my-10 font-bold container block uppercase">Участники</h2>
-            <section className="container flex flex-row flex-wrap gap-10">
+            <section className="container flex flex-row flex-wrap gap-10 mb-10">
                 {
                     teamMembers && teamMembers.map((teamMember: User, index: number) => (
                         <TeamMember teamMember={teamMember} key={index}></TeamMember>

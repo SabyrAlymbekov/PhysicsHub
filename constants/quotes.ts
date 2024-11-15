@@ -4,10 +4,7 @@ export interface Quote {
     about: string;
 }
 
-// TODO: Implement getting Quotes from MongoDB and adding new ones from admin panel
 export const Quotes: Quote[] = [
-   
-    
     {
         text: "Сложнее всего начать действовать, все остальное зависит только от упорства.",
         author: "Амелия Эрхарт",
