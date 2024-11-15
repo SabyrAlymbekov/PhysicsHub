@@ -19,7 +19,7 @@ async function TopicsFilterComponent({selectedTopics}: {selectedTopics: string[]
             className='rounded-full'
             size="sm"
                   >
-            {topic.name + ' ' + topic.bookCount}
+            {topic.name}
           </Button>
           }
         })}

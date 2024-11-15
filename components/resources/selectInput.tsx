@@ -24,7 +24,7 @@ const SelectInput = () => {
     return (
         <Select onValueChange={handeSelectChange}>
         <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder={searchParams.get("type") == "textbook" ? "учебники" : "задачники"} defaultValue={searchParams.get("type") || "textbook"} />
+            <SelectValue placeholder={(searchParams.get("type") == "textbook" || !searchParams.get("type")) ? "учебники" : "задачники"} defaultValue={searchParams.get("type") || "textbook"} />
         </SelectTrigger>
         <SelectContent>
             <SelectItem value="textbook">учебники</SelectItem>

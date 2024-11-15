@@ -14,12 +14,6 @@ const Footer = () => {
                           <Link className="hover:opacity-50" href="/">
                               Главная
                           </Link>
-                          <Link className="hover:opacity-50" href="/weekly">
-                              Задача недели
-                          </Link>
-                          <Link className="hover:opacity-50" href="/archive">
-                              Архив
-                          </Link>
                           <Link className="hover:opacity-50" href="/olympiads">
                               Олимпиады
                           </Link>
@@ -52,15 +46,13 @@ const Footer = () => {
                   </div>
                   <div className="flex gap-3 items-center">
                       <span className="text-[15px]">+996700796184</span>
-                      <div className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center">
-                          <Image className="w-4" src={tg} alt="link" width={7} height={7}/>
-                      </div>
-                      <div className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center">
-                          <Image className="w-4" src={insta} alt="link"  width={7} height={7}/>
-                      </div>
+                      <a className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center" href="https://t.me/phys_hub">
+                            <Image className="w-4" src={tg} alt="link"  width={7} height={7}/>
+                          </a>
+                          <a className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center" href="https://www.instagram.com/_physicshub_rus/?igsh=MWppMmhvcmdidXVvNg%3D%3D">
+                            <Image className="w-4" src={insta} alt="link"  width={7} height={7}/>
+                          </a>
                   </div>
-
-
               </div>
           </footer>
           <footer className="md:hidden w-full bg-white mt-auto border-t">
@@ -110,16 +102,14 @@ const Footer = () => {
                       <span className="text-[14px]">+996-550-22-99</span>
                       <div className="flex gap-3">
 
-                          <Link className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center" href="https://t.me/phys_hub">
+                          <a className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center" href="https://t.me/phys_hub">
                             <Image className="w-4" src={tg} alt="link"  width={7} height={7}/>
-                          </Link>
-                          <Link className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center" href="https://www.instagram.com/_physicshub_rus/?igsh=MWppMmhvcmdidXVvNg%3D%3D">
+                          </a>
+                          <a className="w-7 h-7 rounded border-[1px] border-black flex items-center justify-center" href="https://www.instagram.com/_physicshub_rus/?igsh=MWppMmhvcmdidXVvNg%3D%3D">
                             <Image className="w-4" src={insta} alt="link"  width={7} height={7}/>
-                          </Link>
+                          </a>
                       </div>
                   </div>
-
-
               </div>
           </footer>
       </>
