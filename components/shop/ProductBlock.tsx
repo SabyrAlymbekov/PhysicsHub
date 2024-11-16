@@ -3,34 +3,19 @@ import React, {useState} from 'react';
 import Image from 'next/image'
 import {Input} from "@/components/ui/input";
 import {useCart} from "@/context/CartContext";
+import { ShopCardProps } from './ShopCard';
 
-
-interface pro {
-  product: {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    images: string[];
-    sizes: string[];
-    inStock: boolean;
-  }
-}
-
-
-const ProductBlock = ({product} : {pro} ) => {
+const ProductBlock = ({product} : ShopCardProps ) => {
   const [input, setInput] = useState(1);
   const { updateQuantity } = useCart()
   const handleChange = (e) => {
-    const value = Math.max(1, Math.min(99, Number(e.target.value))); // Ограничиваем значение от 1 до 99
+    const value = Math.max(1, Math.min(99, Number(e.target.value)));
     setInput(value)
-    updateQuantity(product.id, value); // Вызываем updateQuantity с новым значением
+    updateQuantity(product.id, value);
   };
-
 
   return (
     <>
-
       <li className="hidden md:grid w-full py-5 px-10 text-lg grid-cols-4 border rounded-lg">
         <div className="flex gap-5 items-center col-span-1">
           <div className="w-[54px] h-[54px]">
@@ -57,8 +42,6 @@ const ProductBlock = ({product} : {pro} ) => {
         </div>
         <span className=" text-right col-span-1 flex justify-end items-center">{product.price * input} сом</span>
       </li>
-
-{/*GHRUGBEGHEGEHGR*/}
       <li className="w-[350px] py-5 px-10 text-lg flex flex-col border rounded-lg md:hidden gap-2 text-sm">
         <div className="flex flex-col gap-7 items-center justify-center">
           <div className="w-[200px] h-[200px] bg-gray-100 rounded-2xl">

@@ -1,16 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  images: string[];
-  sizes: string[];
-  inStock: boolean;
-}
+import { Product } from '@prisma/client';
 
 interface CartItem extends Product {
   quantity: number;
@@ -19,16 +10,16 @@ interface CartItem extends Product {
 interface CartContextType {
   cart: CartItem[];
   addToCart: (product: Product) => void;
-  removeFromCart: (productId: number) => void;
+  removeFromCart: (productId: string) => void;
   clearCart: () => void;
-  updateQuantity: (productId: number, quantity: number) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
   money: number;
   total: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [money, setMoney] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
@@ -46,7 +37,7 @@ const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     });
   };
 
-  const removeFromCart = (productId: number) => {
+  const removeFromCart = (productId: string) => {
     setCart((prevCart) => prevCart.filter(item => item.id !== productId));
   };
 
@@ -54,7 +45,7 @@ const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setCart([]);
   };
 
-  const updateQuantity = (productId: number, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number) => {
     setCart(prevCart =>
       prevCart.map(item =>
         item.id === productId ? { ...item, quantity } : item
@@ -62,13 +53,11 @@ const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     );
   };
 
-  // Пересчитываем `money` при изменении корзины
   useEffect(() => {
     const calculatedMoney = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     setMoney(calculatedMoney);
   }, [cart]);
 
-  // Пересчитываем `total` при изменении `money`
   useEffect(() => {
     const calculatedTotal = money + (money * discount / 100);
     setTotal(calculatedTotal);

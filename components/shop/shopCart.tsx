@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 
 const ShopCart = () => {
   const { cart, money, total } = useCart();
-  const [discount, setDiscount] = useState<number>(10);
+  const discount = 0;
   const [tgId, setTgId] = useState("");
   const [error, setError] = useState("");
   const [adress, setAdress] = useState("");

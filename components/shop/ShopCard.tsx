@@ -1,34 +1,24 @@
 'use client'
-import React, {useEffect} from 'react'
-import { Product } from '@prisma/client'
+
+import React from 'react'
 import { BsCartFill } from "react-icons/bs";
 import { BsCartPlus } from "react-icons/bs";
 import Image from 'next/image'
 import {Button} from "@/components/ui/button";
 import {useCart} from "@/context/CartContext";
+import { Product } from '@prisma/client';
 
-interface ShopCardProps {
-  product: {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    images: string[];
-    sizes: string[];
-    inStock: boolean;
-  }
+export interface ShopCardProps {
+  product: Product;
 }
 
-const ShopCard = ({ product  }: { ShopCardProps }) => {
-  // console.log(product)
+const ShopCard = ({ product }: ShopCardProps) => {
   const { cart , addToCart, removeFromCart } = useCart()
 
-
-  const [show, setShow] = React.useState(false);
   return (
     <div className='w-[270px] flex flex-col gap-4'>
-      <div className='w-full h-[250px] flex bg-gray-100 items-center justify-center'>
-        <div onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} className='relative w-[270px] h-[250px] rounded-[4px] flex items-center justify-center'>
+      <div className='w-full h-[250px] flex bg-gray-100 items-center justify-center rounded-sm'>
+        <div className='relative w-[270px] h-[250px] rounded-[4px] flex items-center justify-center'>
           <div className="w-[190px] h-[180px]">
             <Image
               src={product.views[0]}
@@ -38,8 +28,6 @@ const ShopCard = ({ product  }: { ShopCardProps }) => {
               className="w-full h-full object-center object-cover"
             />
           </div>
-          {
-            show && (
               <div className="menu absolute top-2 left-2">
                 <Button onClick={() =>
                   cart.some(item => item.id === product.id)
@@ -58,8 +46,6 @@ const ShopCard = ({ product  }: { ShopCardProps }) => {
                   }
                 </Button>
               </div>
-            )
-          }
         </div>
       </div>
 
