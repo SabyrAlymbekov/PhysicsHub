@@ -19,8 +19,9 @@ interface pro {
 
 
 const ProductBlock = ({product} : {pro} ) => {
-  const [input, setInput] = useState(1);
-  const { updateQuantity } = useCart()
+  const {cart, updateQuantity} = useCart();
+  const itemCart = cart.find(item => item.id === product.id);
+  const [input, setInput] = useState(itemCart.quantity);
   const handleChange = (e) => {
     const value = Math.max(1, Math.min(99, Number(e.target.value))); // Ограничиваем значение от 1 до 99
     setInput(value)
