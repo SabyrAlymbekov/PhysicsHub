@@ -6,7 +6,157 @@
     .row {
         @apply flex flex-row;
     }
+
+    .swiper {
+        /* Убедитесь, что контейнер слайдера адаптивный */
+        .views {
+            width: 100%; /* Занимает всю доступную ширину */
+            height: auto; /* Автоматическая высота */
+        }
+
+        /* Основной слайдер */
+        .mySwiper2 {
+            height: 100%; /* Занимает всю доступную высоту контейнера */
+            width: 100%; /* Растягивается на всю ширину */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Миниатюры слайдера */
+        .mySwiper {
+            width: 100px; /* Фиксированная ширина для миниатюр */
+            height: 100%; /* Растягивается по высоте контейнера */
+            max-height: 500px; /* Ограничение максимальной высоты */
+            overflow-y: hidden; /* Скрывает элементы за пределами контейнера */
+            display: flex;
+            flex-direction: column; /* Вертикальное расположение миниатюр */
+            gap: 10px; /* Расстояние между миниатюрами */
+        }
+
+        .mySwiper .swiper-slide {
+            width: 100%; /* Миниатюры занимают всю ширину */
+            height: auto; /* Автоматическая высота под контент */
+            opacity: 0.6; /* Прозрачность неактивных миниатюр */
+            transition: opacity 0.3s ease; /* Плавное изменение прозрачности */
+        }
+
+        .mySwiper .swiper-slide-thumb-active {
+            opacity: 1; /* Полная видимость активной миниатюры */
+        }
+
+        .mySwiper img {
+            width: 100%; /* Изображение растягивается на всю ширину */
+            height: auto;
+            object-fit: cover; /* Сохранение пропорций изображения */
+            border-radius: 4px; /* Лёгкое скругление краёв */
+        }
+
+        .swiper {
+            width: 100%; /* Занимает всю ширину */
+            height: 100%; /* Занимает всю высоту */
+        }
+
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: #fff;
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Сохранение пропорций */
+        }
+    }
+
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+
+        /* Center slide text vertically */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+
+    .swiper {
+        width: 100%;
+        height: 300px;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+
+    .swiper-slide {
+        background-size: cover;
+        background-position: center;
+    }
+
+    .mySwiper2 {
+        height: 80%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .mySwiper2 .swiper-slide {
+        width: 100%;
+        --tw-bg-opacity: 1;
+        background-color: rgb(243 244 246 / var(--tw-bg-opacity))
+    }
+
+    .mySwiper {
+        height: 100%; /* Высота контейнера */
+        max-height: 332px; /* Ограничение высоты */
+        width: 100px; /* Ширина миниатюр */
+        display: flex;
+        flex-direction: column; /* Вертикальное расположение */
+        gap: 10px; /* Расстояние между миниатюрами */
+        overflow-y: hidden; /* Скроет выходящие элементы */
+        position: relative; /* Для безопасности */
+    }
+    @media(max-width: 800px) {
+        .mySwiper {
+            height: 200px;
+        }
+    }
+
+    .mySwiper .swiper-slide {
+        width: 100%; /* Слайд занимает всю ширину контейнера */
+        height: auto; /* Высота под контент */
+        opacity: 0.4; /* Прозрачность неактивных */
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .mySwiper .swiper-slide-thumb-active {
+        opacity: 1; /* Полная видимость активного */
+        border: 1px black solid;
+
+    }
+
+    .mySwiper img {
+        width: 100%; /* Изображение не выходит за границы */
+        height: auto;
+        object-fit: cover; /* Масштабирование с сохранением пропорций */
+        border-radius: 8px; /* Скругление краев */
+    }
+
 }
+
+
 
 @layer utilities {
     .title {
@@ -76,6 +226,9 @@
 }
 
 @layer base {
+    .flex-center {
+        @apply items-center justify-center;
+    }
   :root {
 
         --background: 0 0% 100%;

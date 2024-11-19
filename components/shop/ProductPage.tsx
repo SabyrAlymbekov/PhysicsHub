@@ -22,6 +22,11 @@ import {Input} from "@/components/ui/input";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import {Terminal} from "lucide-react";
 import {TiTick} from "react-icons/ti";
+import SwiperOfProduct from "@/components/shop/swiper/swiperOfProduct";
+
+interface ProductPageProps {
+  productID: number;
+}
 
 interface Product {
   id: number;
@@ -33,14 +38,14 @@ interface Product {
   description: string;
 }
 
-const ProductPage = ({productID}) => {
+const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
   const products = [
     {
       id: 0,
       name: "Майка",
       description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit...",
       price: 4000,
-      views: [shirt],
+      views: [shirt,shirt,shirt,shirt,shirt,shirt],
       sizes: ["XL", "2XL", "L"],
       inStock: true
     },
@@ -49,7 +54,7 @@ const ProductPage = ({productID}) => {
       name: "Рубашка",
       description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit...",
       price: 4000,
-      views: [shirt],
+      views: [shirt,shirt,shirt,shirt,shirt],
       sizes: ["XL", "2XL", "L"],
       inStock: true
     },
@@ -173,203 +178,363 @@ const ProductPage = ({productID}) => {
       removeFromCart(product.id); // Удалить, если количество становится 0
     }
   };
+  if(product) {
 
-  return (
+    return (
 
-    <>
-      <section className="page my-12">
-        <div className="container">
-          <div className="product w-full grid grid-cols-2">
-            <div className="views">
-              {
-                product.views.length > 1 ? (
-                  <div>
+      <div className="min-vw-100 min-vh-100 flex items-center justify-center">
 
-                  </div>
-                ) : (
-                  <div className="col-span-1 flex justify-center items-center rounded-lg">
-                    <div className="w-[500px] h-[600px] bg-gray-100 flex justify-center items-center">
-                      <div className="w-[446px]">
-                        <Image
-                          src={product.views[0]}
-                          alt={product.name}
-                          width={446}
-                          height={446}
-                        />
-                      </div>
+
+        <section className="PC hidden lg:block page my-12">
+          <div className="container">
+            <div className="product w-full grid grid-cols-5 gap-20">
+              <div className="views col-span-3">
+                {
+                  product.views.length > 1 ? (
+                    <div>
+                      <SwiperOfProduct product={product}></SwiperOfProduct>
+
                     </div>
-                  </div>
-                )
-              }
-              {/*{productID}*/}
-              {/*{product.name}*/}
-            </div>
-            <div className="info flex-col flex">
-              <div className="flex flex-col gap-10">
+                  ) : (
+                    // <div className="flex justify-center items-center rounded-lg">
+                    <div className="views w-full">
+                      <SwiperOfProduct product={product}></SwiperOfProduct>
+                    </div>
 
-                <div className="information flex flex-col gap-6">
-                  <div className="texts flex-col flex gap-4">
-                    <h1 className="text-2xl font-semibold">{product.name}</h1>
-                    {
-                      product.inStock ? (
-                        <p className="text-sm text-green-500">* В наличии</p>
-                      ) : (
-                        <p className="text-sm text-red-500">* Нет в наличии</p>
-                      )
-                    }
-                    <h2 className="text-2xl">{product.price} cом</h2>
-                  </div>
-                  <p className="text-sm">{product.description}</p>
-                </div>
-
-                <Separator/>
-
-                <div className="paymet-details flex flex-col gap-6">
-                  <div className="sizes flex gap-3">
-                    <span className="text-xl">Size: </span>
-                    {
-                      product.sizes.map((size, index) => (
-                        <div className={`${selectedSize === size && "bg-gray-800 text-white"} w-8 h-8 flex items-center justify-center rounded border border-gray-800 text-sm`}
-                             key={index}
-                             onClick ={() => handleSizeChange(size)}
-                        >{size}</div>
-                      ))
-                    }
-                  </div>
-                  <div className="btns-to-but flex flex-nowrap gap-4">
-
-                    {
-                      quantity < 1 ? (
-                        <Button onClick={() => addToCart(product)}><BsCartFill/></Button>
-                      ) : (
-                        <div
-                          className="qnts w-[159px] rounded-lg border-gray-800 overflow-hidden border flex justify-between items-center">
-                          <Button
-                            className="rounded-tr-none rounded-br-none"
-                            variant="default"
-                            onClick={handleDecrease}
-                          >
-                            -
-                          </Button>
-                          <span>{quantity}</span>
-                          <Button
-                            className="rounded-tl-none rounded-bl-none"
-                            variant="default" onClick={handleIncrease}>
-                            +
-                          </Button>
-                        </div>
-                      )
-                    }
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          className="bg-gradient w-full"
-                          onClick={() => {
-                            const isInCart = cart.some(item => item.id === product.id);
-                            if (!isInCart) {
-                              addToCart(product, selectedSize || product.sizes[0]); // Передаем выбранный размер или первый из доступных
-                            }
-                          }}
-                        >
-                          Купить Сейчас
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-md">
-                        <DialogHeader>
-                          <DialogTitle>Покупка</DialogTitle>
-                          <DialogDescription>
-                            Введите ваш Telegram ID и адрес. С вами свяжутся по поводу оплаты.
-                            <br/>
-                            Вы выбрали <span className="font-semibold">{product.name}</span>, размер <span
-                            className="font-semibold">{selectedSize}</span>, кол-во <span
-                            className="font-semibold">{quantity}</span>, на сумму <span
-                            className="font-semibold">{endPrice}</span>
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="flex flex-col gap-4 items-center">
-                          <Input
-                            type="text"
-                            value={tgId}
-                            onChange={handleTgIdChange}
-                            placeholder={"@tg_id..."}
-                          />
-                          <Input
-                            type="text"
-                            value={country}
-                            onChange={(e) => setCountry(e.target.value)}
-                            placeholder={"Страна..."}
-                          />
-                          <Input
-                            type="text"
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
-                            placeholder={"Город..."}
-                          />
-                          <Input
-                            type="text"
-                            value={adress}
-                            onChange={(e) => setAdress(e.target.value)}
-                            placeholder={"Адрес..."}
-                          />
-                        </div>
-                        <DialogFooter className="sm:justify-start gap-2">
-                          <DialogClose asChild>
-                            <Button type="button" variant="secondary">
-                              Закрыть
-                            </Button>
-                          </DialogClose>
-                          <DialogClose asChild>
-                            <Button type="button" onClick={handleSubmit}>
-                              Отправить заказ
-                            </Button>
-                          </DialogClose>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-
-                </div>
+                    // </div>
+                  )
+                }
+                {/*{productID}*/}
+                {/*{product.name}*/}
               </div>
+              <div className="info col-span-2 flex-col flex">
+                <div className="flex flex-col gap-10">
 
+                  <div className="information flex flex-col gap-6">
+                    <div className="texts flex-col flex gap-4">
+                      <h1 className="text-2xl font-semibold">{product.name}</h1>
+                      {
+                        product.inStock ? (
+                          <p className="text-sm text-green-500">* В наличии</p>
+                        ) : (
+                          <p className="text-sm text-red-500">* Нет в наличии</p>
+                        )
+                      }
+                      <h2 className="text-2xl">{product.price} cом</h2>
+                    </div>
+                    <p className="text-sm">{product.description}</p>
+                  </div>
+
+                  <Separator/>
+
+                  <div className="paymet-details flex flex-col gap-6">
+                    <div className="sizes flex gap-3">
+                      <span className="text-xl">Size: </span>
+                      {
+                        product.sizes.map((size, index) => (
+                          <div className={`${selectedSize === size && "bg-gray-800 text-white"} cursor-pointer w-8 h-8 flex items-center justify-center rounded border border-gray-800 text-sm`}
+                               key={index}
+                               onClick ={() => handleSizeChange(size)}
+                          >{size}</div>
+                        ))
+                      }
+                    </div>
+                    <div className="btns-to-but flex flex-nowrap gap-4">
+
+                      {
+                        quantity < 1 ? (
+                          <Button onClick={() => addToCart(product)}><BsCartFill/></Button>
+                        ) : (
+                          <div
+                            className="qnts w-[159px] rounded-lg border-gray-800 overflow-hidden border flex justify-between items-center">
+                            <Button
+                              className="rounded-tr-none rounded-br-none"
+                              variant="default"
+                              onClick={handleDecrease}
+                            >
+                              -
+                            </Button>
+                            <span>{quantity}</span>
+                            <Button
+                              className="rounded-tl-none rounded-bl-none"
+                              variant="default" onClick={handleIncrease}>
+                              +
+                            </Button>
+                          </div>
+                        )
+                      }
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            className="bg-gradient w-full"
+                            onClick={() => {
+                              const isInCart = cart.some(item => item.id === product.id);
+                              if (!isInCart) {
+                                addToCart(product, selectedSize || product.sizes[0]); // Передаем выбранный размер или первый из доступных
+                              }
+                            }}
+                          >
+                            Купить Сейчас
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>Покупка</DialogTitle>
+                            <DialogDescription>
+                              Введите ваш Telegram ID и адрес. С вами свяжутся по поводу оплаты.
+                              <br/>
+                              Вы выбрали <span className="font-semibold">{product.name}</span>, размер <span
+                              className="font-semibold">{selectedSize}</span>, кол-во <span
+                              className="font-semibold">{quantity}</span>, на сумму <span
+                              className="font-semibold">{endPrice}</span>
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="flex flex-col gap-4 items-center">
+                            <Input
+                              type="text"
+                              value={tgId}
+                              onChange={handleTgIdChange}
+                              placeholder={"@tg_id..."}
+                            />
+                            <Input
+                              type="text"
+                              value={country}
+                              onChange={(e) => setCountry(e.target.value)}
+                              placeholder={"Страна..."}
+                            />
+                            <Input
+                              type="text"
+                              value={city}
+                              onChange={(e) => setCity(e.target.value)}
+                              placeholder={"Город..."}
+                            />
+                            <Input
+                              type="text"
+                              value={adress}
+                              onChange={(e) => setAdress(e.target.value)}
+                              placeholder={"Адрес..."}
+                            />
+                          </div>
+                          <DialogFooter className="sm:justify-start gap-2">
+                            <DialogClose asChild>
+                              <Button type="button" variant="secondary">
+                                Закрыть
+                              </Button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <Button type="button" onClick={handleSubmit}>
+                                Отправить заказ
+                              </Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
             </div>
+            {/*<SwiperOfProduct product={product}></SwiperOfProduct>*/}
           </div>
-
-        </div>
-      </section>
+        </section>
 
 
-      {showAlert && (
-        <Alert
-          variant="destructive"
-          className="fixed top-4 right-4 z-50 bg-white flex items-center shadow-lg"
-          style={{width: "auto"}}
-        >
-          <Terminal className="h-4 w-4"/>
-          <div>
-            <AlertTitle>Ошибка!</AlertTitle>
-            <AlertDescription>
-              Поле для ID Telegram неправильно введено.
-            </AlertDescription>
+
+        <section className="modile block lg:hidden page my-12">
+          <div className="container flex flex-center">
+            <div className="product w-full grid grid-cols-1 sm:grid-cols-5 md:grid-cols-3 gap-0 sm:gap-20">
+              <div className="views col-span-3 md:col-span-2">
+                {/*{*/}
+                {/*  product.views.length > 1 ? (*/}
+                {/*    <div>*/}
+                {/*      <SwiperOfProduct product={product}></SwiperOfProduct>*/}
+
+                {/*    </div>*/}
+                {/*  ) : (*/}
+                {/*    // <div className="flex justify-center items-center rounded-lg">*/}
+                    <div className=" views">
+                      <SwiperOfProduct product={product}></SwiperOfProduct>
+                    </div>
+
+                {/*    // </div>*/}
+                {/*  )*/}
+                {/*}*/}
+                {/*{productID}*/}
+                {/*{product.name}*/}
+              </div>
+              <div className="info col-span-2 md:col-span-1 flex-col flex">
+                <div className="flex flex-col gap-10">
+
+                  <div className="information flex flex-col gap-6">
+                    <div className="texts flex-col flex gap-4">
+                      <h1 className="text-2xl font-semibold">{product.name}</h1>
+                      {
+                        product.inStock ? (
+                          <p className="text-sm text-green-500">* В наличии</p>
+                        ) : (
+                          <p className="text-sm text-red-500">* Нет в наличии</p>
+                        )
+                      }
+                      <h2 className="text-2xl">{product.price} cом</h2>
+                    </div>
+                    <p className="text-sm">{product.description}</p>
+                  </div>
+
+                  <Separator/>
+
+                  <div className="paymet-details flex flex-col gap-6">
+                    <div className="sizes flex gap-3">
+                      <span className="text-xl">Size: </span>
+                      {
+                        product.sizes.map((size, index) => (
+                          <div className={`${selectedSize === size && "bg-gray-800 text-white"} cursor-pointer w-8 h-8 flex items-center justify-center rounded border border-gray-800 text-sm`}
+                               key={index}
+                               onClick ={() => handleSizeChange(size)}
+                          >{size}</div>
+                        ))
+                      }
+                    </div>
+                    <div className="btns-to-but flex flex-nowrap gap-4">
+
+                      {
+                        quantity < 1 ? (
+                          <Button onClick={() => addToCart(product)}><BsCartFill/></Button>
+                        ) : (
+                          <div
+                            className="qnts w-[159px] rounded-lg border-gray-800 overflow-hidden border flex justify-between items-center">
+                            <Button
+                              className="rounded-tr-none rounded-br-none"
+                              variant="default"
+                              onClick={handleDecrease}
+                            >
+                              -
+                            </Button>
+                            <span>{quantity}</span>
+                            <Button
+                              className="rounded-tl-none rounded-bl-none"
+                              variant="default" onClick={handleIncrease}>
+                              +
+                            </Button>
+                          </div>
+                        )
+                      }
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            className="bg-gradient w-full"
+                            onClick={() => {
+                              const isInCart = cart.some(item => item.id === product.id);
+                              if (!isInCart) {
+                                addToCart(product, selectedSize || product.sizes[0]); // Передаем выбранный размер или первый из доступных
+                              }
+                            }}
+                          >
+                            Купить Сейчас
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>Покупка</DialogTitle>
+                            <DialogDescription>
+                              Введите ваш Telegram ID и адрес. С вами свяжутся по поводу оплаты.
+                              <br/>
+                              Вы выбрали <span className="font-semibold">{product.name}</span>, размер <span
+                              className="font-semibold">{selectedSize}</span>, кол-во <span
+                              className="font-semibold">{quantity}</span>, на сумму <span
+                              className="font-semibold">{endPrice}</span>
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="flex flex-col gap-4 items-center">
+                            <Input
+                              type="text"
+                              value={tgId}
+                              onChange={handleTgIdChange}
+                              placeholder={"@tg_id..."}
+                            />
+                            <Input
+                              type="text"
+                              value={country}
+                              onChange={(e) => setCountry(e.target.value)}
+                              placeholder={"Страна..."}
+                            />
+                            <Input
+                              type="text"
+                              value={city}
+                              onChange={(e) => setCity(e.target.value)}
+                              placeholder={"Город..."}
+                            />
+                            <Input
+                              type="text"
+                              value={adress}
+                              onChange={(e) => setAdress(e.target.value)}
+                              placeholder={"Адрес..."}
+                            />
+                          </div>
+                          <DialogFooter className="sm:justify-start gap-2">
+                            <DialogClose asChild>
+                              <Button type="button" variant="secondary">
+                                Закрыть
+                              </Button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <Button type="button" onClick={handleSubmit}>
+                                Отправить заказ
+                              </Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            {/*<SwiperOfProduct product={product}></SwiperOfProduct>*/}
           </div>
-        </Alert>
-      )}
+        </section>
 
-      {showAlert1 && (
-        <Alert
-          className="fixed top-4 right-4 z-50 bg-white flex items-center shadow-lg"
-          style={{width: "auto"}}
-        >
-          <TiTick className="h-4 w-4 text-green-500"/>
-          <div>
-            <AlertTitle>Успешно!</AlertTitle>
-            <AlertDescription>
-              Вы отправили заказ, ожидайте...
-            </AlertDescription>
-          </div>
-        </Alert>
-      )}
-    </>
-  );
+
+        {showAlert && (
+          <Alert
+            variant="destructive"
+            className="fixed top-4 right-4 z-50 bg-white flex items-center shadow-lg"
+            style={{width: "auto"}}
+          >
+            <Terminal className="h-4 w-4"/>
+            <div>
+              <AlertTitle>Ошибка!</AlertTitle>
+              <AlertDescription>
+                Поле для ID Telegram неправильно введено.
+              </AlertDescription>
+            </div>
+          </Alert>
+        )}
+
+        {showAlert1 && (
+          <Alert
+            className="fixed top-4 right-4 z-50 bg-white flex items-center shadow-lg"
+            style={{width: "auto"}}
+          >
+            <TiTick className="h-4 w-4 text-green-500"/>
+            <div>
+              <AlertTitle>Успешно!</AlertTitle>
+              <AlertDescription>
+                Вы отправили заказ, ожидайте...
+              </AlertDescription>
+            </div>
+          </Alert>
+        )}
+      </div>
+    );
+  } else {
+    return (
+      <section className="w-screen h-screen flex-center"></section>
+    )
+  }
 };
 
 export default ProductPage;
