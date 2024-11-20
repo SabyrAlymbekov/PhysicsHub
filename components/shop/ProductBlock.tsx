@@ -5,9 +5,23 @@ import {Input} from "@/components/ui/input";
 import {useCart} from "@/context/CartContext";
 import { ShopCardProps } from './ShopCard';
 
-const ProductBlock = ({product} : ShopCardProps ) => {
-  const [input, setInput] = useState(1);
-  const { updateQuantity } = useCart()
+interface pro {
+  product: {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    images: string[];
+    sizes: string[];
+    inStock: boolean;
+  }
+}
+
+
+const ProductBlock = ({product} : {pro} ) => {
+  const {cart, updateQuantity} = useCart();
+  const itemCart = cart.find(item => item.id === product.id);
+  const [input, setInput] = useState(itemCart.quantity);
   const handleChange = (e) => {
     const value = Math.max(1, Math.min(99, Number(e.target.value)));
     setInput(value)
