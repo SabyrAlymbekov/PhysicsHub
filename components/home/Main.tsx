@@ -14,8 +14,8 @@ function Main() {
         <div
             className="absolute -inset-2 rounded-lg bg-gradient-to-r from-[#62cff4] to-[#2c67f2] opacity-50 blur-lg"
         ></div>
-            <Link href="/archive" className="relative flex md:py-5 md:px-8 py-3 px-6 items-center justify-center rounded-lg bg-white text-black w-fit paragraph-medium md:base-bold">
-                Решать задачи
+            <Link href="/materials" className="relative flex md:py-5 md:px-8 py-3 px-6 items-center justify-center rounded-lg bg-white text-black w-fit paragraph-medium md:base-bold">
+                 Смотреть материалы
             </Link>
         </div>
         </div>
