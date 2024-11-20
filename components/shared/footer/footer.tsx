@@ -7,7 +7,7 @@ import Image from "next/image"
 const Footer = () => {
     return (
       <>
-          <footer className="md:block hidden w-full bg-white mt-auto border-t">
+          <footer className="md:block hidden w-full bg-white mt-5 border-t ">
               <div className="container flex items-center justify-between gap-10 py-3">
                   <div className="flex gap-3 flex-col">
                       <div className="grid grid-cols-2 gap-2">
@@ -55,7 +55,7 @@ const Footer = () => {
                   </div>
               </div>
           </footer>
-          <footer className="md:hidden w-full bg-white mt-auto border-t">
+          <footer className="md:hidden w-full bg-white mt-5 border-t">
               <div className="container flex items-center sm:flex-row flex-col justify-between gap-5 py-3">
                   <div className="flex gap-3 flex-col ">
                       <div className="grid text-sm grid-cols-2 mini:grid-cols-2 sm:grid-cols-1 gap-2">

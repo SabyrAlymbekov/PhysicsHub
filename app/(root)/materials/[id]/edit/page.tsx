@@ -126,9 +126,9 @@ export default function EditTextbookPage({ params }: { params: { id: string } })
           const oldFileRef = ref(storage, formData.filePath);
           try {
             await deleteObject(oldFileRef);
-            console.log(`Старый файл ${formData.filePath} успешно удалён.`);
+            alert(`Старый файл ${formData.filePath} успешно удалён.`);
           } catch (error) {
-            console.error(`Ошибка при удалении старого файла ${formData.filePath}:`, error);
+            alert(`Ошибка при удалении старого файла ${formData.filePath}: сообщите разрабу пжпжпжпжпж`);
           }
         }
       }

@@ -3,8 +3,8 @@ import { twMerge } from "tailwind-merge"
 import bcrypt from "bcryptjs"
 
 import { v4 as uuidv4 } from "uuid";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject, uploadBytes } from "firebase/storage";
-import { app } from "@/firebase"; // Initialize Firebase client
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject, uploadBytes } from "firebase/storage";
+import { storage } from "@/firebase";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -16,8 +16,6 @@ export function saltAndHashPassword(password: string) {
   const hash = bcrypt.hashSync(password, salt);
   return hash;
 }
-
-const storage = getStorage(app);
 
 export const uploadFileWithProgress = async (file: File, folder: string, onProgress: (progress: number) => void): Promise<string> => {
   const fileName = `${uuidv4()}_${file.name}`;

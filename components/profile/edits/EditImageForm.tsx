@@ -6,12 +6,13 @@ import { FormError } from '@/components/shared/auth/form-error'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { changeProfile } from '@/lib/actions/profile/changeProfile'
-import { uploadFileWithProgress, deleteFile } from "@/lib/utils";
+import { uploadFileWithProgress } from "@/lib/utils";
 
 const EditImageForm = ({oldImage} : {oldImage: string | null}) => {
+    console.log(oldImage);
     const [state, setState] = useState<React.ReactNode>("")
-    const [logo, setLogo] = useState<string | null>(null);
-    const [oldLogo, setOldLogo] = useState<string | null>(oldImage);
+    // const [logo, setLogo] = useState<string | null>(null);
+    // const [oldLogo, setOldLogo] = useState<string | null>(oldImage);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [isUploading, setIsUploading] = useState<boolean>(false);
 
@@ -20,14 +21,15 @@ const EditImageForm = ({oldImage} : {oldImage: string | null}) => {
         if (file) {
             setIsUploading(true);
             try {
-                if (oldLogo) {
-                    await deleteFile(oldLogo);
-                }
+                // if (oldLogo) {
+                    // console.log(oldLogo);
+                    // await deleteFile(oldLogo);
+                // }
                 const url = await uploadFileWithProgress(file, 'users/avatars', setUploadProgress);
-                setOldLogo(logo);
-                setLogo(url);
+                console.log('Download URL:', url);
+                // setOldLogo(logo);
+                // setLogo(url);
                 
-                // Применяем изображение сразу после загрузки
                 const res = await changeProfile({ image: url });
                 if (res.error) {
                     setState(<FormError message={res.error} />);
