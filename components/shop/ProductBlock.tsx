@@ -8,7 +8,7 @@ import { ShopCardProps } from './ShopCard';
 const ProductBlock = ({product} : ShopCardProps ) => {
   const [input, setInput] = useState(1);
   const { updateQuantity } = useCart()
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.max(1, Math.min(99, Number(e.target.value)));
     setInput(value)
     updateQuantity(product.id, value);

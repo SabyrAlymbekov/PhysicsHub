@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Organizer, Stage } from "@prisma/client";
 
 export default function EditOlympiadPage({
   params,
@@ -133,7 +134,7 @@ export default function EditOlympiadPage({
   };
 
   const removeStage = (index: number) => {
-    const newStages = formData.stages.filter((_, i) => i !== index);
+    const newStages = formData.stages.filter((_: Stage, i: number) => i !== index);
     setFormData({ ...formData, stages: newStages });
   };
 
@@ -148,7 +149,7 @@ export default function EditOlympiadPage({
   };
 
   const removeOrganizer = (index: number) => {
-    const newOrganizers = formData.organizers.filter((_, i) => i !== index);
+    const newOrganizers = formData.organizers.filter((_: Organizer, i: number) => i !== index);
     setFormData({ ...formData, organizers: newOrganizers });
   };
 
@@ -171,7 +172,7 @@ export default function EditOlympiadPage({
 
       // Upload organizer logos
       const organizerLogos = await Promise.all(
-        formData.organizers.map(async (org: any, index: number) => {
+        formData.organizers.map(async (org: any) => {
           if (org.logoFile) {
             const [url, storageUrl] = await uploadFile(
               org.logoFile,

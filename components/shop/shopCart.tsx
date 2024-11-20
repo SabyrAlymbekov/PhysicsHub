@@ -25,7 +25,7 @@ const ShopCart = () => {
   const { cart, money, total } = useCart();
   const discount = 0;
   const [tgId, setTgId] = useState("");
-  const [error, setError] = useState("");
+  const [error] = useState("");
   const [adress, setAdress] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [showAlert1, setShowAlert1] = useState(false);
@@ -33,14 +33,9 @@ const ShopCart = () => {
   const showErrorAlert = () => setShowAlert(true);
   const showSuccessAlert = () => setShowAlert1(true);
 
-  const handleTgIdChange = (e) => {
+  const handleTgIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTgId(value);
-    // if (!/^@([A-Za-z0-9_]{5,})$/.test(value)) {
-      // setError("Введите корректный Telegram ID (например, @username)");
-    // } else {
-      // setError("");
-    // }
   };
 
   const end = money + (money * discount / 100);

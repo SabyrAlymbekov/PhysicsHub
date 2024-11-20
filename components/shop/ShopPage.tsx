@@ -19,7 +19,6 @@ const ProductList = async ({category}: {category: string}) => {
 }
 
 const ShopPage = async ({category} : {category?: string}) => {
-  const products = await getAllProductsByCategory(category || '');
 
   return (
     <div className='container'>
