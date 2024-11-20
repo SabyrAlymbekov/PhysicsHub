@@ -117,7 +117,7 @@ model Textbook {
   description String?
   authors     String[]
   tags        String[]
-  filePath    String
+  filePath    String?
   source      String?
   storagePath String?
   topicIds    String[]        @db.ObjectId

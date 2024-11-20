@@ -8,11 +8,11 @@ export async function createTextbook(
     authors: string[],
     category: string,
     topics: string[],
-    filePath: string,
-    storagePath: string, 
-    source: string
+    filePath?: string | null,
+    storagePath?: string | null, 
+    source?: string
 ) {
-    if (!name || !authors.length || !category || !filePath || !topics.length) {
+    if (!name || !authors.length || !category || !topics.length) {
         throw new Error("Пожалуйста, заполните все обязательные поля.");
     }
 
@@ -22,7 +22,6 @@ export async function createTextbook(
                 const existingTopic = await prisma.topic.findUnique({
                     where: { name: topicName },
                 });
-
                 if (existingTopic) {
                     await prisma.topic.update({
                         where: { id: existingTopic.id },

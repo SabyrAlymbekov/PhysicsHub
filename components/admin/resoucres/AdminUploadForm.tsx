@@ -55,13 +55,12 @@ export default function AdminUploadForm() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!formData.file) {
-            alert("Пожалуйста, выберите файл для загрузки.");
-            return;
-        }
-
         try {
-            const fileName = `${Date.now()}_${formData.file.name}`;
+            const authorsArray = formData.authors.split(",").map((item) => item.trim());
+                    const topicsArray = formData.topics.split(",").map((item) => item.trim().toLowerCase());
+
+            if (formData.file) {
+                const fileName = `${Date.now()}_${formData.file.name}`;
             const storageRef = ref(storage, `textbooks/${fileName}`);
             const uploadTask = uploadBytesResumable(storageRef, formData.file);
 
@@ -78,9 +77,6 @@ export default function AdminUploadForm() {
                 async () => {
                     const filePath = `textbooks/${fileName}`;
                     const downloadUrl = await getDownloadURL(ref(storage, filePath));
-
-                    const authorsArray = formData.authors.split(",").map((item) => item.trim());
-                    const topicsArray = formData.topics.split(",").map((item) => item.trim().toLowerCase());
 
                     try {
                         await createTextbook(
@@ -109,6 +105,31 @@ export default function AdminUploadForm() {
                     }
                 }
             );
+            } else {
+                try {
+                    await createTextbook(
+                        formData.name,
+                        formData.description || null,
+                        authorsArray,
+                        formData.category,
+                        topicsArray,
+                        formData.source
+                    );
+                    alert("Учебник успешно добавлен!");
+                    setFormData({
+                        name: "",
+                        description: "",
+                        authors: "",
+                        category: "textbook",
+                        topics: "",
+                        file: null,
+                        source: ""
+                    });
+                    setUploadProgress(0);
+                } catch (error: any) {
+                    alert(`Ошибка при создании учебника: ${error.message}`);
+                }
+            }
         } catch (error) {
             console.error("Ошибка при отправке формы:", error);
             alert("Произошла ошибка при добавлении учебника.");
@@ -169,7 +190,7 @@ export default function AdminUploadForm() {
                     value={formData.source}
                     onChange={handleChange}
                 />
-                <Input type="file" name="file" onChange={handleChange} required />
+                <Input type="file" name="file" onChange={handleChange} />
                 <Button type="submit">Загрузить</Button>
                 {uploadProgress > 0 && <p>Прогресс загрузки: {uploadProgress.toFixed(2)}%</p>}
             </form>

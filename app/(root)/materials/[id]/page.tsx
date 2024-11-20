@@ -30,7 +30,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       </div>
       {textbook.source && (
         <p className="text-gray-300">
-          Источник:{" "}
+          Источник: {" "}
           {textbook.source.includes("https") ? (
             <a href={textbook.source}>{textbook.source}</a>
           ) : (
@@ -38,12 +38,16 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           )}
         </p>
       )}
+      {
+        textbook.filePath &&
       <Link download href={textbook.filePath}>
         <Button variant="default" className="my-4">
           Скачать
         </Button>
       </Link>
-      <Suspense fallback={<Skeleton className="w-full h-[800px]"></Skeleton>}>
+}
+      {
+        textbook.filePath && <Suspense fallback={<Skeleton className="w-full h-[800px]"></Skeleton>}>
         <iframe
           id="inlineFrameExample"
           title="Inline Frame Example"
@@ -53,6 +57,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           src={textbook.filePath}
         ></iframe>
       </Suspense>
+      }
     </div>
   );
 };
