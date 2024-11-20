@@ -19,10 +19,9 @@ const ProductList = async ({category}: {category: string}) => {
 }
 
 const ShopPage = async ({category} : {category?: string}) => {
-
   return (
     <div className='container'>
-      <div className='flex flex-row gap-2'>
+      <div className='flex flex-row gap-2 flex-wrap justify-center md:justify-start w-full'>
         {
           categories.map((c, i) => <Link href={c.link} key={i}>
           <Card className='w-32 h-25 py-3 px-4 flex items-center flex-col justify-center gap-3'>

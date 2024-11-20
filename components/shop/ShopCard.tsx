@@ -7,6 +7,7 @@ import Image from 'next/image'
 import {Button} from "@/components/ui/button";
 import {useCart} from "@/context/CartContext";
 import { Product } from '@prisma/client';
+import Link from 'next/link';
 
 export interface ShopCardProps {
   product: Product;
@@ -48,7 +49,7 @@ const ShopCard = ({ product }: ShopCardProps) => {
               </div>
         </div>
       </div>
-
+      <Link href={`/shop/product/${product.id}`}>
       <div className='flex flex-col gap-2'>
         <p className='text-lg font-medium'>
           {product.name}
@@ -63,6 +64,7 @@ const ShopCard = ({ product }: ShopCardProps) => {
           )
         }
       </div>
+      </Link>
     </div>
   )
 }

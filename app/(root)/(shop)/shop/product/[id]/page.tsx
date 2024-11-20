@@ -12,7 +12,7 @@ const ProductPage = () => {
     if (!confirm("Are you sure you want to delete this product?")) return;
 
     await deleteProductAction(id as string);
-    router.push("/products");
+    router.push("/shop");
   };
 
   return (
