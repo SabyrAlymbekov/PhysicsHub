@@ -62,7 +62,7 @@ const MaterialsListComponent = async ({
               </TableCell>
             )}
             <TableCell className="w-10 ">
-              <Link href={textbook.filePath} download>
+              {textbook.filePath ? <Link href={textbook.filePath} download>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -70,7 +70,15 @@ const MaterialsListComponent = async ({
                 >
                   <BsDownload />
                 </Button>
-              </Link>
+              </Link> : <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-full text-center"
+                  disabled
+                >
+                  <BsDownload />
+                </Button>}
+              
             </TableCell>
             <TableCell className="w-5">
               <Link href={"/materials/" + textbook.id}>
