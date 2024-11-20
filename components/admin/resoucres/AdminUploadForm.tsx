@@ -17,6 +17,7 @@ interface FormData {
     category: string;
     topics: string;
     file: File | null;
+    source: string;
 }
 
 export default function AdminUploadForm() {
@@ -37,6 +38,7 @@ export default function AdminUploadForm() {
         category: "textbook",
         topics: "",
         file: null,
+        source: ""
     });
 
     const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -87,7 +89,9 @@ export default function AdminUploadForm() {
                             authorsArray,
                             formData.category,
                             topicsArray,
-                            downloadUrl
+                            downloadUrl,
+                            filePath,
+                            formData.source
                         );
                         alert("Учебник успешно добавлен!");
                         setFormData({
@@ -97,6 +101,7 @@ export default function AdminUploadForm() {
                             category: "textbook",
                             topics: "",
                             file: null,
+                            source: ""
                         });
                         setUploadProgress(0);
                     } catch (error: any) {
@@ -155,6 +160,13 @@ export default function AdminUploadForm() {
                     name="topics"
                     placeholder="Темы (через запятую)"
                     value={formData.topics}
+                    onChange={handleChange}
+                />
+                <Input
+                    type="text"
+                    name="source"
+                    placeholder="Введите источник материала (ссылку или текст)"
+                    value={formData.source}
                     onChange={handleChange}
                 />
                 <Input type="file" name="file" onChange={handleChange} required />

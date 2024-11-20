@@ -39,30 +39,25 @@ export default function CreateOlympiadForm() {
         router.push('/')
     }
 
-    // Stages var/functions
     const [stages, setStages] = useState<Stage[]>([
         { name: ''},
     ]);
 
-    // Функция для добавления нового этапа
     const addStage = () => {
         setStages([...stages, { name: '' }]);
     };
 
-    // Функция для обновления значений каждого этапа
     const handleStageChange = (index: number, field: keyof Stage, value: string) => {
         const newStages = [...stages];
         newStages[index][field] = value;
         setStages(newStages);
     };
 
-    // Функция для удаления этапа
     const removeStage = (index: number) => {
         const newStages = stages.filter((_, i) => i !== index);
         setStages(newStages);
     };
 
-    // Organizers var/functions
     const [organizers, setOrganizers] = useState<Organizer[]>([]);
 
     const handleOrgChange = (index: number, field: string, value: string) => {
@@ -77,16 +72,13 @@ export default function CreateOlympiadForm() {
     const handleOrgFileChange = (index: number, event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null;
 
-        // Создаем копию массива организаторов
         const updatedOrganizers = [...organizers];
 
-        // Обновляем нужного организатора, добавляя загруженный файл
         updatedOrganizers[index] = {
             ...updatedOrganizers[index],
             logo: file,
         };
 
-        // Обновляем состояние
         setOrganizers(updatedOrganizers);
     };
 
@@ -156,9 +148,12 @@ export default function CreateOlympiadForm() {
                 ...formData,
                 stages,
                 organizers: updatedOrganizers,
-                logoUrl,
-                coverUrl,
-                regulationsUrl,
+                logoUrl: logoUrl[0],
+                coverUrl: coverUrl[0],
+                regulationsUrl: (regulationsUrl ? regulationsUrl[0] : null),
+                logoStorageUrl: logoUrl[1],
+                coverStorageUrl: coverUrl[1],
+                regulationsStorageUrl: (regulationsUrl ? regulationsUrl[1] : null)
             };
 
             const res = await createOlympiad(payload);

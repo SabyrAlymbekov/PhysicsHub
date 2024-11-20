@@ -70,6 +70,9 @@
     .bg-gradient {
         background: linear-gradient(315deg, #62cff4, #2c67f2);
     }
+    .bg-gradient:active {
+        background: linear-gradient(315deg, #4b9fbb, #1c429b);
+    }
 }
 
 @layer base {

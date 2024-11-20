@@ -1,10 +1,10 @@
 import React from 'react';
-import ShopPage from "@/components/shop/ShopPage";
+import ShopCart from "@/components/shop/shopCart";
 
 const Page = () => {
   return (
     <div className="flex flex-col">
-      <ShopPage/>
+      <ShopCart/>
     </div>
   );
 };

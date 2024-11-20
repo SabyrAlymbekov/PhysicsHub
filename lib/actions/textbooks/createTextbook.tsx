@@ -8,7 +8,9 @@ export async function createTextbook(
     authors: string[],
     category: string,
     topics: string[],
-    filePath: string
+    filePath: string,
+    storagePath: string, 
+    source: string
 ) {
     if (!name || !authors.length || !category || !filePath || !topics.length) {
         throw new Error("Пожалуйста, заполните все обязательные поля.");
@@ -47,6 +49,8 @@ export async function createTextbook(
                 tags: [category],
                 filePath,
                 topicIds,
+                storagePath,
+                source
             },
         });
 

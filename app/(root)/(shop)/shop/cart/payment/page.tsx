@@ -1,10 +1,10 @@
 import React from 'react';
-import ShopPage from "@/components/shop/ShopPage";
+import PaymentPage from "@/components/shop/PaymentPage";
 
 const Page = () => {
   return (
     <div className="flex flex-col">
-      <ShopPage/>
+      <PaymentPage/>
     </div>
   );
 };

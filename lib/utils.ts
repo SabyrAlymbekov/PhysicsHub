@@ -41,11 +41,12 @@ export const uploadFileWithProgress = async (file: File, folder: string, onProgr
   });
 };
 
-export const uploadFile = async (file: File, folder: string): Promise<string> => {
+export const uploadFile = async (file: File, folder: string) => {
   const fileName = `${uuidv4()}_${file.name}`;
   const storageRef = ref(storage, `${folder}/${fileName}`);
   await uploadBytes(storageRef, file); // Upload file
-  return getDownloadURL(storageRef);  // Get public URL
+  const url = await getDownloadURL(storageRef)
+  return [url, `${folder}/${fileName}`];  // Get public URL
 };
 
 export const deleteFile = async (fileUrl: string): Promise<void> => {

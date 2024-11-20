@@ -6,6 +6,7 @@ import NavsMobile from './NavsMobile'
 import Link from "next/link";
 import {SignInButton} from "@/components/shared/auth/signin-button";
 import {currentUser} from "@/lib/actions/authActions";
+import { TbShoppingBag } from "react-icons/tb";
 
 async function Navbar() {
     const user = await currentUser()
@@ -21,6 +22,11 @@ async function Navbar() {
             <Navs></Navs>
 
             <div className='row gap-3'>
+            <Link href={`/shop/cart`} className='hidden md:block'>
+        <Button variant={"outline"} size={"icon"}>
+        <TbShoppingBag />
+        </Button>
+      </Link>
                 {!user ? (
                         <SignInButton>
                             <Button variant="outline" className='max-xs:hidden'>

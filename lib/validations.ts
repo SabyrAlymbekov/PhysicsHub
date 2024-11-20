@@ -33,3 +33,15 @@ export const profileSchema = z.object({
     image: z.string().or(z.undefined()),
     rolesInTeam: z.string().min(1, {message: "поле не должно быть пустым"}).max(4096, {message: "длина должна быть меньше 4096 символов."}).array().max(100, {message: "Кол-во полей не должно превышать 100"}).or(z.undefined())
 })
+
+export const productSchema = z.object({
+    name: z.string().min(1, { message: "Name is required" }),
+    description: z.string().min(1, { message: "Description is required" }),
+    type: z.string().min(1, { message: "Type is required" }),
+    price: z.coerce
+      .number({ invalid_type_error: "Price must be a number" })
+      .nonnegative("Price must be a non-negative number"),
+    sizes: z.string().optional(),
+    inStock: z.boolean(),
+  });
+  

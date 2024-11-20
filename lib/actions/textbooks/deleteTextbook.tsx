@@ -1,5 +1,6 @@
 "use server";
 
+import { storage } from "@/lib/firebaseAdmin";
 import { db as prisma } from "@/lib/db";
 
 export async function deleteTextbook(id: string) {
@@ -11,7 +12,7 @@ export async function deleteTextbook(id: string) {
     await prisma.$transaction(async (prisma) => {
       const currentTextbook = await prisma.textbook.findUnique({
         where: { id },
-        select: { topicIds: true, filePath: true },
+        select: { topicIds: true, filePath: true, storagePath: true},
       });
 
       if (!currentTextbook) {
@@ -19,6 +20,13 @@ export async function deleteTextbook(id: string) {
       }
 
       const { topicIds } = currentTextbook;
+      const path = currentTextbook.storagePath
+      const bucket = storage.bucket();
+
+      if (path) {
+        const fileRef = bucket.file(path);
+        await fileRef.delete();
+      }
 
       await prisma.textbook.delete({
         where: { id },

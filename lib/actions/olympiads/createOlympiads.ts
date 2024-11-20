@@ -24,10 +24,10 @@ export async function createOlympiad(formData: any) {
         const {
             name, description, registrationStart, registrationEnd, resultsDate,
             participantCount, socialLinks, registrationFormUrl, stages, organizers,
-            logoUrl, coverUrl, regulationsUrl
+            logoUrl, coverUrl, regulationsUrl, logoStorageUrl, coverStorageUrl, regulationsStorageUrl
         } = formData;
 
-        await db.olympiad.create({
+        const data = {
             data: {
                 name,
                 description,
@@ -46,14 +46,21 @@ export async function createOlympiad(formData: any) {
                     create: organizers.map((org: Org) => ({
                         name: org.name,
                         link: org.link,
-                        logoUrl: org.logoUrl,
+                        logoUrl: org.logoUrl[0],
                     })),
                 },
                 logoUrl,
                 coverUrl,
                 regulationsUrl,
+                logoStorageUrl,
+                coverStorageUrl,
+                regulationsStorageUrl
             },
-        });
+        }
+
+        console.log(data)
+        
+        await db.olympiad.create(data);
 
         revalidatePath('/olympiads');
 
