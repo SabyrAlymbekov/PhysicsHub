@@ -102,7 +102,10 @@ const PolicyPrivacy = () => {
                                 • Отказ от получения уведомлений на электронную почту.
                             </li>
                             <li>
-                                Если вы хотите воспользоваться любым из этих прав, пожалуйста, свяжитесь с нами по [EMAIL].
+                                </p>
+                                    Если вы хотите воспользоваться любым из этих прав, пожалуйста, свяжитесь с нами по адресу: <a href="https://mail.google.com/mail/u/0/?pli=1#inbox?compose=CllgCJlKFQgmqcBnRHDRQrcGDHDGpXBTGghFmlBVqxrWGNWlPjZnFSHlXbQndtndnBgGzqBzwxB" target="_blank" rel="noopener noreferrer">
+                        nursultanraiapov@gmail.com
+                        </a>. </p>.
                             </li>
                         </ul>
                     </li>
