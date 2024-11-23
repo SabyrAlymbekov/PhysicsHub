@@ -7,7 +7,7 @@ const getTextbookById = async (id: string) => {
     const textbook = await db.textbook.findUnique({
         where: {id},
     });
-    console.log(textbook)
+    
     return textbook;
   } catch (error) {
     console.log(error);

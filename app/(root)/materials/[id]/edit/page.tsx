@@ -21,6 +21,8 @@ interface FormData {
   topics: string;
   file: File | null;
   filePath: string | null;
+  source: string;
+  sourceLabel: string;
 }
 
 export default function EditTextbookPage({ params }: { params: { id: string } }) {
@@ -46,7 +48,10 @@ export default function EditTextbookPage({ params }: { params: { id: string } })
     topics: "",
     file: null,
     filePath: null,
+    source: "",
+    sourceLabel: ""
   });
+  
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   useEffect(() => {
@@ -62,6 +67,8 @@ export default function EditTextbookPage({ params }: { params: { id: string } })
             authors: textbook.authors.join(", "),
             category: textbook.tags[0] || "textbook",
             filePath: textbook.filePath,
+            source: textbook.source || "",
+            sourceLabel: textbook.sourceLabel || ""
           });
 
           const topics = await getTopicsByTextbookid(params.id);
@@ -97,11 +104,13 @@ export default function EditTextbookPage({ params }: { params: { id: string } })
 
     try {
       let newFilePath = formData.filePath;
+      let newStoragePath = null;
 
       if (formData.file) {
         const fileName = `${Date.now()}_${formData.file.name}`;
         const storageRef = ref(storage, `textbooks/${fileName}`);
         const uploadTask = uploadBytesResumable(storageRef, formData.file);
+        newStoragePath = `textbooks/${fileName}`
 
         newFilePath = await new Promise<string>((resolve, reject) => {
           uploadTask.on(
@@ -138,13 +147,18 @@ export default function EditTextbookPage({ params }: { params: { id: string } })
 
       try {
         await updateTextbook(
-          formData.id,
-          formData.name,
-          formData.description || null,
-          authorsArray,
-          formData.category,
-          topicsArray,
-          newFilePath
+          {
+          id: formData.id,
+          name: formData.name,
+          description: formData.description || null,
+          authors: authorsArray,
+          category: formData.category,
+          topics: topicsArray,
+          newFilePath,
+          source: formData.source,
+          sourceLabel: formData.sourceLabel,
+          newStoragePath,
+        }
         );
         alert("Учебник успешно обновлён!");
       } catch (error: any) {
@@ -203,6 +217,20 @@ export default function EditTextbookPage({ params }: { params: { id: string } })
           name="topics"
           placeholder="Темы (через запятую)"
           value={formData.topics}
+          onChange={handleChange}
+        />
+        <Input
+          type="text"
+          name="sourceLabel"
+          placeholder="источник (текст)"
+          value={formData.sourceLabel}
+          onChange={handleChange}
+        />
+        <Input
+          type="text"
+          name="source"
+          placeholder="источник (ссылка)"
+          value={formData.source}
           onChange={handleChange}
         />
         <Input type="file" name="file" onChange={handleChange} />

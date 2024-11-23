@@ -2,21 +2,39 @@
 
 import { db as prisma } from "@/lib/db";
 import { currentUser } from "../authActions";
+import { revalidatePath } from "next/cache";
 
 export async function updateTextbook(
-    id: string,
-    name: string,
-    description: string | null,
-    authors: string[],
-    category: string,
-    topics: string[],
-    newFilePath: string | null
+    data: {
+        id: string,
+        name: string,
+        description: string | null,
+        authors: string[],
+        category: string,
+        topics: string[],
+        newFilePath?: string | null,
+        newStoragePath?: string | null, 
+        source?: string,
+        sourceLabel?: string
+    }
 ) {
-    if (!id || !name || !authors.length || !category || !topics.length) {
-        throw new Error("Пожалуйста, заполните все обязательные поля.");
+    const {
+        id,
+        name,
+        description,
+        authors,
+        category,
+        topics,
+        newFilePath,
+        newStoragePath,
+        source,
+        sourceLabel
+    } = data
+
+    if (!id || !name || !category) {
+        throw new Error("Пожалуйста, заполните название материала и категорию.");
     }
     const user = await currentUser();
-
         if (!user || user.role !== 'ADMIN') {
             throw new Error("forbidden");
         }   
@@ -60,7 +78,7 @@ export async function updateTextbook(
             const removedTopicIds = currentTopicIds.filter((id) => !newTopicIds.includes(id));
 
             const addedTopicIds = newTopicIds.filter((id) => !currentTopicIds.includes(id));
-
+            
             if (removedTopicIds.length > 0) {
                 await prisma.topic.updateMany({
                     where: { id: { in: removedTopicIds } },
@@ -81,7 +99,7 @@ export async function updateTextbook(
                     data: { bookCount: { increment: 1 } },
                 });
             }
-
+            console.log(source, sourceLabel)
             const updatedTextbook = await prisma.textbook.update({
                 where: { id },
                 data: {
@@ -91,9 +109,13 @@ export async function updateTextbook(
                     tags: [category],
                     topicIds: newTopicIds,
                     ...(newFilePath && { filePath: newFilePath }),
+                    ...(newStoragePath && { storagePath: newStoragePath }),
+                    source,
+                    sourceLabel
                 },
             });
-
+            
+            revalidatePath('/materials')
             return updatedTextbook;
         });
     } catch (error: any) {

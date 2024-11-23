@@ -13,9 +13,13 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     getTextbookById(id),
     fetchTopics,
   ]);
+
   if (!textbook) {
     return <h1>404</h1>;
   }
+
+  console.log(textbook)
+
   return (
     <div className="container my-10">
       <h1 className="text-4xl font-bold">{textbook.name}</h1>
@@ -28,16 +32,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             </Link>
           ))}
       </div>
-      {textbook.source && (
-        <p className="text-gray-300">
-          Источник: {" "}
-          {textbook.source.includes("https") ? (
-            <a href={textbook.source}>{textbook.source}</a>
-          ) : (
-            ""
-          )}
-        </p>
-      )}
       {
         textbook.filePath &&
       <Link download href={textbook.filePath}>
@@ -58,6 +52,16 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         ></iframe>
       </Suspense>
       }
+      {textbook.source && (
+        <p className="mt-2">
+          {textbook.sourceLabel ? textbook.sourceLabel : "Источник"}: {" "}
+          {textbook.source.includes("http") ? (
+            <a href={textbook.source}>{textbook.source}</a>
+          ) : (
+            textbook.source
+          )}
+        </p>
+      )}
     </div>
   );
 };

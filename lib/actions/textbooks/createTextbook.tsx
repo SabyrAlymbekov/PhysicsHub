@@ -1,19 +1,35 @@
 "use server";
 
 import { db as prisma } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function createTextbook(
-    name: string,
-    description: string | null,
-    authors: string[],
-    category: string,
-    topics: string[],
-    filePath?: string | null,
-    storagePath?: string | null, 
-    source?: string
+    data: {
+        name: string,
+        description: string | null,
+        authors: string[],
+        category: string,
+        topics: string[],
+        filePath?: string | null,
+        storagePath?: string | null, 
+        source?: string,
+        sourceLabel?: string
+    }
 ) {
-    if (!name || !authors.length || !category || !topics.length) {
-        throw new Error("Пожалуйста, заполните все обязательные поля.");
+    const {
+        name,
+        description,
+        authors,
+        category,
+        topics,
+        filePath,
+        storagePath,
+        source,
+        sourceLabel
+    } = data
+    
+    if (!name || !category) {
+        throw new Error("Пожалуйста, заполните имя и тип учебника.");
     }
 
     try {
@@ -49,11 +65,13 @@ export async function createTextbook(
                 filePath,
                 topicIds,
                 storagePath,
-                source
+                source,
+                sourceLabel
             },
         });
 
         return newTextbook;
+        revalidatePath('/materials')
     } catch (error: any) {
         console.error("Ошибка при создании учебника:", error.message);
         throw new Error("Не удалось создать учебник. Попробуйте снова.");

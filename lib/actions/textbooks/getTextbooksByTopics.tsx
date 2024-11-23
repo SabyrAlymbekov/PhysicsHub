@@ -26,9 +26,6 @@ async function getTextbooksByTopics(
       take: pageSize,
     });
 
-    console.log(materials)
-
-    // Получаем все темы, связанные с материалами
     const allTopicIds = Array.from(new Set(materials.flatMap((m) => m.topicIds)));
     const topicsList = await prisma.topic.findMany({
       where: {
@@ -45,7 +42,7 @@ async function getTextbooksByTopics(
       ...material,
       topics: material.topicIds.map((id) => topicMap.get(id)).filter(Boolean),
     }));
-
+    
     return {
       materials: materialsWithTopics,
     };

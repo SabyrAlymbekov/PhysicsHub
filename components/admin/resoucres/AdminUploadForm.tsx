@@ -18,6 +18,7 @@ interface FormData {
     topics: string;
     file: File | null;
     source: string;
+    sourceLabel: string;
 }
 
 export default function AdminUploadForm() {
@@ -38,7 +39,8 @@ export default function AdminUploadForm() {
         category: "textbook",
         topics: "",
         file: null,
-        source: ""
+        source: "",
+        sourceLabel: ""
     });
 
     const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -80,14 +82,17 @@ export default function AdminUploadForm() {
 
                     try {
                         await createTextbook(
-                            formData.name,
-                            formData.description || null,
-                            authorsArray,
-                            formData.category,
-                            topicsArray,
-                            downloadUrl,
-                            filePath,
-                            formData.source
+                            {
+                                name: formData.name,
+                                description: formData.description || null,
+                                authors: authorsArray,
+                                category: formData.category,
+                                topics: topicsArray,
+                                filePath: downloadUrl,
+                                storagePath: filePath,
+                                source: formData.source,
+                                sourceLabel: formData.sourceLabel
+                            }
                         );
                         alert("Учебник успешно добавлен!");
                         setFormData({
@@ -97,7 +102,8 @@ export default function AdminUploadForm() {
                             category: "textbook",
                             topics: "",
                             file: null,
-                            source: ""
+                            source: "",
+                            sourceLabel: "",
                         });
                         setUploadProgress(0);
                     } catch (error: any) {
@@ -108,12 +114,15 @@ export default function AdminUploadForm() {
             } else {
                 try {
                     await createTextbook(
-                        formData.name,
-                        formData.description || null,
-                        authorsArray,
-                        formData.category,
-                        topicsArray,
-                        formData.source
+                        {
+                            name: formData.name,
+                            description: formData.description || null,
+                            authors: authorsArray,
+                            category: formData.category,
+                            topics: topicsArray,
+                            source: formData.source,
+                            sourceLabel: formData.sourceLabel
+                        }
                     );
                     alert("Учебник успешно добавлен!");
                     setFormData({
@@ -123,7 +132,8 @@ export default function AdminUploadForm() {
                         category: "textbook",
                         topics: "",
                         file: null,
-                        source: ""
+                        source: "",
+                        sourceLabel: "",
                     });
                     setUploadProgress(0);
                 } catch (error: any) {
@@ -164,7 +174,6 @@ export default function AdminUploadForm() {
                     placeholder="Авторы (через запятую)"
                     value={formData.authors}
                     onChange={handleChange}
-                    required
                 />
                 <select
                     name="category"
@@ -185,8 +194,15 @@ export default function AdminUploadForm() {
                 />
                 <Input
                     type="text"
+                    name="sourceLabel"
+                    placeholder="Введите источник материала (текст)"
+                    value={formData.sourceLabel}
+                    onChange={handleChange}
+                />
+                <Input
+                    type="text"
                     name="source"
-                    placeholder="Введите источник материала (ссылку или текст)"
+                    placeholder="Введите источник материала (ссылку)"
                     value={formData.source}
                     onChange={handleChange}
                 />

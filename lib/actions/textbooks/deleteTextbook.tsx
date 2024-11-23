@@ -2,6 +2,7 @@
 
 import { storage } from "@/lib/firebaseAdmin";
 import { db as prisma } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function deleteTextbook(id: string) {
   if (!id) {
@@ -46,7 +47,7 @@ export async function deleteTextbook(id: string) {
         });
       }
     });
-
+    revalidatePath('/materials')
     console.log(`Учебник с ID ${id} успешно удалён.`);
   } catch (error: any) {
     console.error("Ошибка при удалении учебника:", error.message);

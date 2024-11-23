@@ -29,7 +29,7 @@ export const changeProfile = async (data: ChangeProfileProps, usertochangeID?: s
             },
             data: checkedData.data
         });
-        revalidatePath(`/profile/${userId}`)
+        revalidatePath(`/`)
         return {
             message: "Success"
         }

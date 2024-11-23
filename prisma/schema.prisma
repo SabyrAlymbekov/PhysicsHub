@@ -119,6 +119,7 @@ model Textbook {
   tags        String[]
   filePath    String?
   source      String?
+  sourceLabel String?
   storagePath String?
   topicIds    String[]        @db.ObjectId
   createdAt   DateTime        @default(now())
