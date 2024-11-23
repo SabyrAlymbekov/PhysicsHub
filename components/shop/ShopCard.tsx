@@ -24,8 +24,8 @@ const ShopCard = ({ product }: ShopCardProps) => {
             <Image
               src={product.images[0]}
               alt={product.name}
-              width={100}
-              height={100}
+              width={400}
+              height={400}
               className="w-full h-full object-center object-cover"
             />
           </div>
