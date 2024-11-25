@@ -33,7 +33,7 @@ const Resources = async (props: {
         {isAdmin && <Link href="/admin/resources" className="container mt-8"><Button variant="outline" className="w-fit">Перейти в админ панель</Button></Link>}
         <div className="container my-10 flex flex-col gap-6 lg:flex-row-reverse">
             <Suspense fallback={<TopicFiltersSkeleton/>}>
-                <TopicsFilter selectedTopics={topics}/>
+                <TopicsFilter />
             </Suspense>
             <div className="flex flex-col border rounded-md px-4 py-6 w-full lg:w-[calc(100%-400px-1.5rem)] h-fit">
                 <Suspense fallback={<Skeleton className="w-[200px] h-[36px] m-auto" />}>

@@ -1,8 +1,7 @@
-import { Button } from '../ui/button';
 import getTextbookTopics from '@/lib/actions/textbooks/getTextbookTopics';
 import TopicButton from './TopicButton';
 
-async function TopicsFilterComponent({selectedTopics}: {selectedTopics: string[]}) {
+async function TopicsFilterComponent() {
   const topicsList = await getTextbookTopics();
   
   return (
