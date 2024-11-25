@@ -10,18 +10,7 @@ async function TopicsFilterComponent({selectedTopics}: {selectedTopics: string[]
       <h1 className="font-semibold text-2xl">выберите теги: </h1>
       <div className='flex flex-wrap h-fit gap-2'>
         {topicsList.map((topic) => {
-          if (!selectedTopics.includes(topic.id)) {
             return <TopicButton topic={topic} key={topic.id}></TopicButton>
-          } else {
-            return <Button
-            key={topic.id}
-            variant={"default"}
-            className='rounded-full'
-            size="sm"
-                  >
-            {topic.name}
-          </Button>
-          }
         })}
       </div>
     </div>

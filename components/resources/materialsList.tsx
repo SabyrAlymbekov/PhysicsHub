@@ -70,14 +70,36 @@ const MaterialsListComponent = async ({
                 >
                   <BsDownload />
                 </Button>
-              </Link> : <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-full text-center"
-                  disabled
-                >
-                  <BsDownload />
-                </Button>}
+              </Link> : (textbook.source && textbook.source.includes("http")) ? (
+                (textbook.source.includes(".pdf") || textbook.source.includes(".doc") ? (
+                <Link href={textbook.source} download>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="w-full text-center"
+                  >
+                    <BsDownload />
+                  </Button>
+                </Link> 
+                ) : (
+<Link href={textbook.source}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="w-full text-center"
+                  >
+                    <BsDownload />
+                  </Button>
+                </Link> 
+                ))
+              ) : <Button
+              variant="ghost"
+              size="icon"
+              className="w-full text-center"
+              disabled
+            >
+              <BsDownload />
+            </Button>}
               
             </TableCell>
             <TableCell className="w-5">

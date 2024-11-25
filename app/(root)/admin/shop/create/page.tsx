@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { categoriesSelect } from "@/constants/categories";
 
 const CreateProductPage = () => {
   const [productType, setProductType] = useState("");
@@ -77,9 +78,9 @@ const CreateProductPage = () => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Category</SelectLabel>
-                <SelectItem value="cup">Cup</SelectItem>
-                <SelectItem value="t-shirt">T-Shirt</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
+                {
+                  categoriesSelect.map((category, ind) => <SelectItem value={category.toLowerCase()} key={ind}>{category}</SelectItem>)
+                }
               </SelectGroup>
             </SelectContent>
           </Select>

@@ -32,31 +32,45 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             </Link>
           ))}
       </div>
-      {
-        textbook.filePath &&
-      <Link download href={textbook.filePath}>
-        <Button variant="default" className="my-4">
-          Скачать
-        </Button>
-      </Link>
-}
-      {
-        textbook.filePath && <Suspense fallback={<Skeleton className="w-full h-[800px]"></Skeleton>}>
-        <iframe
-          id="inlineFrameExample"
-          title="Inline Frame Example"
-          height={600}
-          width={800}
-          className="w-full h-600 rounded-md"
-          src={textbook.filePath}
-        ></iframe>
-      </Suspense>
-      }
+      {textbook.filePath && (
+        <div className="my-4">
+          <p>
+            *При нажатии на кнопку &quot;Скачать&quot; вы будете перенаправлены
+            на сайт Института физики Национальной академии наук Азербайджана. Мы
+            действуем с их официального разрешения.
+          </p>
+          <Link download href={textbook.filePath}>
+            <Button variant="default" className="my-2">
+              Скачать
+            </Button>
+          </Link>
+        </div>
+      )}
+      {textbook.filePath && (
+        <Suspense fallback={<Skeleton className="w-full h-[800px]"></Skeleton>}>
+          <iframe
+            id="inlineFrameExample"
+            title="Inline Frame Example"
+            height={600}
+            width={800}
+            className="w-full h-600 rounded-md"
+            src={textbook.filePath}
+          ></iframe>
+        </Suspense>
+      )}
       {textbook.source && (
         <p className="mt-2">
-          {textbook.sourceLabel ? textbook.sourceLabel : "Источник"}: {" "}
+          {textbook.sourceLabel ? textbook.sourceLabel : "Источник"}:{" "}
           {textbook.source.includes("http") ? (
-            <a href={textbook.source}>{textbook.source}</a>
+            textbook.source.includes("pdf") ? (
+              <a download href={textbook.source}>
+                <Button variant="default" className="my-2">
+                  Скачать
+                </Button>
+              </a>
+            ) : (
+              <a href={textbook.source}>{textbook.source}</a>
+            )
           ) : (
             textbook.source
           )}

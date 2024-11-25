@@ -12,10 +12,15 @@ const TopicButton = ({topic}: {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
+  const isActive = searchParams.get('topics')?.split(',').includes(topic.id);
 
   const handleTopicClick = (id: string) => {
-    const topics = searchParams.get('topics')?.split(',') || [];
-    topics.push(id)
+    let topics = searchParams.get('topics')?.split(',') || [];
+    if (topics.includes(id)) {
+      topics = topics.filter((topic) => topic != id)
+    } else {
+      topics.push(id)
+    }
     const newTopics = topics.join(',');
     const newUrl = new URLSearchParams(searchParams);
     if (topics.length)
@@ -25,15 +30,27 @@ const TopicButton = ({topic}: {
     newUrl.set('page', '1');
     replace(`${pathname}?${newUrl.toString()}`);
   }
+  if (!isActive) {
     return <Button
     key={topic.id}
     onClick={() => handleTopicClick(topic.id)}
     variant={"outline"}
-    className='rounded-full focus:bg-black focus:text-white'
+    className={`rounded-full focus:bg-black focus:text-white`}
   size="sm"
           >
     {topic.name}
   </Button>
+  } else {
+    return <Button
+    key={topic.id}
+    onClick={() => handleTopicClick(topic.id)}
+    variant={"default"}
+    className='rounded-full focus:bg-black focus:text-white'
+    size="sm"
+          >
+    {topic.name}
+  </Button>
+  }
 }
 
 export const TopicButtonClose = ({topic}: {

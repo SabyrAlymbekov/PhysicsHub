@@ -9,6 +9,12 @@ export interface category {
     image: React.ReactNode
 }
 
+export const categoriesSelect: string[] = [
+    "T-shirt",
+    "Cup",
+    "Other"
+]
+
 export const categories: category[] = [
     {
         name: "Все",
@@ -17,11 +23,11 @@ export const categories: category[] = [
     }, {
         name: "Футболки",
         image: <IoShirt className='w-7 h-7'/>,
-        link: "/shop/shirt"
+        link: "/shop/t-shirt"
     }, {
         name: "Кружки",
         image: <BsFillCupFill className='w-7 h-7'/>,
-        link: "/shop/cups"
+        link: "/shop/cup"
     }, {
         name: "Разное",
         image: <BsFillGrid1X2Fill className='w-7 h-7'/>,

@@ -8,6 +8,7 @@ import ProductListFallback from './ProductListFallback';
 
 const ProductList = async ({category}: {category: string}) => {
   const products = await getAllProductsByCategory(category);
+  console.log(products, category);
   return <div className='flex flex-wrap flex-row max-w-[1170px] m-auto gap-[30px] justify-center'>
   {products.map((product) => (
     <ShopCard
