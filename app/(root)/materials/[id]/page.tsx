@@ -33,18 +33,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           ))}
       </div>
       {textbook.filePath && (
-        <div className="my-4">
-          <p>
-            {textbook.sourceLabel} :
-          </p>
-          <Link download href={textbook.filePath}>
-            <Button variant="default" className="my-2">
-              Скачать
-            </Button>
-          </Link>
-        </div>
-      )}
-      {textbook.filePath && (
         <Suspense fallback={<Skeleton className="w-full h-[800px]"></Skeleton>}>
           <iframe
             id="inlineFrameExample"
