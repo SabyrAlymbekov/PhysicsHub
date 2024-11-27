@@ -35,9 +35,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       {textbook.filePath && (
         <div className="my-4">
           <p>
-            *При нажатии на кнопку &quot;Скачать&quot; вы будете перенаправлены
-            на сайт Института физики Национальной академии наук Азербайджана. Мы
-            действуем с их официального разрешения.
+            {textbook.sourceLabel} :
           </p>
           <Link download href={textbook.filePath}>
             <Button variant="default" className="my-2">
