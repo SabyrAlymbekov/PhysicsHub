@@ -14,6 +14,7 @@ import { Olympiad, Stage } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/actions/authActions';
 import DeleteOlympiadButton from './deleteOlympiad';
+import { Button } from '@/components/ui/button';
 
 interface OlympiadPageProps {
   olympiadId: string;
@@ -63,9 +64,14 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
 
   return (
     <div className="olympiadPage w-full py-10">
+      <div className='container flex flex-row flex-wrap items-center gap-2'>
       {
         user?.role == "ADMIN" && <DeleteOlympiadButton olympiadId={olympiadId}></DeleteOlympiadButton>
       }
+      {
+        user?.role == "ADMIN" && <Link href={`/olympiads/${olympiadId}/edit`}><Button className="my-5" variant={"default"}>Редактировать</Button></Link>
+      }
+      </div>
       <div className="container relative">
         <div className="relative w-full h-[200px] bg-black border-2 rounded-lg overflow-hidden">
           <Image src={olympiad.coverUrl} alt="banner" width={1364} height={196} className="w-full h-full object-cover" />
