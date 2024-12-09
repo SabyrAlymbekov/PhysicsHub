@@ -54,6 +54,35 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
     }
     return `${seconds} ${getDeclension(seconds, "секунда", "секунды", "секунд")}`;
   };
+  const timeUntil = (futureDate: Date): string => {
+    const seconds = Math.floor((futureDate.getTime() - new Date().getTime()) / 1000);
+    if (seconds <= 0) return "Время истекло";
+
+    const intervals = [
+      { seconds: 31536000, singular: "год", few: "года", many: "лет" },
+      { seconds: 2592000, singular: "месяц", few: "месяца", many: "месяцев" },
+      { seconds: 86400, singular: "день", few: "дня", many: "дней" },
+      { seconds: 3600, singular: "час", few: "часа", many: "часов" },
+      { seconds: 60, singular: "минута", few: "минуты", many: "минут" },
+    ];
+
+    for (const interval of intervals) {
+      const count = Math.floor(seconds / interval.seconds);
+      if (count >= 1) {
+        return `${count} ${getDeclensionf(count, interval.singular, interval.few, interval.many)}`;
+      }
+    }
+
+    return `${seconds} ${getDeclensionf(seconds, "секунда", "секунды", "секунд")}`;
+  };
+
+// Вспомогательная функция для склонения слов
+  const getDeclensionf = (count: number, singular: string, few: string, many: string): string => {
+    if (count % 100 > 10 && count % 100 < 20) return many;
+    if (count % 10 === 1) return singular;
+    if (count % 10 >= 2 && count % 10 <= 4) return few;
+    return many;
+  };
 
   const getDeclension = (number: number, singular: string, few: string, many: string): string => {
     const mod10 = number % 10;
@@ -160,20 +189,28 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
                     <div className="stage border rounded-lg p-5" key={stage.id}>
                       <h3 className="font-semibold text-2xl">{stage.name}</h3>
                       <span className="text-gradient">
-                      {stage.startDate ? new Date(stage.startDate).toLocaleDateString("ru-GB", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric"
-                      }) : 'Дата не указана'}
-                    </span>{" "}
-                      —{" "}
-                      <span className="text-gradient">
-                      {stage.endDate ? new Date(stage.endDate).toLocaleDateString("ru-GB", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric"
-                      }) : 'Дата не указана'}
+                        {
+                          new Date(stage.startDate) > new Date() ? (
+                              `До начала ${timeUntil(stage.startDate)}`
+                            ) : (
+                              `До конца ${timeUntil(stage.endDate)}`
+                          )
+                        }
                     </span>
+                      <br/>
+                      <span className='text-gray-500'>
+                        {
+                          `${stage.startDate ? new Date(stage.startDate).toLocaleDateString("ru-GB", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric"
+                          }) : 'Дата не указана'} — ${stage.endDate ? new Date(stage.endDate).toLocaleDateString("ru-GB", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric"
+                          }) : 'Дата не указана'}`
+                        }
+                      </span>
                     </div>
                   ))}
                 </div>

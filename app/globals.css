@@ -24,6 +24,8 @@
 
         /* Миниатюры слайдера */
         .mySwiper {
+            position: relative;
+            z-index: 1000;
             width: 100px; /* Фиксированная ширина для миниатюр */
             height: 100%; /* Растягивается по высоте контейнера */
             max-height: 500px; /* Ограничение максимальной высоты */
@@ -36,12 +38,14 @@
         .mySwiper .swiper-slide {
             width: 100%; /* Миниатюры занимают всю ширину */
             height: auto; /* Автоматическая высота под контент */
-            opacity: 0.6; /* Прозрачность неактивных миниатюр */
+            opacity: 0.2; /* Прозрачность неактивных миниатюр */
             transition: opacity 0.3s ease; /* Плавное изменение прозрачности */
         }
 
         .mySwiper .swiper-slide-thumb-active {
             opacity: 1; /* Полная видимость активной миниатюры */
+            border-radius: 10px;
+            border: 1px solid black;
         }
 
         .mySwiper img {
@@ -129,12 +133,13 @@
     }
     @media(max-width: 800px) {
         .mySwiper {
-            height: 200px;
+            height: 300px;
         }
     }
 
     .mySwiper .swiper-slide {
         width: 100%; /* Слайд занимает всю ширину контейнера */
+
         height: auto; /* Высота под контент */
         opacity: 0.4; /* Прозрачность неактивных */
         border-radius: 8px;

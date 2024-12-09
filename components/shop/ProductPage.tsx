@@ -23,6 +23,7 @@ import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import {Terminal} from "lucide-react";
 import {TiTick} from "react-icons/ti";
 import SwiperOfProduct from "@/components/shop/swiper/swiperOfProduct";
+// import SwiperOf from "@/components/shop/swiper/swiperOf";
 
 interface ProductPageProps {
   productID: number;
@@ -182,7 +183,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
 
     return (
 
-      <div className="min-vw-100 min-vh-100 flex items-center justify-center">
+      <div className="min-vw-100 min-vh-100 flex items-center justify-center flex-col">
 
 
         <section className="PC hidden lg:block page my-12">
@@ -193,12 +194,14 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
                   product.views.length > 1 ? (
                     <div>
                       <SwiperOfProduct product={product}></SwiperOfProduct>
+                      {/*<SwiperOf></SwiperOf>*/}
 
                     </div>
                   ) : (
                     // <div className="flex justify-center items-center rounded-lg">
                     <div className="views w-full">
                       <SwiperOfProduct product={product}></SwiperOfProduct>
+                      {/*<SwiperOf></SwiperOf>*/}
                     </div>
 
                     // </div>
@@ -369,7 +372,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
 
                   <div className="information flex flex-col gap-6">
                     <div className="texts flex-col flex gap-4">
-                      <h1 className="text-2xl font-semibold">{product.name}</h1>
+                      <h1 className="text-3xl font-semibold">{product.name}</h1>
                       {
                         product.inStock ? (
                           <p className="text-sm text-green-500">* В наличии</p>
@@ -377,35 +380,33 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
                           <p className="text-sm text-red-500">* Нет в наличии</p>
                         )
                       }
-                      <h2 className="text-2xl">{product.price} cом</h2>
-                    </div>
-                    <p className="text-sm">{product.description}</p>
-                  </div>
+                      <div className="flex justify-between">
+                        <span className="text-2xl">{product.price} cом</span>
+                        <div className="sizes flex gap-3">
+                          <span className="text-lg sm:hidden flex flex-wrap">Размеры: </span>
+                          {
+                            product.sizes.map((size, index) => (
+                              <div
+                                className={`${selectedSize === size && "bg-gray-800 text-white"} cursor-pointer w-8 h-8 flex items-center justify-center rounded border border-gray-800 text-sm`}
+                                key={index}
+                                onClick={() => handleSizeChange(size)}
+                              >{size}</div>
+                            ))
+                          }
+                        </div>
 
-                  <Separator/>
-
-                  <div className="paymet-details flex flex-col gap-6">
-                    <div className="sizes flex gap-3">
-                      <span className="text-xl">Size: </span>
-                      {
-                        product.sizes.map((size, index) => (
-                          <div className={`${selectedSize === size && "bg-gray-800 text-white"} cursor-pointer w-8 h-8 flex items-center justify-center rounded border border-gray-800 text-sm`}
-                               key={index}
-                               onClick ={() => handleSizeChange(size)}
-                          >{size}</div>
-                        ))
-                      }
+                      </div>
                     </div>
-                    <div className="btns-to-but flex flex-nowrap gap-4">
+                    <div className="btns-to-but h-[50px] flex flex-nowrap gap-4 font-bold">
 
                       {
                         quantity < 1 ? (
-                          <Button onClick={() => addToCart(product)}><BsCartFill/></Button>
+                          <Button className="h-full" onClick={() => addToCart(product)}><BsCartFill/></Button>
                         ) : (
                           <div
                             className="qnts w-[159px] rounded-lg border-gray-800 overflow-hidden border flex justify-between items-center">
                             <Button
-                              className="rounded-tr-none rounded-br-none"
+                              className="rounded-tr-none rounded-br-none h-full"
                               variant="default"
                               onClick={handleDecrease}
                             >
@@ -413,7 +414,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
                             </Button>
                             <span>{quantity}</span>
                             <Button
-                              className="rounded-tl-none rounded-bl-none"
+                              className="rounded-tl-none rounded-bl-none h-full"
                               variant="default" onClick={handleIncrease}>
                               +
                             </Button>
@@ -423,7 +424,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
-                            className="bg-gradient w-full"
+                            className="bg-gradient w-full h-full font-bold"
                             onClick={() => {
                               const isInCart = cart.some(item => item.id === product.id);
                               if (!isInCart) {
@@ -487,14 +488,24 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
                         </DialogContent>
                       </Dialog>
                     </div>
+                    <p className="text-sm">{product.description}</p>
+                  </div>
+
+                  <Separator/>
+
+                  <div className="paymet-details flex flex-col gap-6">
+
 
                   </div>
                 </div>
 
               </div>
             </div>
+
             {/*<SwiperOfProduct product={product}></SwiperOfProduct>*/}
+            {/*<SwiperOf></SwiperOf>*/}
           </div>
+
         </section>
 
 
@@ -528,6 +539,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
             </div>
           </Alert>
         )}
+
+        {/*<SwiperOf product={product}></SwiperOf>*/}
+
       </div>
     );
   } else {
