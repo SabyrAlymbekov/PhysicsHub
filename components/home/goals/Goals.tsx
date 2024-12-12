@@ -2,7 +2,7 @@
 
 const Goals = () => {
     return (
-        <section className="container flex justify-between flex-col items-center w-full lg:flex-row my-[100px]">
+        <section className="container flex justify-between flex-col items-center w-full lg:flex-row my-20">
             {/* <div className="w-[700px] h-[700px] radialbg absolute"></div> */}
             <div className="sm:w-full z-2 my-10 lg:my-0 coo">
                 <h3 className="text-4xl sm:text-5xl font-bold md:text-7xl uppercase">Место объединяющее физиков <span className="text-gradient">со всего мира</span></h3>

@@ -143,11 +143,14 @@ model Olympiad {
   registrationEnd     DateTime? // либо дата либо неопределено
   stages              Stage[]
   resultsDate         DateTime? // либо дата либо неопределено
-  description         String
-  participantCount    Int
-  socialLinks         String // Ссылки на соц. сети
-  registrationFormUrl String
+  resultsUrl          String? // Опционально
+  description         String?
+  participantCount    Int?
+  socialLinks         String? // Ссылки на соц. сети
+  registrationFormUrl String?
   organizers          Organizer[]
+  // priority            Int         @default(0) // Приоритет олимпиады. Чем больше число, тем выше приоритет.
+
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
 }
@@ -159,6 +162,7 @@ model Stage {
   name       String
   startDate  DateTime? // либо дата либо неопределено
   endDate    DateTime? // либо дата либо неопределено
+  toPracticeLink String?
 }
 
 model Organizer {

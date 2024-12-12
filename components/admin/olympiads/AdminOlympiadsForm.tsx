@@ -14,6 +14,7 @@ export interface Stage {
     name: string;
     startDate?: string;
     endDate?: string;
+    toPracticeLink?: string;
 }
 
 export interface Organizer {
@@ -25,7 +26,7 @@ export interface Organizer {
 export default function CreateOlympiadForm() {
     const router = useRouter();
     const [isAdmin, setIsAdmin] = useState<boolean>(true);
-
+    
     useEffect(() => {
         const ch = async () => {
             const curUser = await currentUser()
@@ -40,7 +41,7 @@ export default function CreateOlympiadForm() {
     }
 
     const [stages, setStages] = useState<Stage[]>([
-        { name: ''},
+        { name: '' },
     ]);
 
     const addStage = () => {
@@ -100,6 +101,7 @@ export default function CreateOlympiadForm() {
         participantCount: 0,
         socialLinks: '',
         registrationFormUrl: '',
+        resultsUrl: '',
     });
 
     const [logo, setLogo] = useState<File | null>(null);
@@ -183,7 +185,7 @@ export default function CreateOlympiadForm() {
 
                 <Label className="subtitle !text-left !text-black">
                     Описание:
-                    <Textarea name="description" value={formData.description} onChange={handleInputChange} required disabled={isSubmitting}/>
+                    <Textarea name="description" value={formData.description} onChange={handleInputChange} disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
@@ -205,21 +207,27 @@ export default function CreateOlympiadForm() {
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
+                    Ссылка на результаты:
+                    <Input type="text" name="resultsUrl" value={formData.resultsUrl}
+                           onChange={handleInputChange} disabled={isSubmitting}/>
+                </Label>
+
+                <Label className="subtitle !text-left !text-black">
                     Количество участников:
                     <Input type="number" name="participantCount" value={formData.participantCount}
-                           onChange={handleInputChange} required disabled={isSubmitting}/>
+                           onChange={handleInputChange} disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Ссылки на соцсети:
                     (в формате название:ссылка без пробелов и запятыми для перечисления. Например instagram:https://instagram.com)
-                    <Textarea name="socialLinks" value={formData.socialLinks} onChange={handleInputChange} required disabled={isSubmitting}/>
+                    <Textarea name="socialLinks" value={formData.socialLinks} onChange={handleInputChange} disabled={isSubmitting}/>
                 </Label>
 
                 <Label className="subtitle !text-left !text-black">
                     Ссылка на форму регистрации:
                     <Input type="text" name="registrationFormUrl" value={formData.registrationFormUrl}
-                           onChange={handleInputChange} required disabled={isSubmitting}/>
+                           onChange={handleInputChange} disabled={isSubmitting}/>
                 </Label>
 
                 <h1 className="subtitle !text-left !text-black">
@@ -254,6 +262,16 @@ export default function CreateOlympiadForm() {
                                     type="date"
                                     value={stage.endDate || ''}
                                     onChange={(e) => handleStageChange(index, 'endDate', e.target.value)}
+                                    disabled={isSubmitting}
+                                />
+                            </Label>
+
+                            <Label>
+                                Ссылка для решения задач:
+                                <Input
+                                    type="text"
+                                    value={stage.toPracticeLink || ''}
+                                    onChange={(e) => handleStageChange(index, 'toPracticeLink', e.target.value)}
                                     disabled={isSubmitting}
                                 />
                             </Label>

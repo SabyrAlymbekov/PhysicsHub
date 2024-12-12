@@ -9,6 +9,7 @@ interface Stage {
   name: string;
   startDate?: string;
   endDate?: string;
+  toPracticeLink?: string;
 }
 
 interface Organizer {
@@ -45,33 +46,31 @@ export async function updateOlympiad(formData: any) {
       logoStorageUrl,
       coverStorageUrl,
       regulationsStorageUrl,
+      resultsUrl
     } = formData;
 
-    // Begin a transaction
     await db.$transaction(async (prisma) => {
-      // Update the Olympiad
       await prisma.olympiad.update({
         where: { id },
         data: {
           name,
-          description,
+          description: description ? description : null,
           registrationStart: registrationStart ? new Date(registrationStart) : null,
           registrationEnd: registrationEnd ? new Date(registrationEnd) : null,
           resultsDate: resultsDate ? new Date(resultsDate) : null,
           participantCount: parseInt(participantCount),
-          socialLinks,
-          registrationFormUrl,
+          socialLinks: socialLinks ? socialLinks : null,
+          registrationFormUrl: registrationFormUrl ? registrationFormUrl : null,
           logoUrl,
           coverUrl,
-          regulationsUrl,
+          regulationsUrl: regulationsUrl ? regulationsUrl : null,
           logoStorageUrl,
           coverStorageUrl,
-          regulationsStorageUrl,
+          regulationsStorageUrl: regulationsStorageUrl ? regulationsStorageUrl : null,
+          resultsUrl: resultsUrl ? resultsUrl : null,
         },
       });
 
-      // Update stages
-      // Fetch existing stages
       const existingStages = await prisma.stage.findMany({
         where: { olympiadId: id },
       });
@@ -86,40 +85,36 @@ export async function updateOlympiad(formData: any) {
         (stageId) => !updatedStageIds.includes(stageId)
       );
 
-      // Delete removed stages
       if (stagesToDelete.length > 0) {
         await prisma.stage.deleteMany({
           where: { id: { in: stagesToDelete } },
         });
       }
 
-      // Upsert stages
       for (const stage of stages) {
         if (stage.id) {
-          // Update existing stage
           await prisma.stage.update({
             where: { id: stage.id },
             data: {
               name: stage.name,
               startDate: stage.startDate ? new Date(stage.startDate) : null,
               endDate: stage.endDate ? new Date(stage.endDate) : null,
+              toPracticeLink: stage.toPracticeLink ? stage.toPracticeLink : null,
             },
           });
         } else {
-          // Create new stage
           await prisma.stage.create({
             data: {
               olympiadId: id,
               name: stage.name,
               startDate: stage.startDate ? new Date(stage.startDate) : null,
               endDate: stage.endDate ? new Date(stage.endDate) : null,
+              toPracticeLink: stage.toPracticeLink ? stage.toPracticeLink : null
             },
           });
         }
       }
 
-      // Update organizers
-      // Fetch existing organizers
       const existingOrganizers = await prisma.organizer.findMany({
         where: { olympiadId: id },
       });
@@ -134,17 +129,14 @@ export async function updateOlympiad(formData: any) {
         (orgId) => !updatedOrganizerIds.includes(orgId)
       );
 
-      // Delete removed organizers
       if (organizersToDelete.length > 0) {
         await prisma.organizer.deleteMany({
           where: { id: { in: organizersToDelete } },
         });
       }
 
-      // Upsert organizers
       for (const org of organizers) {
         if (org.id) {
-          // Update existing organizer
           await prisma.organizer.update({
             where: { id: org.id },
             data: {
@@ -154,7 +146,6 @@ export async function updateOlympiad(formData: any) {
             },
           });
         } else {
-          // Create new organizer
           await prisma.organizer.create({
             data: {
               olympiadId: id,

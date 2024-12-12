@@ -16,7 +16,9 @@ const OlympiadBlock = ({ olympiad }: {olympiad: Olympiad}) => {
         <div>
         <h1 className="font-bold text-2xl">{olympiad.name}</h1>
         <h1 className="font-medium text-lg"> <span className="text-gradient">Регистрация с {registrationStart} по {registrationEnd}</span></h1>
-        <p className="text-sm">{(olympiad.description.length<200 ? olympiad.description : olympiad.description.slice(0, 200) + "...")}</p>
+        {
+          olympiad.description && <p className="text-sm">{(olympiad.description.length<200 ? olympiad.description : olympiad.description.slice(0, 200) + "...")}</p>
+        }
         </div>
       </div>
     </Link>

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Organizer, Stage } from "@prisma/client";
+import Image from "next/image";
 
 export default function EditOlympiadPage({
   params,
@@ -27,6 +28,7 @@ export default function EditOlympiadPage({
     registrationStart: "",
     registrationEnd: "",
     resultsDate: "",
+    resultsUrl: "",
     participantCount: 0,
     socialLinks: "",
     registrationFormUrl: "",
@@ -159,7 +161,6 @@ export default function EditOlympiadPage({
     setIsSubmitting(true);
 
     try {
-      // Handle file uploads
       const logoData = logo
         ? await uploadFile(logo, "olympiads/logos")
         : [formData.logoUrl, formData.logoStorageUrl];
@@ -170,7 +171,6 @@ export default function EditOlympiadPage({
         ? await uploadFile(regulations, "olympiads/regulations")
         : [formData.regulationsUrl, formData.regulationsStorageUrl];
 
-      // Upload organizer logos
       const organizerLogos = await Promise.all(
         formData.organizers.map(async (org: any) => {
           if (org.logoFile) {
@@ -213,13 +213,14 @@ export default function EditOlympiadPage({
         logoStorageUrl: logoData[1],
         coverStorageUrl: coverData[1],
         regulationsStorageUrl: regulationsData[1],
+        resultsUrl: formData.resultsUrl,
       };
 
       const res = await updateOlympiad(payload);
 
       if (res?.message === "success") {
         alert("Олимпиада успешно обновлена!");
-        router.push("/olympiads");
+        router.push(`/olympiads/${formData.id}`);
       } else {
         alert("Ошибка при обновлении олимпиады!");
       }
@@ -258,9 +259,9 @@ export default function EditOlympiadPage({
           Описание:
           <Textarea
             name="description"
-            value={formData.description}
+            value={formData.description || ""}
             onChange={handleInputChange}
-            required
+            
             disabled={isSubmitting}
           />
         </Label>
@@ -299,13 +300,24 @@ export default function EditOlympiadPage({
         </Label>
 
         <Label className="subtitle !text-left !text-black">
+          Ссылка на результаты:
+          <Input
+            type="text"
+            name="resultsUrl"
+            value={formData.resultsUrl || ""}
+            onChange={handleInputChange}
+            disabled={isSubmitting}
+          />
+        </Label>
+
+        <Label className="subtitle !text-left !text-black">
           Количество участников:
           <Input
             type="number"
             name="participantCount"
             value={formData.participantCount}
             onChange={handleInputChange}
-            required
+            
             disabled={isSubmitting}
           />
         </Label>
@@ -317,7 +329,7 @@ export default function EditOlympiadPage({
             name="socialLinks"
             value={formData.socialLinks}
             onChange={handleInputChange}
-            required
+            
             disabled={isSubmitting}
           />
         </Label>
@@ -329,7 +341,7 @@ export default function EditOlympiadPage({
             name="registrationFormUrl"
             value={formData.registrationFormUrl}
             onChange={handleInputChange}
-            required
+            
             disabled={isSubmitting}
           />
         </Label>
@@ -371,6 +383,18 @@ export default function EditOlympiadPage({
                   value={stage.endDate || ""}
                   onChange={(e) =>
                     handleStageChange(index, "endDate", e.target.value)
+                  }
+                  disabled={isSubmitting}
+                />
+              </Label>
+
+              <Label>
+                Ссылка для решения задач:
+                <Input
+                  type="text"
+                  value={stage.toPracticeLink || ""}
+                  onChange={(e) =>
+                    handleStageChange(index, "toPracticeLink", e.target.value)
                   }
                   disabled={isSubmitting}
                 />
@@ -425,10 +449,11 @@ export default function EditOlympiadPage({
                 Логотип:
                 {org.logoUrl && (
                   <div>
-                    <img
+                    <Image
                       src={org.logoUrl}
                       alt="Логотип организатора"
-                      width="100"
+                      width={100}
+                      height={100}
                     />
                   </div>
                 )}
@@ -458,7 +483,12 @@ export default function EditOlympiadPage({
           Логотип:
           {formData.logoUrl && (
             <div>
-              <img src={formData.logoUrl} alt="Логотип" width="100" />
+              <Image
+                      src={formData.logoUrl}
+                      alt="Логотип"
+                      width={100}
+                      height={100}
+                    />
             </div>
           )}
           <Input
@@ -473,7 +503,12 @@ export default function EditOlympiadPage({
           Обложка:
           {formData.coverUrl && (
             <div>
-              <img src={formData.coverUrl} alt="Обложка" width="100" />
+              <Image
+                      src={formData.logoUrl}
+                      alt="Обложка"
+                      width={1364}
+                      height={196}
+                    />
             </div>
           )}
           <Input
