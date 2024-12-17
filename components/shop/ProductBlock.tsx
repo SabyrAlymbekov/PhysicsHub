@@ -1,9 +1,8 @@
 'use client'
 import React, {useState} from 'react';
-import Image from 'next/image'
+import Image, {StaticImageData} from 'next/image'
 import {Input} from "@/components/ui/input";
 import {useCart} from "@/context/CartContext";
-
 
 interface Product {
   product: {
@@ -11,22 +10,29 @@ interface Product {
     name: string;
     description: string;
     price: number;
-    images: string[];
+    views: (StaticImageData | string)[];
     sizes: string[];
     inStock: boolean;
+    images?: string[]; // Делайте images опциональным, если оно не обязательно
   }
 }
 
 
-const ProductBlock = ({product} : Product ) => {
-  const {cart, updateQuantity} = useCart();
+const ProductBlock = ({ product }: Product) => {
+  const { cart, updateQuantity } = useCart();
   const itemCart = cart.find(item => item.id === product.id);
-  const [input, setInput] = useState(itemCart.quantity);
-  const handleChange = (e) => {
+  const [input, setInput] = useState<number>(itemCart?.quantity || 1);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.max(1, Math.min(99, Number(e.target.value))); // Ограничиваем значение от 1 до 99
-    setInput(value)
-    updateQuantity(product.id, value); // Вызываем updateQuantity с новым значением
+    setInput(value);
+
+    // Вызываем updateQuantity только если товар есть в корзине
+    if (itemCart) {
+      updateQuantity(product.id, value);
+    }
   };
+
 
 
   return (

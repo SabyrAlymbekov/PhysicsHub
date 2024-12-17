@@ -190,13 +190,11 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
                       <h3 className="font-semibold text-2xl">{stage.name}</h3>
                       <span className="text-gradient">
                         {
-                          new Date(stage.startDate) > new Date() ? (
-                              `До начала ${timeUntil(stage.startDate)}`
-                            ) : (
-                              `До конца ${timeUntil(stage.endDate)}`
-                          )
+                          stage.startDate && new Date(stage.startDate) > new Date()
+                            ? `До начала ${timeUntil(new Date(stage.startDate))}`
+                            : stage.endDate && `До конца ${timeUntil(new Date(stage.endDate))}`
                         }
-                    </span>
+                      </span>
                       <br/>
                       <span className='text-gray-500'>
                         {

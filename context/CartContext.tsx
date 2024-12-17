@@ -1,15 +1,17 @@
 'use client'
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import {StaticImageData} from "next/image";
 
 interface Product {
   id: number;
   name: string;
-  price: number;
   description: string;
-  images: string[];
+  price: number;
+  views: (StaticImageData | string)[];
   sizes: string[];
   inStock: boolean;
+  images?: string[]; // Делайте images опциональным, если оно не обязательно
 }
 
 interface CartItem extends Product {

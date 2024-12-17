@@ -20,16 +20,17 @@ import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import {Terminal} from "lucide-react";
 import {TiTick} from "react-icons/ti";
 import SwiperOfProduct from "@/components/shop/swiper/swiperOfProduct";
+import {StaticImageData} from "next/image";
 
 interface ProductPageProps {
-  productID: number;
+  productID: string;
 }
 
 interface Product {
   id: number;
   name: string;
   price: number;
-  views: string[];
+  views: (StaticImageData | string)[];
   sizes: string[];
   inStock: boolean;
   description: string;
@@ -59,12 +60,12 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
 
 
 
-  const product: Product = products[productID];
+  const product: Product | undefined = products[Number(productID)];
 
 
 
-  // const product = getProductById(productID);
-  const { cart, addToCart, updateQuantity, removeFromCart } = useCart();
+
+
   const [tgId, setTgId] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string | null>(product.sizes[0]);
@@ -78,8 +79,32 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
   const [showAlert1, setShowAlert1] = useState<boolean>(false);
 
 
+  // const product = getProductById(productID);
+  const { cart, addToCart, updateQuantity, removeFromCart, updateSize} = useCart();
+
+
+
   const showErrorAlert = () => setShowAlert(true);
   const showSuccessAlert = () => setShowAlert1(true);
+
+
+  useEffect(() => {
+    if (showAlert) {
+      const timer = setTimeout(() => setShowAlert(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert]);
+
+  useEffect(() => {
+    if (showAlert1) {
+      const timer = setTimeout(() => setShowAlert1(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert1]);
+
+  if (!product) {
+    return <div>Продукт не найден</div>;
+  }
 
 
   const handleSizeChange = (size: string) => {
@@ -99,19 +124,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
       setError("");
     }
   };
-  useEffect(() => {
-    if (showAlert) {
-      const timer = setTimeout(() => setShowAlert(false), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showAlert]);
 
-  useEffect(() => {
-    if (showAlert1) {
-      const timer = setTimeout(() => setShowAlert1(false), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showAlert1]);
 
   // Найти продукт в корзине
   const cartItem = cart.find((item) => item.id === product.id);
@@ -164,7 +177,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
     if (cartItem) {
       updateQuantity(product.id, quantity + 1);
     } else {
-      addToCart(product);
+      addToCart(product, "1");
     }
   };
 
@@ -242,7 +255,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
 
                       {
                         quantity < 1 ? (
-                          <Button onClick={() => addToCart(product)}><BsCartFill/></Button>
+                          <Button onClick={() => addToCart(product, "1")}><BsCartFill/></Button>
                         ) : (
                           <div
                             className="qnts w-[159px] rounded-lg border-gray-800 overflow-hidden border flex justify-between items-center">
@@ -397,7 +410,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
 
                       {
                         quantity < 1 ? (
-                          <Button className="h-full" onClick={() => addToCart(product)}><BsCartFill/></Button>
+                          <Button className="h-full" onClick={() => addToCart(product, "1")}><BsCartFill/></Button>
                         ) : (
                           <div
                             className="qnts w-[159px] rounded-lg border-gray-800 overflow-hidden border flex justify-between items-center">
@@ -542,7 +555,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ productID }) => {
     );
   } else {
     return (
-      <section className="w-screen h-screen flex-center"></section>
+      <section className="w-screen h-screen flex-center">ERROR</section>
     )
   }
 };

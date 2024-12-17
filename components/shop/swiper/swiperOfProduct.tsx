@@ -1,26 +1,28 @@
 'use client';
 import React, {useState} from 'react';
+import { Swiper as SwiperType }  from 'swiper'; // Импорт Swiper для типизации
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
-import Image from 'next/image';
+import Image, {StaticImageData} from 'next/image';
 
 interface Product {
   id: number;
   name: string;
+  description: string;
   price: number;
-  views: string[];
+  views: (StaticImageData | string)[];
   sizes: string[];
   inStock: boolean;
-  description: string;
+  images?: string[]; // Делайте images опциональным, если оно не обязательно
 }
 
 const SwiperOfProduct: React.FC<{ product: Product }> = ({ product }) => {
-  const [thumbsSwiperMobile, setThumbsSwiperMobile] = useState(null);
-  const [thumbsSwiperDesktop, setThumbsSwiperDesktop] = useState(null);
+  const [thumbsSwiperMobile, setThumbsSwiperMobile] = useState<SwiperType | null>(null);
+  const [thumbsSwiperDesktop, setThumbsSwiperDesktop] = useState<SwiperType | null>(null);
 
   return (
     <>
@@ -29,8 +31,8 @@ const SwiperOfProduct: React.FC<{ product: Product }> = ({ product }) => {
         {/* Main Swiper */}
         <Swiper
           style={{
-            '--swiper-navigation-color': '#00b2ff',
-            '--swiper-pagination-color': '#fff',
+            ['--swiper-navigation-color' as any]: '#00b2ff',
+            ['--swiper-pagination-color' as any]: '#fff',
           }}
           loop={true}
           spaceBetween={10}
@@ -87,8 +89,8 @@ const SwiperOfProduct: React.FC<{ product: Product }> = ({ product }) => {
         {/* Main Swiper */}
         <Swiper
           style={{
-            '--swiper-navigation-color': '#00b2ff',
-            '--swiper-pagination-color': '#000000',
+            ['--swiper-navigation-color' as any]: '#00b2ff',
+            ['--swiper-pagination-color' as any]: '#fff',
           }}
           loop={true}
           spaceBetween={10}

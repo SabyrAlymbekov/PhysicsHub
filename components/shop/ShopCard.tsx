@@ -1,29 +1,31 @@
 'use client'
 import { BsCartFill } from "react-icons/bs";
 import { BsCartPlus } from "react-icons/bs";
-import Image from 'next/image'
+import Image, {StaticImageData} from 'next/image'
 import {Button} from "@/components/ui/button";
 import {useCart} from "@/context/CartContext";
 import Link from "next/link";
+import {useState} from "react";
 
-interface ShopCardProps {
+interface Product {
   product: {
     id: number;
     name: string;
     description: string;
     price: number;
-    images: string[];
+    views: (StaticImageData | string)[];
     sizes: string[];
     inStock: boolean;
+    images?: string[]; // Делайте images опциональным, если оно не обязательно
   }
 }
 
-const ShopCard = ({ product  }: ShopCardProps) => {
+const ShopCard = ({ product  } : Product) => {
   // console.log(product)
   const { cart , addToCart, removeFromCart } = useCart()
 
 
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   return (
 
       <div
@@ -35,7 +37,7 @@ const ShopCard = ({ product  }: ShopCardProps) => {
               <Button onClick={() =>
                 cart.some(item => item.id === product.id)
                   ? removeFromCart(product.id)
-                  : addToCart(product)
+                  : addToCart(product, "1")
               }>
                 {
                   cart.some(item => item.id === product.id) ?

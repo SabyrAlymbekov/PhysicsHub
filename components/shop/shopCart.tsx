@@ -21,13 +21,23 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {StaticImageData} from "next/image";
 
 interface Product {
-  id: string;
+  id: number;
   name: string;
-  quantity: number;
+  description: string;
+  price: number;
+  views: (StaticImageData | string)[];
+  sizes: string[];
+  inStock: boolean;
+  images?: string[]; // Делайте images опциональным, если оно не обязательно
 }
 
+interface CartItem extends Product {
+  quantity: number;
+  size: string;
+}
 const ShopCart: React.FC = () => {
   const { cart, money, total } = useCart();
   const [discount] = useState<number>(10);
@@ -57,9 +67,9 @@ const ShopCart: React.FC = () => {
 
   const sendMessage = async () => {
     const message = `Пользователь ${tgId} заказал следующие товары:\n\n${cart
-      .map((product: Product) => `${product.name} — ${product.id} — кол-во: ${product.quantity}`)
-      .join("\n")}\n\nСтрана, адрес и город: ${country},${adress} и ${city} \n\nНа сумму: ${total} сом
-      --------------------------`;
+      .map((item: CartItem) => `${item.name} — ${item.id} — кол-во: ${item.quantity}`)
+      .join("\n")}\n\nСтрана, адрес и город: ${country}, ${adress} и ${city} \n\nНа сумму: ${total} сом
+    --------------------------`;
 
     const token = "7153702905:AAEd9TfQEo9Kxa3pRBvBvGMwImQcwFku-Gs";
     const URL_API = `https://api.telegram.org/bot${token}/sendMessage`;
@@ -127,7 +137,10 @@ const ShopCart: React.FC = () => {
                 <span className="block md:hidden text-2xl">Товары в корзине</span>
               </li>
               {cart.map((product: Product, index: number) => (
-                <ProductBlock key={index} product={product} />
+                <ProductBlock
+                  key={index}
+                  product={{ ...product, images: product.images || [] }} // Значение по умолчанию
+                />
               ))}
             </ul>
             <div className="w-full flex mb-10 md:mb-0 justify-center">
