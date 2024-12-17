@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input";
 import {useCart} from "@/context/CartContext";
 
 
-interface pro {
+interface Product {
   product: {
     id: number;
     name: string;
@@ -18,7 +18,7 @@ interface pro {
 }
 
 
-const ProductBlock = ({product} : {pro} ) => {
+const ProductBlock = ({product} : Product ) => {
   const {cart, updateQuantity} = useCart();
   const itemCart = cart.find(item => item.id === product.id);
   const [input, setInput] = useState(itemCart.quantity);

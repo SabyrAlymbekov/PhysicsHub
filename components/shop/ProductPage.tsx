@@ -2,14 +2,11 @@
 import dotenv from "dotenv";
 dotenv.config();
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import {getProductById} from "@/lib/actions/shop/getProductById";
 import shirt from "@/components/shop/t-shirt.png";
-import Image from "next/image";
 import {Separator} from "@/components/ui/separator";
 import {Button} from "@/components/ui/button";
 import {useCart} from "@/context/CartContext";
 import {BsCartFill} from "react-icons/bs";
-import Link from "next/link";
 import {
   Dialog, DialogClose,
   DialogContent,
@@ -23,7 +20,6 @@ import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import {Terminal} from "lucide-react";
 import {TiTick} from "react-icons/ti";
 import SwiperOfProduct from "@/components/shop/swiper/swiperOfProduct";
-// import SwiperOf from "@/components/shop/swiper/swiperOf";
 
 interface ProductPageProps {
   productID: number;

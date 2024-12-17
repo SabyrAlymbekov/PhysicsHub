@@ -30,7 +30,7 @@ interface Product {
 
 const ShopCart: React.FC = () => {
   const { cart, money, total } = useCart();
-  const [discount, setDiscount] = useState<number>(10);
+  const [discount] = useState<number>(10);
   const [tgId, setTgId] = useState<string>("");
   const [error, setError] = useState<string>("");
 

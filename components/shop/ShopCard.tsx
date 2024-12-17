@@ -1,6 +1,4 @@
 'use client'
-import React, {useEffect} from 'react'
-import { Product } from '@prisma/client'
 import { BsCartFill } from "react-icons/bs";
 import { BsCartPlus } from "react-icons/bs";
 import Image from 'next/image'
@@ -20,7 +18,7 @@ interface ShopCardProps {
   }
 }
 
-const ShopCard = ({ product  }: { ShopCardProps }) => {
+const ShopCard = ({ product  }: ShopCardProps) => {
   // console.log(product)
   const { cart , addToCart, removeFromCart } = useCart()
 
