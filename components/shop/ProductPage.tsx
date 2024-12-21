@@ -1,6 +1,4 @@
 'use client'
-import dotenv from "dotenv";
-dotenv.config();
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import shirt from "@/components/shop/t-shirt.png";
 import {Separator} from "@/components/ui/separator";
