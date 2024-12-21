@@ -50,12 +50,11 @@ const ShopCart = () => {
     const chatId = "@test_bot_beka";
 
     try {
-      const response = await fetch(URL_API, {
+      await fetch(URL_API, {
         method: 'POST',
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({ chat_id: chatId, text: message })
       });
-      const data = await response.json();
     } catch (error) {
       console.error("Error sending message:", error);
     }

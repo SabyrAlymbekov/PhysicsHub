@@ -23,7 +23,6 @@ import { cn } from "@/lib/utils";
 import { countries } from "@/constants/countries";
 
 import { Country } from "@/types/countries";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface CountryDropdownProps {
   disabled?: boolean;

@@ -21,8 +21,8 @@ const EditImageForm = ({oldImage} : {oldImage: string | null}) => {
             setIsUploading(true);
             try {
                 // if (oldLogo) {
-                    // console.log(oldLogo);
-                    // await deleteFile(oldLogo);
+                    console.log(oldImage);
+                //     await deleteFile(oldLogo);
                 // }
                 const url = await uploadFileWithProgress(file, 'users/avatars', setUploadProgress);
                 // setOldLogo(logo);
