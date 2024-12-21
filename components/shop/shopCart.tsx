@@ -1,5 +1,6 @@
-'use client'
-import React, { useEffect, useState } from 'react';
+"use client";
+
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -20,53 +21,59 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Product } from "@prisma/client";
+import sendMessageToTG from "@/lib/actions/shop/sendMessage";
 
-const ShopCart = () => {
+interface CartItem extends Product {
+  quantity: number;
+  size: string;
+}
+const ShopCart: React.FC = () => {
   const { cart, money, total } = useCart();
-  const discount = 0;
-  const [tgId, setTgId] = useState("");
-  const [error] = useState("");
-  const [adress, setAdress] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
-  const [showAlert1, setShowAlert1] = useState(false);
+  const [discount] = useState<number>(10);
+  const [tgId, setTgId] = useState<string>("");
+
+  const [city, setCity] = useState<string>("");
+  const [country, setCountry] = useState<string>("");
+  const [adress, setAdress] = useState<string>("");
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [showAlert1, setShowAlert1] = useState<boolean>(false);
 
   const showErrorAlert = () => setShowAlert(true);
   const showSuccessAlert = () => setShowAlert1(true);
 
-  const handleTgIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTgIdChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTgId(value);
   };
 
-  const end = money + (money * discount / 100);
+  const end = money + (money * discount) / 100;
 
   const sendMessage = async () => {
     const message = `Пользователь ${tgId} заказал следующие товары:\n\n${cart
-      .map((product) => `${product.name} — ${product.id} — кол-во: ${product.quantity}`)
-      .join('\n')}\n\nСтрана, адрес и регион: ${adress} \n\nНа сумму: ${total} сом`;
-
-    const token = "7153702905:AAEd9TfQEo9Kxa3pRBvBvGMwImQcwFku-Gs";
-    const URL_API = `https://api.telegram.org/bot${token}/sendMessage`;
-    const chatId = "@test_bot_beka";
+      .map(
+        (item: CartItem) =>
+          `${item.name} — ${item.id} — кол-во: ${item.quantity}`
+      )
+      .join(
+        "\n"
+      )}\n\nСтрана, адрес и город: ${country}, ${adress} и ${city} \n\nНа сумму: ${total} сом
+    --------------------------`;
 
     try {
-      await fetch(URL_API, {
-        method: 'POST',
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ chat_id: chatId, text: message })
-      });
+      const res = await sendMessageToTG(message);
+      if (res?.error) {
+        showErrorAlert();
+      }
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
   const handleSubmit = () => {
-    if (error) {
-      showErrorAlert();
-    } else {
       showSuccessAlert();
       sendMessage();
-    }
+    
   };
 
   useEffect(() => {
@@ -85,16 +92,14 @@ const ShopCart = () => {
 
   return (
     <>
-
-      <section className="container">
-        <div className='mx-auto my-8 p-4 border border-gray-300 rounded-lg'>
+      <section className="container my-12">
         <div className="mb-5">
           <Link href="/shop">
-            <Button className="">
-                  <span className="flex gap-3 items-center">
-                    <IoIosReturnLeft/>
-                    <span>Вернуться в магазин</span>
-                  </span>
+            <Button>
+              <span className="flex gap-3 items-center">
+                <IoIosReturnLeft />
+                <span>Вернуться в магазин</span>
+              </span>
             </Button>
           </Link>
         </div>
@@ -102,18 +107,27 @@ const ShopCart = () => {
 
         {cart && cart.length > 0 ? (
           <div className="w-full flex flex-col items-center justify-center gap-5">
-            <ul
-              className="cart w-full flex flex-col items-center gap-5 border pt-5 rounded-lg md:rounded-none pb-5 md:p-0 md:border-none">
-              <li
-                className="w-full justify-items-center md:py-5 md:px-10 text-lg grid grid-cols-1 md:grid-cols-4 md:border rounded-lg font-medium">
+            <ul className="cart w-full flex flex-col items-center gap-5 border pt-5 rounded-lg md:rounded-none pb-5 md:p-0 md:border-none">
+              <li className="w-full justify-items-center md:py-5 md:px-10 text-lg grid grid-cols-1 md:grid-cols-4 md:border rounded-lg font-medium">
                 <span className="hidden md:block col-span-1">Продукт</span>
-                <span className="hidden md:block col-span-1 text-center">Цена</span>
-                <span className="hidden md:block col-span-1 text-center">Количество</span>
-                <span className="hidden md:block col-span-1 text-right">Итого</span>
-                <span className="block md:hidden text-2xl">Товары в корзине</span>
+                <span className="hidden md:block col-span-1 text-center">
+                  Цена
+                </span>
+                <span className="hidden md:block col-span-1 text-center">
+                  Количество
+                </span>
+                <span className="hidden md:block col-span-1 text-right">
+                  Итого
+                </span>
+                <span className="block md:hidden text-2xl">
+                  Товары в корзине
+                </span>
               </li>
-              {cart.map((product, index) => (
-                <ProductBlock key={index} product={product}/>
+              {cart.map((product: Product, index: number) => (
+                <ProductBlock
+                  key={index}
+                  product={{ ...product, images: product.images || [] }} // Значение по умолчанию
+                />
               ))}
             </ul>
             <div className="w-full flex mb-10 md:mb-0 justify-center">
@@ -124,12 +138,12 @@ const ShopCart = () => {
                     <span>Вместе</span>
                     <span>{money}</span>
                   </div>
-                  <Separator/>
+                  <Separator />
                   <div className="flex justify-between">
                     <span>Доставка</span>
                     <span>{discount ? `${discount}%` : "Бесплатно"}</span>
                   </div>
-                  <Separator/>
+                  <Separator />
                   <div className="flex justify-between">
                     <span>Итого</span>
                     <span>{end}</span>
@@ -137,7 +151,10 @@ const ShopCart = () => {
                 </div>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button className="bg-gradient w-full" disabled={cart.length === 0}>
+                    <Button
+                      className="bg-gradient w-full"
+                      disabled={cart.length === 0}
+                    >
                       Перейти к оплате
                     </Button>
                   </DialogTrigger>
@@ -145,7 +162,8 @@ const ShopCart = () => {
                     <DialogHeader>
                       <DialogTitle>Последний этап</DialogTitle>
                       <DialogDescription>
-                        Введите ваш Telegram ID и адрес. С вами свяжутся по поводу оплаты.
+                        Введите ваш Telegram ID и адрес. С вами свяжутся по
+                        поводу оплаты.
                       </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col gap-4 items-center">
@@ -157,9 +175,21 @@ const ShopCart = () => {
                       />
                       <Input
                         type="text"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        placeholder={"Страна..."}
+                      />
+                      <Input
+                        type="text"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        placeholder={"Город..."}
+                      />
+                      <Input
+                        type="text"
                         value={adress}
                         onChange={(e) => setAdress(e.target.value)}
-                        placeholder={"Город, Регион, Адрес..."}
+                        placeholder={"Адрес..."}
                       />
                     </div>
                     <DialogFooter className="sm:justify-start gap-2">
@@ -182,17 +212,15 @@ const ShopCart = () => {
         ) : (
           <p className="text-center text-gray-500">Корзина пуста</p>
         )}
-        </div>
       </section>
 
-      {/* Alerts */}
       {showAlert && (
         <Alert
           variant="destructive"
           className="fixed top-4 right-4 z-50 bg-white flex items-center shadow-lg"
-          style={{width: 'auto'}}
+          style={{ width: "auto" }}
         >
-          <Terminal className="h-4 w-4"/>
+          <Terminal className="h-4 w-4" />
           <div>
             <AlertTitle>Ошибка!</AlertTitle>
             <AlertDescription>
@@ -205,14 +233,12 @@ const ShopCart = () => {
       {showAlert1 && (
         <Alert
           className="fixed top-4 right-4 z-50 bg-white flex items-center shadow-lg"
-          style={{ width: 'auto' }}
+          style={{ width: "auto" }}
         >
           <TiTick className="h-4 w-4 text-green-500" />
           <div>
             <AlertTitle>Успешно!</AlertTitle>
-            <AlertDescription>
-              Вы отправили заказ, ожидайте...
-            </AlertDescription>
+            <AlertDescription>Вы отправили заказ, ожидайте...</AlertDescription>
           </div>
         </Alert>
       )}

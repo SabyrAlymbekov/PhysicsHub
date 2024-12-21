@@ -1,27 +1,32 @@
-"use client";
+import { getProductById } from "@/lib/actions/shop/getProductById";
+import { Product } from "@prisma/client";
+import ProductPage from "@/components/shop/ProductPage";
+import { currentUser } from "@/lib/actions/authActions";
+import ProductDeleteButton from "@/components/shop/ProductDeleteButton";
 
-import { useRouter, useParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { deleteProductAction } from "@/lib/actions/shop/deleteProduct";
-
-const ProductPage = () => {
-  const router = useRouter();
-  const { id } = useParams();
-
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this product?")) return;
-
-    await deleteProductAction(id as string);
-    router.push("/shop");
-  };
+const Page = async ( {params} : {
+  params: Promise<{ id: string }>
+}) => {
+  const id = (await params).id;
+  const user = await currentUser();
+console.log(id)
+  const product: Product | null = await getProductById(id);
+    if (!product) {
+      return <div>Product not found</div>;
+    }
 
   return (
     <div>
-      <Button variant="destructive" onClick={handleDelete}>
-        Delete Product
-      </Button>
+      {
+        user?.role === 'ADMIN' && (
+          <div className="container">
+            <ProductDeleteButton id={id}/>
+          </div>
+        )
+      }
+      <ProductPage product={product} />
     </div>
   );
 };
 
-export default ProductPage;
+export default Page;

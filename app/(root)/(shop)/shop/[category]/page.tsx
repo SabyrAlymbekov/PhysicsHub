@@ -10,7 +10,7 @@ const Page = async ({
     
     return (
         <div className="flex flex-col">
-        <ShopPage category={category}/>
+          <ShopPage category={category}/>
         </div>
     );
 };

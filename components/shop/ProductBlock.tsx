@@ -3,16 +3,29 @@ import React, {useState} from 'react';
 import Image from 'next/image'
 import {Input} from "@/components/ui/input";
 import {useCart} from "@/context/CartContext";
-import { ShopCardProps } from './ShopCard';
+import { Product } from '@prisma/client';
 
-const ProductBlock = ({product} : ShopCardProps ) => {
-  const [input, setInput] = useState(1);
-  const { updateQuantity } = useCart()
+interface ShopProduct {
+  product: Product;
+}
+
+
+const ProductBlock = ({ product }: ShopProduct) => {
+  const { cart, updateQuantity } = useCart();
+  const itemCart = cart.find(item => item.id === product.id);
+  const [input, setInput] = useState<number>(itemCart?.quantity || 1);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(1, Math.min(99, Number(e.target.value)));
-    setInput(value)
-    updateQuantity(product.id, value);
+    const value = Math.max(1, Math.min(99, Number(e.target.value))); // Ограничиваем значение от 1 до 99
+    setInput(value);
+
+    // Вызываем updateQuantity только если товар есть в корзине
+    if (itemCart) {
+      updateQuantity(product.id, value);
+    }
   };
+
+
 
   return (
     <>

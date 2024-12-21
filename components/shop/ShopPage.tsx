@@ -1,10 +1,10 @@
-import React, { Suspense } from 'react';
 import ShopCard from "@/components/shop/ShopCard";
 import { getAllProductsByCategory } from '@/lib/actions/shop/getAllProducts';
 import { Card } from '../ui/card';
 import { categories } from '@/constants/categories';
 import Link from 'next/link';
 import ProductListFallback from './ProductListFallback';
+import { Suspense } from 'react';
 
 const ProductList = async ({category}: {category: string}) => {
   const products = await getAllProductsByCategory(category);
@@ -12,14 +12,14 @@ const ProductList = async ({category}: {category: string}) => {
   return <div className='flex flex-wrap flex-row max-w-[1170px] m-auto gap-[30px] justify-center'>
   {products.map((product) => (
     <ShopCard
-      product={product}
+      Product={product}
       key={product.id}
     />
   ))}
 </div>
 }
 
-const ShopPage = async ({category} : {category?: string}) => {
+const ShopPage = ({category} : {category?: string}) => {
   return (
     <div className='container'>
       <div className='flex flex-row gap-2 flex-wrap justify-center md:justify-start w-full'>
@@ -43,6 +43,5 @@ const ShopPage = async ({category} : {category?: string}) => {
     </div>
   );
 };
-
 
 export default ShopPage;
