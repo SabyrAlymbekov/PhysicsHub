@@ -17,12 +17,10 @@ export const changeProfile = async (data: ChangeProfileProps, usertochangeID?: s
         }
         const checkedData = profileSchema.safeParse(data)
         if (!checkedData?.success) {
-            console.log(checkedData.error.errors[0].message)
             return {
                 error: checkedData.error.errors[0].message
             }   
         }
-        console.log(checkedData, userId)
         await db.user.update({
             where: {
                 id: userId

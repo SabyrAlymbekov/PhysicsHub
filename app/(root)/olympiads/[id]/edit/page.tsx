@@ -12,6 +12,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Organizer, Stage } from "@prisma/client";
 import Image from "next/image";
+import { Country } from "@/types/countries";
+import { IoCloseSharp } from "react-icons/io5";
+import CountryDropdown from "@/components/shared/olympiads/CountryList";
+import { countriesByIso3 } from "@/constants/countries";
 
 export default function EditOlympiadPage({
   params,
@@ -40,7 +44,15 @@ export default function EditOlympiadPage({
     coverStorageUrl: "",
     regulationsUrl: "",
     regulationsStorageUrl: "",
+    priority: 0,
+    regions: [],
   });
+
+  const handleCountrySelect = (country: Country | undefined) => {
+    if (!country) return;
+    if (formData.regions.includes(country)) return;
+    setFormData({ ...formData, regions: [...formData.regions, country] });
+  };
 
   const [logo, setLogo] = useState<File | null>(null);
   const [cover, setCover] = useState<File | null>(null);
@@ -71,6 +83,10 @@ export default function EditOlympiadPage({
               : "",
             stages: olympiad.stages || [],
             organizers: olympiad.organizers || [],
+            regions:
+              olympiad.regions.map(
+                (region: string) => countriesByIso3[region]
+              ) || [],
           });
         } else {
           console.error("Olympiad not found");
@@ -136,7 +152,9 @@ export default function EditOlympiadPage({
   };
 
   const removeStage = (index: number) => {
-    const newStages = formData.stages.filter((_: Stage, i: number) => i !== index);
+    const newStages = formData.stages.filter(
+      (_: Stage, i: number) => i !== index
+    );
     setFormData({ ...formData, stages: newStages });
   };
 
@@ -151,13 +169,14 @@ export default function EditOlympiadPage({
   };
 
   const removeOrganizer = (index: number) => {
-    const newOrganizers = formData.organizers.filter((_: Organizer, i: number) => i !== index);
+    const newOrganizers = formData.organizers.filter(
+      (_: Organizer, i: number) => i !== index
+    );
     setFormData({ ...formData, organizers: newOrganizers });
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
     setIsSubmitting(true);
 
     try {
@@ -214,6 +233,8 @@ export default function EditOlympiadPage({
         coverStorageUrl: coverData[1],
         regulationsStorageUrl: regulationsData[1],
         resultsUrl: formData.resultsUrl,
+        priority: formData.priority,
+        regions: formData.regions.map((region: Country) => region.iso3),
       };
 
       const res = await updateOlympiad(payload);
@@ -235,6 +256,8 @@ export default function EditOlympiadPage({
   if (isLoading) {
     return <div>Загрузка...</div>;
   }
+
+  console.log(formData)
 
   return (
     <div className="container my-16">
@@ -261,10 +284,39 @@ export default function EditOlympiadPage({
             name="description"
             value={formData.description || ""}
             onChange={handleInputChange}
-            
             disabled={isSubmitting}
           />
         </Label>
+
+        <div className="subtitle !text-left !text-black">
+          регионы (если олимпиада международная то выберите international и все,
+          иначе выберите регионы в которых она проводится):
+          <div className="border border-input px-3 py-3 flex flex-row gap-2 flex-wrap ">
+            {formData.regions.map((region: Country, index: number) => (
+              <Button
+                key={index}
+                className="flex gap-1 rounded-full"
+                variant="outline"
+                type={"button"}
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    regions: formData.regions.filter(
+                      (r: Country) => r !== region
+                    ),
+                  });
+                }}
+              >
+                {region.emoji + " " + region.name} <IoCloseSharp></IoCloseSharp>
+              </Button>
+            ))}
+          </div>
+          <CountryDropdown
+            onSelect={(country) => {
+              handleCountrySelect(country);
+            }}
+          />
+        </div>
 
         <Label className="subtitle !text-left !text-black">
           Дата начала регистрации:
@@ -317,7 +369,18 @@ export default function EditOlympiadPage({
             name="participantCount"
             value={formData.participantCount}
             onChange={handleInputChange}
-            
+            disabled={isSubmitting}
+          />
+        </Label>
+
+        <Label className="subtitle !text-left !text-black">
+          Престижность олимпиады где (0 - самая не престижная и до бесконечности
+          выше)
+          <Input
+            type="number"
+            name="priority"
+            value={formData.priority}
+            onChange={handleInputChange}
             disabled={isSubmitting}
           />
         </Label>
@@ -329,7 +392,6 @@ export default function EditOlympiadPage({
             name="socialLinks"
             value={formData.socialLinks}
             onChange={handleInputChange}
-            
             disabled={isSubmitting}
           />
         </Label>
@@ -341,7 +403,6 @@ export default function EditOlympiadPage({
             name="registrationFormUrl"
             value={formData.registrationFormUrl}
             onChange={handleInputChange}
-            
             disabled={isSubmitting}
           />
         </Label>
@@ -368,21 +429,34 @@ export default function EditOlympiadPage({
                 Дата начала:
                 <Input
                   type="date"
-                  value={stage.startDate || ""}
+                  value={stage.Date ? stage.Date.toISOString().split('T')[0] : ""}
                   onChange={(e) =>
-                    handleStageChange(index, "startDate", e.target.value)
+                    handleStageChange(index, "Date", e.target.value)
                   }
                   disabled={isSubmitting}
                 />
               </Label>
 
               <Label>
-                Дата окончания:
+                время начала (внимание пишите в формате hh:mm 24 часа иначе на
+                сайте будет некорректно отображатся):
                 <Input
-                  type="date"
-                  value={stage.endDate || ""}
+                  type="text"
+                  value={stage.startTime || ""}
                   onChange={(e) =>
-                    handleStageChange(index, "endDate", e.target.value)
+                    handleStageChange(index, "startTime", e.target.value)
+                  }
+                  disabled={isSubmitting}
+                />
+              </Label>
+              <Label>
+                время окончания (внимание пишите в формате hh:mm 24 часа иначе
+                на сайте будет некорректно отображатся):
+                <Input
+                  type="text"
+                  value={stage.endTime || ""}
+                  onChange={(e) =>
+                    handleStageChange(index, "endTime", e.target.value)
                   }
                   disabled={isSubmitting}
                 />
@@ -484,11 +558,11 @@ export default function EditOlympiadPage({
           {formData.logoUrl && (
             <div>
               <Image
-                      src={formData.logoUrl}
-                      alt="Логотип"
-                      width={100}
-                      height={100}
-                    />
+                src={formData.logoUrl}
+                alt="Логотип"
+                width={100}
+                height={100}
+              />
             </div>
           )}
           <Input
@@ -504,11 +578,11 @@ export default function EditOlympiadPage({
           {formData.coverUrl && (
             <div>
               <Image
-                      src={formData.logoUrl}
-                      alt="Обложка"
-                      width={1364}
-                      height={196}
-                    />
+                src={formData.coverUrl}
+                alt="Обложка"
+                width={1364}
+                height={196}
+              />
             </div>
           )}
           <Input

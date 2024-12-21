@@ -9,7 +9,6 @@ import { changeProfile } from '@/lib/actions/profile/changeProfile'
 import { uploadFileWithProgress } from "@/lib/utils";
 
 const EditImageForm = ({oldImage} : {oldImage: string | null}) => {
-    console.log(oldImage);
     const [state, setState] = useState<React.ReactNode>("")
     // const [logo, setLogo] = useState<string | null>(null);
     // const [oldLogo, setOldLogo] = useState<string | null>(oldImage);
@@ -26,7 +25,6 @@ const EditImageForm = ({oldImage} : {oldImage: string | null}) => {
                     // await deleteFile(oldLogo);
                 // }
                 const url = await uploadFileWithProgress(file, 'users/avatars', setUploadProgress);
-                console.log('Download URL:', url);
                 // setOldLogo(logo);
                 // setLogo(url);
                 

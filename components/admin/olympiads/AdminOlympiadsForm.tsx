@@ -9,11 +9,15 @@ import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import { uploadFile} from "@/lib/utils";
 import { createOlympiad } from "@/lib/actions/olympiads/createOlympiads";
+import { IoCloseSharp } from 'react-icons/io5';
+import CountryDropdown from '@/components/shared/olympiads/CountryList';
+import { Country } from '@/types/countries';
 
 export interface Stage {
     name: string;
-    startDate?: string;
-    endDate?: string;
+    Date?: string;
+    startTime?: string;
+    endTime?: string;
     toPracticeLink?: string;
 }
 
@@ -102,13 +106,14 @@ export default function CreateOlympiadForm() {
         socialLinks: '',
         registrationFormUrl: '',
         resultsUrl: '',
+        priority: 0,
     });
 
     const [logo, setLogo] = useState<File | null>(null);
     const [cover, setCover] = useState<File | null>(null);
     const [regulations, setRegulations] = useState<File | null>(null);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
+    
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -117,6 +122,14 @@ export default function CreateOlympiadForm() {
         const file = e.target.files ? e.target.files[0] : null;
         setter(file);
     };
+
+    const [regions, setRegions] = useState<Country[]>([]);
+
+    const handleCountrySelect = (country: Country | undefined) => {
+        if (!country) return;
+        if (regions.includes(country)) return;
+        setRegions([...regions, country]);
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -155,7 +168,8 @@ export default function CreateOlympiadForm() {
                 regulationsUrl: (regulationsUrl ? regulationsUrl[0] : null),
                 logoStorageUrl: logoUrl[1],
                 coverStorageUrl: coverUrl[1],
-                regulationsStorageUrl: (regulationsUrl ? regulationsUrl[1] : null)
+                regulationsStorageUrl: (regulationsUrl ? regulationsUrl[1] : null),
+                regions: regions.map(region => region.iso3),
             };
 
             const res = await createOlympiad(payload);
@@ -177,7 +191,7 @@ export default function CreateOlympiadForm() {
     return (
         <div className="container my-16">
             <h1 className="title mb-6">Create on olympiad</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col max-w-[500px] gap-6">
+            <form onSubmit={handleSubmit} className="flex flex-col max-w-[600px] gap-6">
                 <Label className="subtitle !text-left !text-black">
                     Название:
                     <Input type="text" name="name" value={formData.name} onChange={handleInputChange} required disabled={isSubmitting}/>
@@ -187,6 +201,20 @@ export default function CreateOlympiadForm() {
                     Описание:
                     <Textarea name="description" value={formData.description} onChange={handleInputChange} disabled={isSubmitting}/>
                 </Label>
+
+                <div className="subtitle !text-left !text-black">
+                    регионы (если олимпиада международная то выберите international и все, иначе выберите регионы в которых она проводится):
+                    <div className='border border-input px-3 py-3 flex flex-row gap-2 flex-wrap '>
+                        {
+                            regions.map((region, index) => (
+                                <Button key={index} className='flex gap-1 rounded-full' variant="outline" type={"button"} onClick={() => {
+                                    setRegions(regions.filter((r) => r !== region))
+                                }}>{region.emoji + ' ' + region.name} <IoCloseSharp></IoCloseSharp></Button>
+                            ))
+                        }
+                    </div>
+                    <CountryDropdown onSelect={(country) => {handleCountrySelect(country)}}/>
+                </div>
 
                 <Label className="subtitle !text-left !text-black">
                     Дата начала регистрации:
@@ -215,6 +243,12 @@ export default function CreateOlympiadForm() {
                 <Label className="subtitle !text-left !text-black">
                     Количество участников:
                     <Input type="number" name="participantCount" value={formData.participantCount}
+                           onChange={handleInputChange} disabled={isSubmitting}/>
+                </Label>
+
+                <Label className="subtitle !text-left !text-black">
+                    Престижность олимпиады где (0 - самая не престижная и до бесконечности выше)
+                    <Input type="number" name="priority" value={formData.priority}
                            onChange={handleInputChange} disabled={isSubmitting}/>
                 </Label>
 
@@ -250,18 +284,27 @@ export default function CreateOlympiadForm() {
                                 Дата начала:
                                 <Input
                                     type="date"
-                                    value={stage.startDate || ''}
-                                    onChange={(e) => handleStageChange(index, 'startDate', e.target.value)}
+                                    value={stage.Date || ''}
+                                    onChange={(e) => handleStageChange(index, 'Date', e.target.value)}
                                     disabled={isSubmitting}
                                 />
                             </Label>
 
                             <Label>
-                                Дата окончания:
+                                время начала (внимание пишите в формате hh:mm 24 часа иначе на сайте будет некорректно отображатся):
                                 <Input
-                                    type="date"
-                                    value={stage.endDate || ''}
-                                    onChange={(e) => handleStageChange(index, 'endDate', e.target.value)}
+                                    type="text"
+                                    value={stage.startTime || ''}
+                                    onChange={(e) => handleStageChange(index, 'startTime', e.target.value)}
+                                    disabled={isSubmitting}
+                                />
+                            </Label>
+                            <Label>
+                                время окончания (внимание пишите в формате hh:mm 24 часа иначе на сайте будет некорректно отображатся):
+                                <Input
+                                    type="text"
+                                    value={stage.endTime || ''}
+                                    onChange={(e) => handleStageChange(index, 'endTime', e.target.value)}
                                     disabled={isSubmitting}
                                 />
                             </Label>

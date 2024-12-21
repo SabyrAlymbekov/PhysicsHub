@@ -78,7 +78,7 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
     if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
     return many;
   };
-  console.log(olympiad);
+
   return (
     <div className="olympiadPage w-full py-10">
       <div className="container flex flex-row flex-wrap items-center gap-2">
@@ -128,7 +128,8 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
               </>
             )}
             <span className="md:block hidden font-bold py-2 px-4 bg-gray-100 rounded-xl">
-              <span className="text-gray-600 text-xs"> (Было обновлено)</span> {timeSince(olympiad.updatedAt)} назад
+              <span className="text-gray-600 text-xs"> (Было обновлено)</span>{" "}
+              {timeSince(olympiad.updatedAt)} назад
             </span>
             <span className="md:hidden gap-2 font-bold py-2 px-4 bg-gray-100 rounded-xl flex flex-nowrap items-center">
               <BsCalendar2DateFill />
@@ -242,30 +243,25 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
                     <div className="stage border rounded-lg p-5" key={stage.id}>
                       <h3 className="font-semibold text-2xl">{stage.name}</h3>
                       <span className="text-gradient">
-                        {stage.startDate
-                          ? new Date(stage.startDate).toLocaleDateString(
-                              "ru-GB",
-                              {
-                                day: "numeric",
-                                month: "long",
-                                year: "numeric",
-                              }
-                            )
-                          : "Дата не указана"}
-                      </span>{" "}
-                      —{" "}
-                      <span className="text-gradient">
-                        {stage.endDate
-                          ? new Date(stage.endDate).toLocaleDateString(
-                              "ru-GB",
-                              {
-                                day: "numeric",
-                                month: "long",
-                                year: "numeric",
-                              }
-                            )
+                        {stage.Date
+                          ? new Date(stage.Date).toLocaleDateString("ru-GB", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })
                           : "Дата не указана"}
                       </span>
+                      <div>
+                        <span className="text-gradient">
+                          {stage.startTime
+                            ? stage.startTime
+                            : "Время не указано"}
+                        </span>{" "}
+                        —{" "}
+                        <span className="text-gradient">
+                          {stage.endTime ? stage.endTime : "Время не указано"}
+                        </span>
+                      </div>
                       {stage.toPracticeLink && (
                         <p>
                           <Link

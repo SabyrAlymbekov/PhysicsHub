@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button';
 const Olympiads = async (props: {
     searchParams?: Promise<{
       from?: string,
-      to?: string
+      to?: string,
+      country? :string
     }>;
   }) => {
     const searchParams = await props.searchParams;
@@ -28,7 +29,7 @@ const Olympiads = async (props: {
                     <OlymiadsFilters></OlymiadsFilters>
                 </Suspense>
                 <Suspense fallback={<h1>Loading...</h1>}>
-                    <RenderOlympiads dateRange={dateRange}/>
+                    <RenderOlympiads dateRange={dateRange} region={searchParams?.country || undefined}/>
                 </Suspense>
             </section>
         </div>

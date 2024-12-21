@@ -99,7 +99,6 @@ export async function updateTextbook(
                     data: { bookCount: { increment: 1 } },
                 });
             }
-            console.log(source, sourceLabel)
             const updatedTextbook = await prisma.textbook.update({
                 where: { id },
                 data: {

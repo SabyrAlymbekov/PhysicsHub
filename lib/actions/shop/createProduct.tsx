@@ -34,16 +34,6 @@ export async function createProductAction(formData: FormData) {
     imageUrls.push(downloadURL);
     imagePaths.push(filename);
   }
-  console.log({
-    name,
-    description,
-    type,
-    price,
-    sizes: sizes.split(",").map((s) => s.trim()),
-    inStock,
-    images: imageUrls,
-    imagePaths,
-  });
 
   await prisma.product.create({
     data: {

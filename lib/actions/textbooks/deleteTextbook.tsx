@@ -48,7 +48,6 @@ export async function deleteTextbook(id: string) {
       }
     });
     revalidatePath('/materials')
-    console.log(`Учебник с ID ${id} успешно удалён.`);
   } catch (error: any) {
     console.error("Ошибка при удалении учебника:", error.message);
     throw new Error("Не удалось удалить учебник. Попробуйте снова.");

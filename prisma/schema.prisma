@@ -149,7 +149,8 @@ model Olympiad {
   socialLinks         String? // Ссылки на соц. сети
   registrationFormUrl String?
   organizers          Organizer[]
-  // priority            Int         @default(0) // Приоритет олимпиады. Чем больше число, тем выше приоритет.
+  regions             String[] // Регионы проведения олимпиады
+  priority            Int         @default(0) // Приоритет олимпиады. Чем больше число, тем выше приоритет.
 
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
@@ -160,8 +161,9 @@ model Stage {
   olympiad   Olympiad  @relation(fields: [olympiadId], references: [id])
   olympiadId String    @db.ObjectId
   name       String
-  startDate  DateTime? // либо дата либо неопределено
-  endDate    DateTime? // либо дата либо неопределено
+  Date  DateTime? // либо дата либо неопределено
+  startTime    String? // либо время либо неопределено. В формате "HH:MM" 24-часовой
+  endTime    String? // либо время либо неопределено. В формате "HH:MM" 24-часовой
   toPracticeLink String?
 }
 

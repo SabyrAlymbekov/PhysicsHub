@@ -46,7 +46,9 @@ export async function updateOlympiad(formData: any) {
       logoStorageUrl,
       coverStorageUrl,
       regulationsStorageUrl,
-      resultsUrl
+      resultsUrl,
+      priority,
+      regions,
     } = formData;
 
     await db.$transaction(async (prisma) => {
@@ -68,6 +70,8 @@ export async function updateOlympiad(formData: any) {
           coverStorageUrl,
           regulationsStorageUrl: regulationsStorageUrl ? regulationsStorageUrl : null,
           resultsUrl: resultsUrl ? resultsUrl : null,
+          priority: priority ? parseInt(priority) : 0,
+          regions
         },
       });
 
@@ -97,8 +101,9 @@ export async function updateOlympiad(formData: any) {
             where: { id: stage.id },
             data: {
               name: stage.name,
-              startDate: stage.startDate ? new Date(stage.startDate) : null,
-              endDate: stage.endDate ? new Date(stage.endDate) : null,
+              Date: stage.Date ? new Date(stage.Date) : null,
+              startTime: stage.startTime ? stage.startTime : null,
+              endTime: stage.endTime ? stage.endTime : null,
               toPracticeLink: stage.toPracticeLink ? stage.toPracticeLink : null,
             },
           });
@@ -107,8 +112,9 @@ export async function updateOlympiad(formData: any) {
             data: {
               olympiadId: id,
               name: stage.name,
-              startDate: stage.startDate ? new Date(stage.startDate) : null,
-              endDate: stage.endDate ? new Date(stage.endDate) : null,
+              Date: stage.Date ? new Date(stage.Date) : null,
+              startTime: stage.startTime ? stage.startTime : null,
+              endTime: stage.endTime ? stage.endTime : null,
               toPracticeLink: stage.toPracticeLink ? stage.toPracticeLink : null
             },
           });

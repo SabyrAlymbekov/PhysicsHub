@@ -56,7 +56,6 @@ const ShopCart = () => {
         body: JSON.stringify({ chat_id: chatId, text: message })
       });
       const data = await response.json();
-      console.log("Message sent:", data);
     } catch (error) {
       console.error("Error sending message:", error);
     }

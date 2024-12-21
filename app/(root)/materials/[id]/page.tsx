@@ -18,8 +18,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     return <h1>404</h1>;
   }
 
-  console.log(textbook)
-
   return (
     <div className="container my-10">
       <h1 className="text-4xl font-bold">{textbook.name}</h1>
