@@ -3,7 +3,6 @@ import ProfileForm from "@/components/profile/profileForm"
 import { Metadata } from "next";
 import { getProfile } from "@/lib/actions/profile/getProfile";
 import { User } from "@prisma/client";
-import { getTeamMembers } from "@/lib/actions/team/getTeam";
 import { currentUser } from "@/lib/actions/authActions";
 import { UserSessionT as user } from "@/types/user";
 import { notFound } from "next/navigation";
@@ -24,12 +23,6 @@ export async function generateMetadata({params}: {params: {id: string}}): Promis
             ]
         },
     }
-}
-
-export async function generateStaticParams() {
-    const profiles: User[] = await getTeamMembers("ALL");
-    
-    return profiles.map(profile => profile.id)
 }
 
 const ProfilePage = async ({params}: {params: {id: string}}) => {

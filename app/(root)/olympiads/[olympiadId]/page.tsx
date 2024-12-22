@@ -10,7 +10,6 @@ import DeleteOlympiadButton from "@/components/shared/olympiads/deleteOlympiad";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Metadata } from "next";
-import { getAllOlympiads } from "@/lib/actions/olympiads/getAllOlympiads";
 
 export async function generateMetadata({ params }: { params: { olympiadId: string } }): Promise<Metadata> {
   const { olympiadId } = params;
@@ -41,12 +40,6 @@ export async function generateMetadata({ params }: { params: { olympiadId: strin
       ],
     },
   };
-}
-
-export async function generateStaticParams() {
-    const olympiads = await getAllOlympiads({});
-    
-    return olympiads.map(olympiad => olympiad.id)
 }
 
 const Page = async ({ params }: { params: { olympiadId: string } }) => {

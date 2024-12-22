@@ -1,5 +1,4 @@
 import React from "react"
-import {getTeamMembers} from "@/lib/actions/team/getTeam";
 import type {User} from "@prisma/client";
 import {
     HoverCard,
@@ -52,43 +51,27 @@ export const TeamMember = ({teamMember}: {
     )
 } 
 
-const TeamSection = async () => {
-    const teamMembers = await getTeamMembers("TEAM");
-    const admins = await getTeamMembers("ADMIN");
+
+const TeamSection = ({ teamMembers, admins }: { teamMembers: User[], admins: User[]}) => {
     return (
-        <section className="my-24 container">
-            <div className="">
-                <h1 className="text-center title uppercase">
-                    Наша команда
-                </h1>
-                <h3 className="subtitle mt-4">
-                    Команда проекта <span className="text-gradient">Physics Hub</span> состоит из энтузиастов,
-                    <br/>
-                    готовых помочь в развитии науки.
-                    <br/>
-                    Наша главная цель сделать изучение физики 
-                    <br/>
-                    <span className="text-gradient">легким</span>, <span className="text-gradient">понятным</span>, а главное  <span className="text-gradient">доступным</span>! 
-                </h3>
-            </div>
-            <h1 className="text-3xl font-bold mt-14 text-center"> Админы </h1>
-            <div className="flex flex-row flex-wrap justify-center gap-10 mt-4">
-                {
-                    admins && admins.map((teamMember: User, index: number) => (
+      <section className="my-24 container">
+        <div className="">
+          <h1 className="text-center title uppercase">Наша команда</h1>
+          <h3 className="subtitle mt-4">Администраторы</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {admins && admins.map((teamMember: User, index: number) => (
                         <TeamMember teamMember={teamMember} key={index}></TeamMember>
-                    ))
-                }
-            </div>
-            <h1 className="text-3xl font-bold mt-7 text-center"> Участники </h1>
-            <div className="flex flex-row flex-wrap justify-center gap-10 mt-4">
-                {
-                   teamMembers && teamMembers.map((teamMember: User, index: number) => (
-                       <TeamMember teamMember={teamMember} key={index}></TeamMember>
-                    ))
-                }
-            </div>
-        </section>
-    )
-}
+                    ))}
+          </div>
+          <h3 className="subtitle mt-4">Команда</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {teamMembers && teamMembers.map((teamMember: User, index: number) => (
+                        <TeamMember teamMember={teamMember} key={index}></TeamMember>
+                    ))}
+          </div>
+        </div>
+      </section>
+    );
+  };
 
 export default TeamSection;
