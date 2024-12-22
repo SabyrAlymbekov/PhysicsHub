@@ -11,7 +11,6 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import {SignInButton} from "@/components/shared/auth/signin-button";
-// import {auth} from "@/auth";
 import {currentUser} from "@/lib/actions/authActions";
  
 export async function Burger() {
@@ -32,7 +31,7 @@ export async function Burger() {
               <SheetTitle>
                   <SheetClose asChild>
                       <Link className="row items-center gap-1" href="/">
-                          <Image src="/assets/icons/logo.png" width={40} height={40} alt="physicshub"></Image>
+                          <Image src="/assets/icons/logo-new-year.png" width={40} height={40} alt="physicshub"></Image>
                           <h1 className='h2-bold'>Physics Hub</h1>
                       </Link>
                   </SheetClose>

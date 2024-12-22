@@ -50,7 +50,7 @@ const TermsOfPolicy = () => {
                     <p>Использование нашего сайта регулируется также нашей Политикой конфиденциальности, которая
                         подробно описывает, как мы собираем, используем и защищаем вашу личную информацию. Ознакомьтесь
                         с Политикой конфиденциальности на {" "}
-                        <a href="https://physicshub-test.vercel.app/privacy-policy" target="_blank" rel="noopener noreferrer">
+                        <a href="https://physics-hub.com/privacy-policy" target="_blank" rel="noopener noreferrer">
                         Privacy Policy
                         </a>. </p>
 
