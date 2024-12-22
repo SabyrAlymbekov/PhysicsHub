@@ -62,7 +62,7 @@ const CountryDropdown = ({ disabled, onSelect, curCountry }: CountryDropdownProp
       <PopoverContent className="w-[300px] rounded-[6px] p-0">
         <Command>
         <CommandList>
-          <CommandInput placeholder="Search country..." />
+          <CommandInput placeholder="Поиск страны..." />
           <CommandEmpty>Страна не найдена</CommandEmpty>
           <CommandGroup>
             <ScrollArea className="h-[300px] w-full">
