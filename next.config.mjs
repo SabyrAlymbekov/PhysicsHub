@@ -7,7 +7,7 @@ const nextConfig = {
             "firebasestorage.googleapis.com",
             "storage.googleapis.com"
         ],
-    }
+    },
 };
 
 export default withNextVideo(nextConfig);

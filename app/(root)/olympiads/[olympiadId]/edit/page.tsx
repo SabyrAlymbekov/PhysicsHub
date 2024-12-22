@@ -1,8 +1,8 @@
-import EditOlympiadPage from "@/components/admin/olympiads/AdminOlympiadsEdit"
+import EditOlympiadPage from "@/components/admin/olympiads/AdminOlympiadsEdit";
 import { currentUser } from "@/lib/actions/authActions";
 import { notFound } from "next/navigation";
 
-const Page = async (params: { id: string }) => {
+const Page = async ({ params }: { params: { olympiadId: string } }) => {
   const user = await currentUser();
 
   if (user?.role !== "ADMIN") {
@@ -10,8 +10,8 @@ const Page = async (params: { id: string }) => {
   }
 
   return (
-    <EditOlympiadPage params={params}/>
-  )
+    <EditOlympiadPage params={{ id: params.olympiadId }}/>
+  );
 }
 
-export default Page
+export default Page;
