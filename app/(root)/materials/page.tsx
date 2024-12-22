@@ -11,6 +11,12 @@ import getTextbooksByTopicsCount from "@/lib/actions/textbooks/getTextbooksByTop
 import { Skeleton } from "@/components/ui/skeleton";
 import TopicChoosed from "@/components/resources/topicChoosed";
 import SelectInput from "@/components/resources/selectInput";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Materials",
+    description: "Все необходимые и лучшие материалы и ресурсы для подготовки к олимпиадам по физике, а также для самостоятельного изучения физики."
+};
 
 const Resources = async (props: {
     searchParams?: Promise<{

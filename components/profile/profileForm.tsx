@@ -1,10 +1,8 @@
-import { getProfile } from "@/lib/actions/profile/getProfile";
 import ImageFallback from "../fallbackImage";
 import { User } from "@prisma/client";
 import { Button } from "../ui/button";
 import { Card, CardTitle, CardHeader, CardContent } from "../ui/card";
 import { Separator } from "../ui/separator";
-import { currentUser } from "@/lib/actions/authActions";
 import ModalWrapper from "./modalWrapper";
 import EditFieldForm from "./edits/EditFieldForm";
 import EditManyFields from "./edits/EditManyFields";
@@ -12,21 +10,10 @@ import Link from "next/link";
 import { z } from "zod";
 import Logout from "../shared/auth/Logout-button";
 import EditImageForm from "./edits/EditImageForm";
+import { UserSessionT as user } from "@/types/user";
 
-interface user {
-  name: string;
-  email: string;
-  image: string | null;
-  id: string;
-  role: "ADMIN" | "TEAM" | "USER";
-}
-
-const ProfileFormShare = async ({ userId }: { userId: string }) => {
-  const profile: User | null = await getProfile(userId);
-  const user: user | null = await currentUser();
-  if (profile === null) {
-    return <div>Profile not found</div>;
-  }
+const ProfileFormShare = async ({ profile, user }: { profile: User, user: user | null }) => {
+  const userId = profile.id;
   
   return (
     <div className="flex flex-col gap-4">

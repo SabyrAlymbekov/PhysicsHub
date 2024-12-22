@@ -1,5 +1,4 @@
 import React from "react";
-import { getOlympiadById } from "@/lib/actions/olympiads/getOlympiadById";
 import Image from "next/image";
 import Link from "next/link";
 import { CiLink } from "react-icons/ci";
@@ -8,29 +7,9 @@ import { IoMdAlarm } from "react-icons/io";
 import { Separator } from "@/components/ui/separator";
 import { BsCalendar2DateFill } from "react-icons/bs";
 import { IoPeopleSharp } from "react-icons/io5";
-import getStagesByOlympiadId from "@/lib/actions/olympiads/getStagesByOlympiadId";
-import getOrganizerByOlympiadsId from "@/lib/actions/olympiads/getOrganizerByOlympiadId";
-import { Olympiad, Stage } from "@prisma/client";
-import { redirect } from "next/navigation";
-import { currentUser } from "@/lib/actions/authActions";
-import DeleteOlympiadButton from "./deleteOlympiad";
-import { Button } from "@/components/ui/button";
+import { Olympiad, Organizer, Stage } from "@prisma/client";
 
-interface OlympiadPageProps {
-  olympiadId: string;
-}
-
-const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
-  const olympiad: Olympiad | null = await getOlympiadById(olympiadId);
-  if (!olympiad) {
-    redirect("/");
-  }
-  const stages: Stage[] | undefined = await getStagesByOlympiadId(olympiadId);
-  if (!stages) {
-    redirect("/");
-  }
-  const organizers = await getOrganizerByOlympiadsId(olympiadId);
-  const user = await currentUser();
+const OlympiadPage = async ({ olympiad, stages, organizers }: { olympiad: Olympiad, stages: Stage[], organizers: Organizer[]}) => {
 
   const links: string[] = olympiad.socialLinks
     ? olympiad.socialLinks.split(",")
@@ -81,18 +60,6 @@ const OlympiadPage: React.FC<OlympiadPageProps> = async ({ olympiadId }) => {
 
   return (
     <div className="olympiadPage w-full py-10">
-      <div className="container flex flex-row flex-wrap items-center gap-2">
-        {user?.role == "ADMIN" && (
-          <DeleteOlympiadButton olympiadId={olympiadId}></DeleteOlympiadButton>
-        )}
-        {user?.role == "ADMIN" && (
-          <Link href={`/olympiads/${olympiadId}/edit`}>
-            <Button className="my-5" variant={"default"}>
-              Редактировать
-            </Button>
-          </Link>
-        )}
-      </div>
       <div className="container relative">
         <div className="relative w-full h-[200px] bg-black border-2 rounded-lg overflow-hidden">
           <Image

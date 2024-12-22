@@ -2,7 +2,6 @@
 
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { currentUser } from "@/lib/actions/authActions";
 import { getOlympiadById } from "@/lib/actions/olympiads/getOlympiadById";
 import { updateOlympiad } from "@/lib/actions/olympiads/UpdateOlympiad";
 import { uploadFile } from "@/lib/utils";
@@ -61,12 +60,6 @@ export default function EditOlympiadPage({
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await currentUser();
-      if (!user || user.role !== "ADMIN") {
-        router.replace("/");
-        return;
-      }
-
       try {
         const olympiad = await getOlympiadById(params.id);
         if (olympiad) {

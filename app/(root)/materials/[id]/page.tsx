@@ -5,9 +5,36 @@ import React, { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
+import { db } from "@/lib/db";
 
-const page = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const id = (await params).id;
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const material = await getTextbookById(params.id)
+  
+  if (!material) {
+    return {
+      title: "Материал не найден",
+      description: "Такого материала не существует или он был удален.",
+    };
+  }
+
+  return {
+    title: material.name,
+    description: material.description,
+  };
+}
+
+export async function generateStaticParams() {
+    const materials = await db.textbook.findMany({
+      take: 10,
+    });
+    
+    return materials.map(material => material.id)
+}
+
+const page = async ({ params }: { params: { id: string } }) => {
+  const id = params.id;
   const fetchTopics = getTopicsByTextbookid(id);
   const [textbook, topics] = await Promise.all([
     getTextbookById(id),
@@ -15,7 +42,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   ]);
 
   if (!textbook) {
-    return <h1>404</h1>;
+    notFound();
   }
 
   return (

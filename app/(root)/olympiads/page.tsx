@@ -7,6 +7,13 @@ import { currentUser } from '@/lib/actions/authActions';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Olympiads",
+    description: "Все об олимпиадах и интеллектуальных соревнованиях для школьников по физике"
+};
+
 const Olympiads = async (props: {
     searchParams?: Promise<{
       from?: string,
