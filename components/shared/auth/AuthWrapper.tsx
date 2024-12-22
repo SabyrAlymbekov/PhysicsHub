@@ -50,14 +50,14 @@ const AuthWrapper = ({ children, type, header, description  }: AuthWrapperProps)
                     <p className="px-8 text-center text-sm text-muted-foreground">
                         Продолжая, вы соглашаетесь с нашими {" "}
                         <Link
-                            href="/terms"
+                            href="https://physics-hub.com/terms-of-service"
                             className="underline underline-offset-4 hover:text-primary"
                         >
                             Условиями использования
                         </Link>{" "}
                         , а также нашей {" "}
                         <Link
-                            href="/privacy"
+                            href="https://physics-hub.com/privacy-policy"
                             className="underline underline-offset-4 hover:text-primary"
                         >
                             Политикой конфиденциальности
