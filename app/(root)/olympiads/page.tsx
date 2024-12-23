@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 import { Metadata } from 'next';
+import OlympiadsSkeleton from '@/components/shared/olympiads/OlympiadsSkeleton';
 
 export const metadata: Metadata = {
     title: "Olympiads",
@@ -35,7 +36,7 @@ const Olympiads = async (props: {
                 <Suspense fallback={<Skeleton className='w-full h-[36px]'></Skeleton>}>
                     <OlymiadsFilters></OlymiadsFilters>
                 </Suspense>
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense fallback={<OlympiadsSkeleton></OlympiadsSkeleton>}>
                     <RenderOlympiads dateRange={dateRange} region={searchParams?.country || undefined}/>
                 </Suspense>
             </section>

@@ -47,10 +47,8 @@ const Resources = async (props: {
                         totalPages={totalPages}
                     />
                 </Suspense>
-                <Suspense fallback={<h1>Loading...</h1>}>
-                    <TopicChoosed selectedTopics={topics}></TopicChoosed>
-                </Suspense>
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <TopicChoosed selectedTopics={topics}></TopicChoosed>
+                <Suspense fallback={<Skeleton className="w-[180px] h-[36px]" />}>
                     <SelectInput></SelectInput>
                 </Suspense>
                 <Suspense fallback={<MaterialsListSkeleton></MaterialsListSkeleton>}>
