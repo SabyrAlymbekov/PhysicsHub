@@ -16,6 +16,3 @@ const RenderOlympiads = async ({ dateRange, region }: {dateRange?: DateRange, re
 };
 
 export default RenderOlympiads;
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
