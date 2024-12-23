@@ -1,5 +1,3 @@
-'use client'
-
 const Goals = () => {
     return (
         <section className="container flex justify-between flex-col items-center w-full lg:flex-row my-20">

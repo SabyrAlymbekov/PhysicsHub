@@ -24,7 +24,7 @@ export default function RootLayout({
       <body
         className={`${GeistSans.className}`}
       >
-        {children}
+          {children}
         <SpeedInsights />
       </body>
     </html>

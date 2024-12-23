@@ -11,10 +11,11 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import {SignInButton} from "@/components/shared/auth/signin-button";
-import {currentUser} from "@/lib/actions/authActions";
+import { useSession } from 'next-auth/react'
  
-export async function Burger() {
-    const user = await currentUser()
+export function Burger() {
+    const {data: session} = useSession();
+    const user = session?.user;
     return (
         <Sheet>
           <SheetTrigger asChild>
