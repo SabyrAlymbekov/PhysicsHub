@@ -18,6 +18,7 @@ import {Terminal} from "lucide-react";
 import {TiTick} from "react-icons/ti";
 import SwiperOfProduct from "@/components/shop/swiper/swiperOfProduct";
 import { Product } from '@prisma/client';
+import sendMessageToTG from '@/lib/actions/shop/sendMessage';
 
 interface ProductPageProps {
   product: Product;
@@ -90,28 +91,11 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }: ProductPageProps) 
   const sendMessage = async () => {
     const message = `Пользователь ${tgId} заказал следующий товар:\n\n${product.name} — ${product.id} — кол-во:${quantity}\n\nСтрана, адрес и город: ${country},${adress} и ${city} \n\nНа сумму: ${endPrice} сом
     --------------------------`;
-
-    const token: string = "7153702905:AAEd9TfQEo9Kxa3pRBvBvGMwImQcwFku-Gs";
-    const URL_API: string = `https://api.telegram.org/bot${token}/sendMessage`;
-    const chatId: string = "@test_bot_beka"; // Убедитесь, что вы используете правильный идентификатор чата.
-
     try {
-      const response = await fetch(URL_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: message,
-          parse_mode: "HTML", // Добавлено для лучшего форматирования текста (опционально).
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+      const res = await sendMessageToTG(message);
+      if (res?.error) {
+        showErrorAlert();
       }
-
-      const data = await response.json();
-      console.log("Message sent:", data);
     } catch (error) {
       console.error("Error sending message:", error);
     }

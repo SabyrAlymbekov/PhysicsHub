@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 const OlympiadBlock = ({ olympiad }: {olympiad: Olympiad}) => {
-
   const linkHref = olympiad.id ? (`/olympiads/${olympiad.id}`) : ("#");
 
   const registrationStart = olympiad.registrationStart ? new Date(olympiad.registrationStart).toLocaleDateString("de-DE") : "неизвестно";

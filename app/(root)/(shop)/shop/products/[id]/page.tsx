@@ -2,6 +2,7 @@ import React from 'react';
 import ProductPage from "@/components/shop/ProductPage";
 import { getProductById } from '@/lib/actions/shop/getProductById';
 import { Product } from '@prisma/client';
+import { notFound } from 'next/navigation';
 
 const Page = async ( {params} : {
   params: Promise<{ id: string }>
@@ -9,7 +10,7 @@ const Page = async ( {params} : {
   const id = (await params).id;
   const product: Product | null = await getProductById(id);
   if (!product) {
-    return <div>Product not found</div>;
+    notFound();
   }
   return (
     <div className="flex flex-col">

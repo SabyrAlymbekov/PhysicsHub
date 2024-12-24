@@ -16,16 +16,13 @@ const ProductBlock = ({ product }: ShopProduct) => {
   const [input, setInput] = useState<number>(itemCart?.quantity || 1);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(1, Math.min(99, Number(e.target.value))); // Ограничиваем значение от 1 до 99
+    const value = Math.max(1, Math.min(99, Number(e.target.value)));
     setInput(value);
 
-    // Вызываем updateQuantity только если товар есть в корзине
     if (itemCart) {
       updateQuantity(product.id, value);
     }
   };
-
-
 
   return (
     <>
@@ -55,7 +52,7 @@ const ProductBlock = ({ product }: ShopProduct) => {
         </div>
         <span className=" text-right col-span-1 flex justify-end items-center">{product.price * input} сом</span>
       </li>
-      <li className="max-w-[300px] py-5 px-5 text-lg flex flex-col border rounded-lg md:hidden gap-2 text-sm">
+      <li className="max-w-[300px] py-5 px-5 text-lg flex flex-col border rounded-lg md:hidden gap-2">
         <div className="flex flex-col gap-7 items-center justify-center">
           <div className="w-[200px] h-[200px] bg-gray-100 rounded-2xl">
             <Image
